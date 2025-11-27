@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import LiveClock from './LiveClock';
 
 const LandingPage: React.FC = () => {
   const borderColor = "border-[#EBE9E9]";
@@ -18,7 +19,7 @@ const LandingPage: React.FC = () => {
           {/* Middle Decoration (Optional) */}
           <div className="flex-1 flex flex-col justify-center items-center">
               <div className="text-[11px] font-bold uppercase tracking-widest text-gray-400 rotate-180 [writing-mode:vertical-rl]">
-                  EST. 2024 — COPENHAGEN
+                  EST. 2025 — AARHUS
               </div>
           </div>
 
@@ -92,19 +93,40 @@ const LandingPage: React.FC = () => {
           </section>
 
           {/* FOOTER CONTENT (Newsletter, Legal) */}
-          <footer className="p-16 flex flex-col items-center justify-center gap-8 text-center">
-                <h3 className="text-2xl font-black uppercase tracking-[-0.05em]">Join the Newsletter</h3>
-                <div className="flex w-full max-w-md border-b border-black pb-2">
-                    <input type="email" placeholder="EMAIL ADDRESS" className="flex-1 bg-transparent outline-none text-lg uppercase placeholder-gray-400" />
-                    <button className="font-bold uppercase tracking-widest hover:text-[#1D5E2C]">SUBMIT</button>
+          <footer className="px-16 py-10 border-t border-[#EBE9E9] mt-64">
+             <div className="grid grid-cols-3 w-full h-full items-start">
+                {/* Left: Socials */}
+                <div className="flex flex-col justify-between h-full">
+                    <span className="text-sm font-bold uppercase tracking-widest">©2025</span>
+                    <div className="flex flex-col gap-2 mt-8">
+                        <a href="#" className="text-sm font-bold uppercase tracking-widest hover:text-[#1D5E2C] flex items-center gap-2">
+                            <span className="text-gray-300">//</span> LinkedIn
+                        </a>
+                        <a href="#" className="text-sm font-bold uppercase tracking-widest hover:text-[#1D5E2C] flex items-center gap-2">
+                            <span className="text-gray-300">//</span> Instagram
+                        </a>
+                    </div>
                 </div>
-                
-                <div className="flex gap-8 mt-8">
-                     <span className="text-sm font-bold uppercase tracking-widest text-gray-400 hover:text-black cursor-pointer">AGENCY</span>
-                     <span className="text-sm font-bold uppercase tracking-widest text-gray-400 hover:text-black cursor-pointer">CAREERS</span>
-                     <span className="text-sm font-bold uppercase tracking-widest text-gray-400 hover:text-black cursor-pointer">LEGAL</span>
+
+                {/* Center: Clock - Aligned to top with others */}
+                <div className="flex justify-center items-center h-full">
+                    <div className="-mt-3">
+                        <LiveClock />
+                    </div>
                 </div>
-                <span className="text-xs text-gray-400 uppercase tracking-widest mt-8">© 2025 HOFFMEISTER STUDIO</span>
+
+                {/* Right: Contact */}
+                <div className="flex flex-col justify-between h-full text-right">
+                    <div>
+                        <h3 className="text-2xl font-black uppercase tracking-[-0.05em] leading-none">HOFFMEISTER</h3>
+                        <h3 className="text-2xl font-black uppercase tracking-[-0.05em] leading-none">STUDIO</h3>
+                    </div>
+                    <div className="flex flex-col gap-1 mt-8">
+                        <a href="mailto:NIKOLAJ@gmail.com" className="text-sm font-bold uppercase tracking-widest hover:underline">NIKOLAJ@gmail.com</a>
+                        <span className="text-sm font-bold uppercase tracking-widest">+45123456789</span>
+                    </div>
+                </div>
+             </div>
           </footer>
       </div>
 
@@ -116,8 +138,10 @@ const LandingPage: React.FC = () => {
           </div>
 
           {/* Middle Decoration (Scroll Indicator) */}
-          <div className="flex-1 flex flex-col justify-center items-center pb-12">
-               
+          <div className="flex-1 flex flex-col justify-center items-center">
+               <div className="text-[11px] font-bold uppercase tracking-widest text-gray-400 rotate-180 [writing-mode:vertical-rl]">
+                  56° 09' N — 10° 12' E
+              </div>
           </div>
 
           {/* Bottom Right: KONTAKT */}
