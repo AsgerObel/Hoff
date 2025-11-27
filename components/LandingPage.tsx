@@ -11,8 +11,8 @@ const LandingPage: React.FC = () => {
       {/* LEFT FIXED COLUMN */}
       <div className={`w-[250px] flex flex-col justify-between border-r ${borderColor} relative z-50`}>
           {/* Top Left: SERVICES */}
-          <div className={`h-32 flex items-center justify-center border-b ${borderColor} bg-white`}>
-              <span className="text-xl font-bold uppercase tracking-[-0.05em] cursor-pointer hover:text-[#1D5E2C] transition-colors">SERVICES</span>
+          <div className={`h-32 flex items-center justify-center border-b ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
+              <span className="text-xl font-bold uppercase tracking-[-0.05em]">SERVICES</span>
           </div>
 
           {/* Middle Decoration (Optional) */}
@@ -23,8 +23,8 @@ const LandingPage: React.FC = () => {
           </div>
 
           {/* Bottom Left: CASES */}
-          <div className={`h-24 flex items-center justify-center border-t ${borderColor} bg-white`}>
-              <span className="text-xl font-bold uppercase tracking-[-0.05em] cursor-pointer hover:text-[#1D5E2C] transition-colors">CASES</span>
+          <div className={`h-24 flex items-center justify-center border-t ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
+              <span className="text-xl font-bold uppercase tracking-[-0.05em]">CASES</span>
           </div>
       </div>
 
@@ -111,22 +111,18 @@ const LandingPage: React.FC = () => {
       {/* RIGHT FIXED COLUMN */}
       <div className={`w-[250px] flex flex-col justify-between border-l ${borderColor} relative z-50`}>
           {/* Top Right: LOGIN */}
-          <div className={`h-32 flex items-center justify-center border-b ${borderColor} bg-white hover:bg-[#1D5E2C] hover:text-white transition-colors group`}>
+          <div className={`h-32 flex items-center justify-center border-b ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
               <Link to="/login" className="text-xl font-bold uppercase tracking-[-0.05em] w-full h-full flex items-center justify-center">LOGIN</Link>
           </div>
 
           {/* Middle Decoration (Scroll Indicator) */}
           <div className="flex-1 flex flex-col justify-center items-center pb-12">
-               <div className="animate-bounce">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 5v14M19 12l-7 7-7-7"/>
-                  </svg>
-               </div>
+               
           </div>
 
           {/* Bottom Right: KONTAKT */}
-          <div className={`h-24 flex items-center justify-center border-t ${borderColor} bg-white`}>
-              <span className="text-xl font-bold uppercase tracking-[-0.05em] cursor-pointer hover:text-[#1D5E2C] transition-colors">KONTAKT</span>
+          <div className={`h-24 flex items-center justify-center border-t ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
+              <span className="text-xl font-bold uppercase tracking-[-0.05em]">KONTAKT</span>
           </div>
       </div>
 
