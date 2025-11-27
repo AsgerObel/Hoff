@@ -9,22 +9,22 @@ const LandingPage: React.FC = () => {
     <div className="flex h-screen bg-white text-black font-sans selection:bg-[#1D5E2C] selection:text-white overflow-hidden">
       
       {/* LEFT FIXED COLUMN */}
-      <div className={`w-[250px] flex flex-col justify-between border-r ${borderColor} relative z-50`}>
+      <div className={`w-[188px] flex flex-col justify-between border-r ${borderColor} relative z-50`}>
           {/* Top Left: SERVICES */}
-          <div className={`h-32 flex items-center justify-center border-b ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
-              <span className="text-xl font-bold uppercase tracking-[-0.05em]">SERVICES</span>
+          <div className={`h-24 flex items-center justify-center border-b ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
+              <span className="text-lg font-bold uppercase tracking-[-0.05em]">SERVICES</span>
           </div>
 
           {/* Middle Decoration (Optional) */}
           <div className="flex-1 flex flex-col justify-center items-center">
-              <div className="text-xs font-bold uppercase tracking-widest text-gray-400 rotate-180 [writing-mode:vertical-rl]">
+              <div className="text-[11px] font-bold uppercase tracking-widest text-gray-400 rotate-180 [writing-mode:vertical-rl]">
                   EST. 2024 — COPENHAGEN
               </div>
           </div>
 
           {/* Bottom Left: CASES */}
-          <div className={`h-24 flex items-center justify-center border-t ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
-              <span className="text-xl font-bold uppercase tracking-[-0.05em]">CASES</span>
+          <div className={`h-[72px] flex items-center justify-center border-t ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
+              <span className="text-lg font-bold uppercase tracking-[-0.05em]">CASES</span>
           </div>
       </div>
 
@@ -32,15 +32,15 @@ const LandingPage: React.FC = () => {
       <div className="flex-1 flex flex-col overflow-y-auto relative scrollbar-hide">
           
           {/* Sticky Header: LOGO */}
-          <header className={`sticky top-0 z-40 bg-white/95 backdrop-blur-sm h-32 shrink-0 flex items-center justify-center border-b ${borderColor}`}>
-              <div className="text-center pt-4">
-                  <h1 className="text-3xl font-black uppercase tracking-[-0.05em] leading-none text-[#1D5E2C]">HOFFMEISTER</h1>
-                  <h1 className="text-3xl font-black uppercase tracking-[-0.05em] leading-none text-[#1D5E2C]">STUDIO</h1>
+          <header className={`sticky top-0 z-40 bg-white/95 backdrop-blur-sm h-24 shrink-0 flex items-center justify-center border-b ${borderColor}`}>
+              <div className="text-center pt-3">
+                  <h1 className="text-2xl font-black uppercase tracking-[-0.05em] leading-none text-[#1D5E2C]">HOFFMEISTER</h1>
+                  <h1 className="text-2xl font-black uppercase tracking-[-0.05em] leading-none text-[#1D5E2C]">STUDIO</h1>
               </div>
           </header>
 
           {/* HERO VIDEO - Adjusted for alignment */}
-          <div className={`w-full flex flex-col items-center justify-center relative group border-b ${borderColor} min-h-[calc(100vh-8rem)]`}>
+          <div className={`w-full flex flex-col items-center justify-center relative group border-b ${borderColor} min-h-[calc(100vh-6rem)]`}>
                <div className="w-full h-full absolute inset-0 bg-[url('https://picsum.photos/1600/900?grayscale')] bg-cover bg-center opacity-20 group-hover:opacity-40 transition-opacity duration-1000"></div>
                <div className="relative z-10 bg-white p-6 border border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                   <span className="text-xl font-bold uppercase tracking-[-0.05em]">SHOWREEL 2025</span>
@@ -109,10 +109,10 @@ const LandingPage: React.FC = () => {
       </div>
 
       {/* RIGHT FIXED COLUMN */}
-      <div className={`w-[250px] flex flex-col justify-between border-l ${borderColor} relative z-50`}>
+      <div className={`w-[188px] flex flex-col justify-between border-l ${borderColor} relative z-50`}>
           {/* Top Right: LOGIN */}
-          <div className={`h-32 flex items-center justify-center border-b ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
-              <Link to="/login" className="text-xl font-bold uppercase tracking-[-0.05em] w-full h-full flex items-center justify-center">LOGIN</Link>
+          <div className={`h-24 flex items-center justify-center border-b ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
+              <Link to="/login" className="text-lg font-bold uppercase tracking-[-0.05em] w-full h-full flex items-center justify-center">LOGIN</Link>
           </div>
 
           {/* Middle Decoration (Scroll Indicator) */}
@@ -121,8 +121,8 @@ const LandingPage: React.FC = () => {
           </div>
 
           {/* Bottom Right: KONTAKT */}
-          <div className={`h-24 flex items-center justify-center border-t ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
-              <span className="text-xl font-bold uppercase tracking-[-0.05em]">KONTAKT</span>
+          <div className={`h-[72px] flex items-center justify-center border-t ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
+              <span className="text-lg font-bold uppercase tracking-[-0.05em]">KONTAKT</span>
           </div>
       </div>
 
