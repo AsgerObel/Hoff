@@ -145,9 +145,9 @@ const LandingPage: React.FC = () => {
           </div>
 
           {/* Bottom Right: KONTAKT */}
-          <div className={`h-[72px] flex items-center justify-center border-t ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
+          <Link to="/kontakt" className={`h-[72px] flex items-center justify-center border-t ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
               <span className="text-lg font-bold uppercase tracking-[-0.05em]">KONTAKT</span>
-          </div>
+          </Link>
       </div>
 
     </div>

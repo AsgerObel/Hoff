@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { LayoutDashboard, Palette, Monitor, Box, Briefcase, Settings, X, ChevronUp } from 'lucide-react';
 import { User } from '../types';
 
@@ -37,9 +38,9 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser, activeTab, onTabChange, 
         <aside className={`${mobileClasses} ${desktopClasses} flex flex-col border-r border-[#EBE9E9] h-screen bg-white relative`}>
         {/* Brand Header */}
         <div className="h-32 border-b border-[#EBE9E9] p-6 flex items-center justify-between">
-            <h1 className="text-3xl font-black leading-tight tracking-[-0.05em] uppercase">
+            <Link to="/" className="text-3xl font-black leading-tight tracking-[-0.05em] uppercase hover:opacity-70 transition-opacity">
             Hoffmeister<br />Studio
-            </h1>
+            </Link>
             <button className="md:hidden" onClick={onClose}>
                 <X size={24} />
             </button>

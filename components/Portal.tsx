@@ -30,7 +30,7 @@ const INITIAL_TASKS: ProjectTask[] = [
     comments: [
       {
         id: 'c1',
-        userId: 'admin',
+        userId: 'u1',
         text: 'Kan Berry Bad Boy varianten laves i en mere blå nuance?',
         timestamp: '2025-08-10T15:14:00'
       }
@@ -236,8 +236,8 @@ const Portal: React.FC = () => {
   const handleUndoApprove = (taskId: string) => {
     setTasks(prev => prev.map(task => {
       if (task.id === taskId) {
-        // Revert to PENDING to allow re-evaluation
-        return { ...task, status: ProjectStatus.PENDING };
+        // Revert to IN_PROGRESS instead of PENDING to reflect active work
+        return { ...task, status: ProjectStatus.IN_PROGRESS };
       }
       return task;
     }));
