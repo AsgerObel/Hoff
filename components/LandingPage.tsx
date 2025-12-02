@@ -12,9 +12,9 @@ const LandingPage: React.FC = () => {
       {/* LEFT FIXED COLUMN */}
       <div className={`w-[188px] flex flex-col justify-between border-r ${borderColor} relative z-50`}>
           {/* Top Left: SERVICES */}
-          <div className={`h-24 flex items-center justify-center border-b ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
+          <Link to="/services" className={`h-24 flex items-center justify-center border-b ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
               <span className="text-lg font-bold uppercase tracking-[-0.05em]">SERVICES</span>
-          </div>
+          </Link>
 
           {/* Middle Decoration (Optional) */}
           <div className="flex-1 flex flex-col justify-center items-center">
@@ -24,9 +24,9 @@ const LandingPage: React.FC = () => {
           </div>
 
           {/* Bottom Left: CASES */}
-          <div className={`h-[72px] flex items-center justify-center border-t ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
+          <Link to="/cases" className={`h-[72px] flex items-center justify-center border-t ${borderColor} bg-white hover:bg-[#EBE9E9] transition-colors cursor-pointer`}>
               <span className="text-lg font-bold uppercase tracking-[-0.05em]">CASES</span>
-          </div>
+          </Link>
       </div>
 
       {/* CENTER SCROLLABLE COLUMN */}
@@ -34,10 +34,9 @@ const LandingPage: React.FC = () => {
           
           {/* Sticky Header: LOGO */}
           <header className={`sticky top-0 z-40 bg-white/95 backdrop-blur-sm h-24 shrink-0 flex items-center justify-center border-b ${borderColor}`}>
-              <div className="text-center pt-3">
-                  <h1 className="text-2xl font-black uppercase tracking-[-0.05em] leading-none text-[#1D5E2C]">HOFFMEISTER</h1>
-                  <h1 className="text-2xl font-black uppercase tracking-[-0.05em] leading-none text-[#1D5E2C]">STUDIO</h1>
-              </div>
+              <span className="text-3xl font-black leading-tight tracking-[-0.05em] uppercase text-black">
+                  Hoffmeister<br />Studio
+              </span>
           </header>
 
           {/* HERO VIDEO - Adjusted for alignment */}
@@ -87,7 +86,7 @@ const LandingPage: React.FC = () => {
              <p className="text-3xl md:text-5xl font-bold uppercase leading-tight tracking-[-0.05em] max-w-4xl mx-auto">
                 "Brutally simple digital products for complex problems."
              </p>
-             <button className="mt-12 border border-white px-8 py-4 text-lg font-bold uppercase tracking-widest hover:bg-white hover:text-[#1D5E2C] transition-colors">
+             <button className="mt-12 border border-white px-8 py-4 text-lg font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors">
                 Start a Project
              </button>
           </section>
@@ -99,10 +98,10 @@ const LandingPage: React.FC = () => {
                 <div className="flex flex-col justify-between h-full">
                     <span className="text-sm font-bold uppercase tracking-widest">©2025</span>
                     <div className="flex flex-col gap-2 mt-8">
-                        <a href="#" className="text-sm font-bold uppercase tracking-widest hover:text-[#1D5E2C] flex items-center gap-2">
+                        <a href="#" className="text-sm font-bold uppercase tracking-widest hover:text-gray-500 flex items-center gap-2">
                             <span className="text-gray-300">//</span> LinkedIn
                         </a>
-                        <a href="#" className="text-sm font-bold uppercase tracking-widest hover:text-[#1D5E2C] flex items-center gap-2">
+                        <a href="#" className="text-sm font-bold uppercase tracking-widest hover:text-gray-500 flex items-center gap-2">
                             <span className="text-gray-300">//</span> Instagram
                         </a>
                     </div>
@@ -137,11 +136,8 @@ const LandingPage: React.FC = () => {
               <Link to="/login" className="text-lg font-bold uppercase tracking-[-0.05em] w-full h-full flex items-center justify-center">LOGIN</Link>
           </div>
 
-          {/* Middle Decoration (Scroll Indicator) */}
+          {/* Middle Decoration */}
           <div className="flex-1 flex flex-col justify-center items-center">
-               <div className="text-[11px] font-bold uppercase tracking-widest text-gray-400 rotate-180 [writing-mode:vertical-rl]">
-                  56° 09' N — 10° 12' E
-              </div>
           </div>
 
           {/* Bottom Right: KONTAKT */}

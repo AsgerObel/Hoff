@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, MapPin, Mail, Phone, Clock, ArrowUpRight, Check, ArrowLeft } from 'lucide-react';
+import { ArrowRight, Check, Menu } from 'lucide-react';
+import PublicSidebar from './PublicSidebar';
 
 const Kontakt: React.FC = () => {
   const borderColor = "border-[#EBE9E9]";
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -49,220 +51,176 @@ const Kontakt: React.FC = () => {
 
   const budgetOptions = [
     { value: '', label: 'Vælg budget...' },
-    { value: '25-50', label: '25.000 - 50.000 DKK' },
-    { value: '50-100', label: '50.000 - 100.000 DKK' },
-    { value: '100-250', label: '100.000 - 250.000 DKK' },
-    { value: '250+', label: '250.000+ DKK' },
+    { value: '5-10', label: '5.000 - 10.000 DKK' },
+    { value: '10-20', label: '10.000 - 20.000 DKK' },
+    { value: '20-40', label: '20.000 - 40.000 DKK' },
+    { value: '40+', label: '40.000+ DKK' },
   ];
+  
+  const [budgetOpen, setBudgetOpen] = useState(false);
 
   return (
     <div className="flex h-screen bg-white text-black font-sans overflow-hidden selection:bg-black selection:text-white">
       
-      {/* SIDEBAR - Same style as Portal */}
-      <aside className="hidden md:flex flex-col border-r border-[#EBE9E9] h-screen bg-white w-64 shrink-0">
-        {/* Brand Header */}
-        <div className="h-32 border-b border-[#EBE9E9] p-6 flex items-center">
-          <Link to="/" className="text-3xl font-black leading-tight tracking-[-0.05em] uppercase hover:opacity-70 transition-opacity">
-            Hoffmeister<br />Studio
-          </Link>
-        </div>
+      {/* Mobile Header */}
+      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-[#EBE9E9] flex items-center justify-between px-6 z-40">
+        <Link to="/" className="font-black uppercase tracking-[-0.05em] text-lg">Hoffmeister Studio</Link>
+        <button onClick={() => setMobileMenuOpen(true)}>
+          <Menu size={24} />
+        </button>
+      </div>
 
-        {/* Navigation */}
-        <nav className="flex-1">
-          <Link
-            to="/"
-            className="w-full text-left p-6 h-[77px] border-b border-[#EBE9E9] text-xl font-bold transition-colors hover:bg-[#EBE9E9] flex items-center gap-4 bg-white"
-          >
-            <ArrowLeft size={20} />
-            <span className="tracking-[-0.05em]">Tilbage</span>
-          </Link>
-          <div className="w-full text-left p-6 h-[77px] border-b border-[#EBE9E9] text-xl font-bold bg-[#EBE9E9] flex items-center gap-4">
-            <span className="tracking-[-0.05em]">Kontakt</span>
-          </div>
-        </nav>
-
-        {/* Bottom Info */}
-        <div className="mt-auto border-t border-[#EBE9E9] p-6">
-          <div className="text-[11px] font-bold uppercase tracking-widest text-gray-400">
-            <p>56° 09' N — 10° 12' E</p>
-            <p className="mt-1">Aarhus, Danmark</p>
-          </div>
-        </div>
-      </aside>
+      {/* Sidebar */}
+      <PublicSidebar 
+        isOpen={mobileMenuOpen} 
+        onClose={() => setMobileMenuOpen(false)} 
+      />
 
       {/* MAIN CONTENT AREA */}
-      <main className="flex-1 overflow-y-auto relative">
-        {/* Subtle Grid Background Pattern - Same as Portal */}
+      <main className="flex-1 overflow-hidden relative pt-16 md:pt-0">
+        {/* Subtle Grid Background Pattern */}
         <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
              style={{ 
-               backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', 
+               backgroundImage: 'linear-gradient(#1b1b1b 1px, transparent 1px), linear-gradient(90deg, #1b1b1b 1px, transparent 1px)', 
                backgroundSize: '40px 40px' 
              }}>
         </div>
 
-        {/* Mobile Header */}
-        <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-[#EBE9E9] flex items-center justify-between px-6 z-40">
-          <Link to="/" className="font-black uppercase tracking-[-0.05em] text-lg">Hoffmeister Studio</Link>
-          <Link to="/" className="flex items-center gap-2 text-sm font-bold uppercase tracking-[-0.05em]">
-            <ArrowLeft size={16} />
-          </Link>
-        </div>
-
-        <div className="relative z-10 animate-enter pt-16 md:pt-0">
+        <div className="relative z-10">
           
-          {/* Header Area - Same structure as Dashboard */}
-          <div className="bg-white w-full">
-            <div className="max-w-[1200px] mx-auto px-4 md:px-12 pt-8 md:pt-0 mb-0 flex flex-col justify-end md:h-[110px]">
-              <div className="md:pb-4 text-center md:text-left">
-                <h1 className="text-4xl md:text-5xl font-black uppercase mb-2 md:mb-0 tracking-[-0.05em] leading-none">
-                  KONTAKT
-                </h1>
-              </div>
+          {/* Header Area - aligned with sidebar header border */}
+          <div className="bg-white w-full border-b border-[#EBE9E9]">
+            <div className="max-w-[1400px] mx-auto px-4 md:px-12 h-[127px] flex items-center">
+              <h1 className="text-4xl md:text-5xl font-black uppercase tracking-[-0.05em] leading-none">
+                KONTAKT
+              </h1>
             </div>
           </div>
 
-          {/* Content */}
-          <div className="max-w-[1200px] mx-auto px-4 md:px-12 py-8 md:py-12">
+          {/* Content - Fits exactly in viewport without scroll */}
+          <div className="max-w-[1400px] mx-auto px-4 md:px-12 py-4 h-[calc(100vh-127px)] flex flex-col overflow-hidden">
             
             {/* Two Column Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 h-full overflow-hidden">
               
               {/* LEFT: Contact Form */}
-              <div className="bg-[#F9F9F9] p-6 md:p-10 relative border border-[#EBE9E9]">
-                {/* Decorative Element */}
-                <div className="absolute top-6 right-6 md:top-8 md:right-8 text-[10px] font-bold uppercase tracking-widest text-gray-300">
-                  {formattedTime} — AARHUS
-                </div>
+              <div className={`border ${borderColor} p-6 bg-white relative h-full flex flex-col`}>
 
                 {isSubmitted ? (
                   /* Success State */
-                  <div className="text-center py-16 animate-enter">
-                    <div className="w-16 h-16 bg-black mx-auto mb-6 flex items-center justify-center">
-                      <Check size={32} className="text-white" />
+                  <div className="flex-1 flex flex-col items-center justify-center">
+                    <div className="w-14 h-14 border-2 border-black flex items-center justify-center mb-5">
+                      <Check size={28} className="text-black" />
                     </div>
-                    <h3 className="text-2xl font-black uppercase tracking-[-0.05em] mb-3">TAK FOR DIN BESKED</h3>
+                    <h3 className="text-2xl font-black uppercase tracking-[-0.05em] mb-2">Tak for din besked</h3>
                     <p className="text-gray-500 text-sm mb-6">Vi vender tilbage inden for 24 timer.</p>
                     <button 
                       onClick={() => {
                         setIsSubmitted(false);
                         setFormData({ name: '', email: '', company: '', budget: '', message: '' });
                       }}
-                      className="border border-black px-6 py-2.5 font-bold uppercase text-xs tracking-[-0.05em] hover:bg-black hover:text-white transition-colors"
+                      className="bg-black text-white px-5 py-2.5 font-bold uppercase text-sm tracking-[-0.05em] hover:bg-gray-800 transition-colors"
                     >
                       Send ny besked
                     </button>
                   </div>
                 ) : (
-                  /* Form */
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    <div className="mb-6">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-2">
-                        // KONTAKTFORMULAR
-                      </span>
-                      <h3 className="text-xl font-black uppercase tracking-[-0.05em]">Fortæl os om dit projekt</h3>
-                    </div>
-
+                  /* Form - Matching info cards style */
+                  <form onSubmit={handleSubmit} className="flex flex-col h-full space-y-4">
                     {/* Name & Email Row */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="relative">
-                        <label className="block text-[10px] font-bold uppercase mb-2 tracking-[-0.05em]">
-                          Navn <span className="text-[#FF3B30]">*</span>
-                        </label>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-black uppercase tracking-[-0.05em] text-black block mb-1.5">Navn</label>
                         <input 
                           type="text"
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
-                          onFocus={() => setFocusedField('name')}
-                          onBlur={() => setFocusedField(null)}
                           required
-                          className={`w-full bg-white border ${focusedField === 'name' ? 'border-black' : 'border-[#EBE9E9]'} p-3 text-sm font-medium focus:outline-none transition-colors`}
+                          className="w-full bg-white border border-[#EBE9E9] p-3 text-xs font-bold text-black focus:outline-none focus:border-black focus:bg-[#F9F9F9] transition-colors"
                           placeholder="Dit fulde navn"
                         />
                       </div>
-                      <div className="relative">
-                        <label className="block text-[10px] font-bold uppercase mb-2 tracking-[-0.05em]">
-                          Email <span className="text-[#FF3B30]">*</span>
-                        </label>
+                      <div>
+                        <label className="text-sm font-black uppercase tracking-[-0.05em] text-black block mb-1.5">Email</label>
                         <input 
                           type="email"
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
-                          onFocus={() => setFocusedField('email')}
-                          onBlur={() => setFocusedField(null)}
                           required
-                          className={`w-full bg-white border ${focusedField === 'email' ? 'border-black' : 'border-[#EBE9E9]'} p-3 text-sm font-medium focus:outline-none transition-colors`}
+                          className="w-full bg-white border border-[#EBE9E9] p-3 text-xs font-bold text-black focus:outline-none focus:border-black focus:bg-[#F9F9F9] transition-colors"
                           placeholder="din@email.dk"
                         />
                       </div>
                     </div>
 
                     {/* Company & Budget Row */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="relative">
-                        <label className="block text-[10px] font-bold uppercase mb-2 tracking-[-0.05em]">
-                          Virksomhed
-                        </label>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-black uppercase tracking-[-0.05em] text-black block mb-1.5">Virksomhed</label>
                         <input 
                           type="text"
                           name="company"
                           value={formData.company}
                           onChange={handleChange}
-                          onFocus={() => setFocusedField('company')}
-                          onBlur={() => setFocusedField(null)}
-                          className={`w-full bg-white border ${focusedField === 'company' ? 'border-black' : 'border-[#EBE9E9]'} p-3 text-sm font-medium focus:outline-none transition-colors`}
+                          className="w-full bg-white border border-[#EBE9E9] p-3 text-xs font-bold text-black focus:outline-none focus:border-black focus:bg-[#F9F9F9] transition-colors"
                           placeholder="Virksomhedsnavn"
                         />
                       </div>
                       <div className="relative">
-                        <label className="block text-[10px] font-bold uppercase mb-2 tracking-[-0.05em]">
-                          Budget
-                        </label>
-                        <select 
-                          name="budget"
-                          value={formData.budget}
-                          onChange={handleChange}
-                          onFocus={() => setFocusedField('budget')}
-                          onBlur={() => setFocusedField(null)}
-                          className={`w-full bg-white border ${focusedField === 'budget' ? 'border-black' : 'border-[#EBE9E9]'} p-3 text-sm font-medium focus:outline-none transition-colors appearance-none cursor-pointer`}
+                        <label className="text-sm font-black uppercase tracking-[-0.05em] text-black block mb-1.5">Budget</label>
+                        <button
+                          type="button"
+                          onClick={() => setBudgetOpen(!budgetOpen)}
+                          className="w-full bg-white border border-[#EBE9E9] p-3 text-xs font-bold text-black focus:outline-none focus:border-black transition-colors text-left flex items-center justify-between"
                         >
-                          {budgetOptions.map(opt => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                          ))}
-                        </select>
-                        {/* Custom dropdown arrow */}
-                        <div className="absolute right-3 top-[calc(50%+4px)] pointer-events-none">
-                          <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                          <span className={formData.budget ? 'text-black' : 'text-gray-400'}>
+                            {formData.budget ? budgetOptions.find(o => o.value === formData.budget)?.label : 'Vælg budget...'}
+                          </span>
+                          <svg width="10" height="6" viewBox="0 0 12 8" fill="none" className={`transition-transform ${budgetOpen ? 'rotate-180' : ''}`}>
                             <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
-                        </div>
+                        </button>
+                        {/* Dropdown */}
+                        {budgetOpen && (
+                          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#EBE9E9] shadow-lg z-20">
+                            {budgetOptions.filter(o => o.value).map(opt => (
+                              <button
+                                key={opt.value}
+                                type="button"
+                                onClick={() => {
+                                  setFormData(prev => ({ ...prev, budget: opt.value }));
+                                  setBudgetOpen(false);
+                                }}
+                                className={`w-full text-left px-3 py-2 text-xs font-bold text-black hover:bg-[#F9F9F9] transition-colors ${formData.budget === opt.value ? 'bg-[#F9F9F9]' : ''}`}
+                              >
+                                {opt.label}
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
 
-                    {/* Message */}
-                    <div className="relative">
-                      <label className="block text-[10px] font-bold uppercase mb-2 tracking-[-0.05em]">
-                        Besked <span className="text-[#FF3B30]">*</span>
-                      </label>
+                    {/* Message - Expands to fill space */}
+                    <div className="flex-1 flex flex-col">
+                      <label className="text-sm font-black uppercase tracking-[-0.05em] text-black block mb-1.5">Besked</label>
                       <textarea 
                         name="message"
                         value={formData.message}
                         onChange={handleChange}
-                        onFocus={() => setFocusedField('message')}
-                        onBlur={() => setFocusedField(null)}
                         required
-                        rows={5}
-                        className={`w-full bg-white border ${focusedField === 'message' ? 'border-black' : 'border-[#EBE9E9]'} p-3 text-sm font-medium focus:outline-none transition-colors resize-none`}
+                        className="flex-1 w-full bg-white border border-[#EBE9E9] p-3 text-xs font-bold text-black focus:outline-none focus:border-black focus:bg-[#F9F9F9] transition-colors resize-none"
                         placeholder="Fortæl os om dit projekt, dine mål og din tidslinje..."
                       />
                     </div>
 
-                    {/* Submit Button */}
+                    {/* Submit Button - Matching your button style */}
                     <button 
                       type="submit"
                       disabled={isSubmitting || !formData.name || !formData.email || !formData.message}
-                      className="w-full bg-black text-white p-4 font-bold uppercase text-sm tracking-[-0.05em] hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 group"
+                      className="w-full bg-black text-white px-5 py-3 font-bold uppercase flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors tracking-[-0.05em] text-sm disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                       {isSubmitting ? (
                         <>
@@ -280,82 +238,70 @@ const Kontakt: React.FC = () => {
                 )}
               </div>
 
-              {/* RIGHT: Info Cards */}
-              <div className="space-y-4">
-                {/* Location */}
-                <div className={`p-6 border ${borderColor} group hover:bg-[#F9F9F9] transition-colors bg-white`}>
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-black text-white flex items-center justify-center shrink-0">
-                      <MapPin size={18} />
+              {/* RIGHT COLUMN: Info Cards + Map */}
+              <div className="flex flex-col gap-3 h-full overflow-hidden">
+                {/* Info Cards - 2x2 Grid */}
+                <div className="grid grid-cols-2 gap-3 content-start">
+                  {/* Location */}
+                  <div className={`p-4 border ${borderColor} group hover:bg-[#F9F9F9] transition-colors bg-white`}>
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 block mb-0.5">Adresse</span>
+                    <h4 className="text-sm font-black uppercase tracking-[-0.05em] mb-1.5">Besøg Os</h4>
+                    <div className="text-xs font-medium text-gray-600 leading-relaxed">
+                      <p>Åboulevarden 70, 3. sal</p>
+                      <p>8000 Aarhus C</p>
                     </div>
-                    <div className="flex-1">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-1">Adresse</span>
-                      <h4 className="text-lg font-black uppercase tracking-[-0.05em] mb-3">Besøg Os</h4>
-                      <div className="text-sm font-medium text-gray-600 leading-relaxed">
-                        <p>Åboulevarden 70, 3. sal</p>
-                        <p>8000 Aarhus C</p>
-                        <p className="mt-2 text-gray-400">Danmark</p>
-                      </div>
+                  </div>
+
+                  {/* Email */}
+                  <div className={`p-4 border ${borderColor} group hover:bg-[#F9F9F9] transition-colors bg-white`}>
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 block mb-0.5">Email</span>
+                    <h4 className="text-sm font-black uppercase tracking-[-0.05em] mb-1.5">Skriv Til Os</h4>
+                    <div className="text-xs font-medium">
+                      <a href="mailto:hej@hoffmeister.dk" className="text-black hover:underline transition-colors">
+                        hej@hoffmeister.dk
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Phone */}
+                  <div className={`p-4 border ${borderColor} group hover:bg-[#F9F9F9] transition-colors bg-white`}>
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 block mb-0.5">Telefon</span>
+                    <h4 className="text-sm font-black uppercase tracking-[-0.05em] mb-1.5">Ring Til Os</h4>
+                    <div className="text-xs font-medium">
+                      <a href="tel:+4512345678" className="text-black hover:underline transition-colors">
+                        +45 12 34 56 78
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Hours */}
+                  <div className={`p-4 border ${borderColor} group hover:bg-[#F9F9F9] transition-colors bg-white`}>
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 block mb-0.5">Åbningstider</span>
+                    <h4 className="text-sm font-black uppercase tracking-[-0.05em] mb-1.5">Vi Er Her</h4>
+                    <div className="text-xs font-medium text-gray-600">
+                      <span>Man-Fre: </span>
+                      <span className="font-bold text-black">09-17</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Email */}
-                <div className={`p-6 border ${borderColor} group hover:bg-[#F9F9F9] transition-colors bg-white`}>
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-black text-white flex items-center justify-center shrink-0">
-                      <Mail size={18} />
-                    </div>
-                    <div className="flex-1">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-1">Email</span>
-                      <h4 className="text-lg font-black uppercase tracking-[-0.05em] mb-3">Skriv Til Os</h4>
-                      <div className="text-sm font-medium">
-                        <a href="mailto:hej@hoffmeister.dk" className="text-black hover:underline transition-colors">
-                          hej@hoffmeister.dk
-                        </a>
-                        <p className="text-gray-400 mt-2">Vi svarer inden for 24 timer</p>
+                {/* Map Container - Fills remaining space to align with form bottom */}
+                <div className={`flex-1 border ${borderColor} relative overflow-hidden group`}>
+                  {/* Map Image */}
+                  <img 
+                    src="/assets/aarhus-map.png" 
+                    alt="Kort over Aarhus" 
+                    className="w-full h-full object-cover"
+                  />
+                  
+                  {/* Location Marker - X cross made from rotated lines */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="relative w-5 h-5">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-full h-[2px] bg-gray-400 rotate-45" />
                       </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Phone */}
-                <div className={`p-6 border ${borderColor} group hover:bg-[#F9F9F9] transition-colors bg-white`}>
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-black text-white flex items-center justify-center shrink-0">
-                      <Phone size={18} />
-                    </div>
-                    <div className="flex-1">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-1">Telefon</span>
-                      <h4 className="text-lg font-black uppercase tracking-[-0.05em] mb-3">Ring Til Os</h4>
-                      <div className="text-sm font-medium">
-                        <a href="tel:+4512345678" className="text-black hover:underline transition-colors">
-                          +45 12 34 56 78
-                        </a>
-                        <p className="text-gray-400 mt-2">Man-Fre: 09:00 - 17:00</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Hours */}
-                <div className={`p-6 border ${borderColor} group hover:bg-[#F9F9F9] transition-colors bg-white`}>
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-black text-white flex items-center justify-center shrink-0">
-                      <Clock size={18} />
-                    </div>
-                    <div className="flex-1">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-1">Åbningstider</span>
-                      <h4 className="text-lg font-black uppercase tracking-[-0.05em] mb-3">Vi Er Her</h4>
-                      <div className="text-sm font-medium text-gray-600 space-y-1">
-                        <div className="flex justify-between">
-                          <span>Mandag - Fredag</span>
-                          <span className="font-bold text-black">09:00 - 17:00</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Weekend</span>
-                          <span className="text-gray-400">Lukket</span>
-                        </div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-full h-[2px] bg-gray-400 -rotate-45" />
                       </div>
                     </div>
                   </div>

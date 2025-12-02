@@ -329,7 +329,7 @@ const Portal: React.FC = () => {
          {/* Subtle Grid Background Pattern */}
          <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
               style={{ 
-                  backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', 
+                  backgroundImage: 'linear-gradient(#1b1b1b 1px, transparent 1px), linear-gradient(90deg, #1b1b1b 1px, transparent 1px)', 
                   backgroundSize: '40px 40px' 
               }}>
          </div>

@@ -38,7 +38,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onSave }) => {
 
   // Mock Brand Data for the Client
   const brandColors = [
-    { name: 'Primary Black', value: '#000000' },
+    { name: 'Primary Black', value: '#1b1b1b' },
     { name: 'Off White', value: '#F9F9F9' },
     { name: 'Accent Red', value: '#FF3B30' },
     { name: 'Hoffmeister Grey', value: '#EBE9E9' },
