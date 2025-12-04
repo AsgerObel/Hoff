@@ -33,7 +33,7 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose }) => {
 
       <aside className={`${mobileClasses} ${desktopClasses} flex flex-col border-r border-[#EBE9E9] h-screen bg-white relative w-64 shrink-0`}>
         {/* Brand Header */}
-        <div className="h-32 border-b border-[#EBE9E9] p-6 flex items-center justify-between">
+        <div className="h-[127px] border-b border-[#EBE9E9] p-6 flex items-center justify-between">
           <Link to="/" className="text-3xl font-black leading-tight tracking-[-0.05em] uppercase hover:opacity-70 transition-opacity">
             Hoffmeister<br />Studio
           </Link>

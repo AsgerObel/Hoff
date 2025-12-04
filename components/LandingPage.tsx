@@ -7,7 +7,7 @@ const LandingPage: React.FC = () => {
   const marqueeServices = "BRAND IDENTITY — WEB DESIGN — ART DIRECTION — DIGITAL STRATEGY — CAMPAIGN — SOCIAL MEDIA — ";
 
   return (
-    <div className="flex h-screen bg-white text-black font-sans selection:bg-[#1D5E2C] selection:text-white overflow-hidden">
+    <div className="flex h-screen bg-white text-black font-sans selection:bg-black selection:text-white overflow-hidden">
       
       {/* LEFT FIXED COLUMN */}
       <div className={`w-[188px] flex flex-col justify-between border-r ${borderColor} relative z-50`}>
@@ -82,7 +82,7 @@ const LandingPage: React.FC = () => {
           </div>
 
           {/* MANIFESTO */}
-          <section className={`bg-[#1D5E2C] text-white p-16 md:py-32 text-center border-b ${borderColor}`}>
+          <section className={`bg-black text-white p-16 md:py-32 text-center border-b ${borderColor}`}>
              <p className="text-3xl md:text-5xl font-bold uppercase leading-tight tracking-[-0.05em] max-w-4xl mx-auto">
                 "Brutally simple digital products for complex problems."
              </p>

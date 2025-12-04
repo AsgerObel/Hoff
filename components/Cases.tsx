@@ -15,6 +15,13 @@ interface CaseItem {
 const Cases: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hoveredCase, setHoveredCase] = useState<string | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  // Track mouse position for the floating preview
+  const handleMouseMove = (e: React.MouseEvent) => {
+    // Calculate Y position relative to viewport for the fixed right-side preview
+    setMousePos({ x: e.clientX, y: e.clientY });
+  };
 
   const cases: CaseItem[] = [
     {
@@ -85,18 +92,29 @@ const Cases: React.FC = () => {
       />
 
       {/* MAIN CONTENT AREA */}
-      <main className="flex-1 overflow-y-auto relative pt-16 md:pt-0">
-        {/* Subtle Grid Background Pattern */}
-        <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
-             style={{ 
-               backgroundImage: 'linear-gradient(#1b1b1b 1px, transparent 1px), linear-gradient(90deg, #1b1b1b 1px, transparent 1px)', 
-               backgroundSize: '40px 40px' 
-             }}>
+      <main className="flex-1 overflow-y-auto relative pt-16 md:pt-0 bg-white" onMouseMove={handleMouseMove}>
+        
+        {/* Right Side Fixed Image Preview - Aligned with Cursor Y */}
+        <div 
+          className="fixed right-[5%] w-[400px] h-[250px] z-50 pointer-events-none transition-all duration-300 ease-out overflow-hidden hidden xl:block shadow-xl"
+          style={{ 
+            top: mousePos.y,
+            transform: 'translateY(-50%)',
+            opacity: hoveredCase ? 1 : 0,
+          }}
+        >
+          {hoveredCase && (
+            <img 
+              src={cases.find(c => c.id === hoveredCase)?.imageUrl} 
+              alt="" 
+              className="w-full h-full object-cover"
+            />
+          )}
         </div>
 
-        <div className="relative z-10">
+        <div className="relative z-10 min-h-screen flex flex-col">
           
-          {/* Header Area - aligned with sidebar header border */}
+          {/* Header Area */}
           <div className="bg-white w-full border-b border-[#EBE9E9]">
             <div className="max-w-[1400px] mx-auto px-4 md:px-12 h-[127px] flex items-center">
               <h1 className="text-4xl md:text-5xl font-black uppercase tracking-[-0.05em] leading-none">
@@ -105,52 +123,59 @@ const Cases: React.FC = () => {
             </div>
           </div>
 
-          {/* Cases Grid */}
-          <div className="max-w-[1400px] mx-auto px-4 md:px-12 py-8 md:py-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-              {cases.map((caseItem, index) => (
-                <div 
-                  key={caseItem.id}
-                  className="group cursor-pointer border border-[#EBE9E9] bg-white hover:border-black transition-colors"
-                  onMouseEnter={() => setHoveredCase(caseItem.id)}
-                  onMouseLeave={() => setHoveredCase(null)}
-                >
-                  {/* Image */}
-                  <div className="relative overflow-hidden aspect-[4/3]">
-                    <img 
-                      src={caseItem.imageUrl} 
-                      alt={caseItem.title}
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-                    />
-                    {/* Overlay on hover */}
-                    <div className={`absolute inset-0 bg-black/60 flex items-center justify-center transition-opacity duration-300 ${hoveredCase === caseItem.id ? 'opacity-100' : 'opacity-0'}`}>
-                      <div className="text-white text-center p-6">
-                        <p className="text-sm font-medium mb-4 max-w-xs">{caseItem.description}</p>
-                        <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest border border-white px-4 py-2 hover:bg-white hover:text-black transition-colors">
-                          Se Case <ArrowUpRight size={12} />
-                        </span>
-                      </div>
-                    </div>
-                    {/* Number Badge */}
-                    <div className="absolute top-4 left-4 text-6xl font-black text-white/20 leading-none select-none">
-                      {String(index + 1).padStart(2, '0')}
-                    </div>
+          {/* Cases List - Data Table Style */}
+          <div className="flex-1 bg-white pb-24">
+            {/* List Header - Full Width Border */}
+            <div className="w-full border-b border-black">
+              <div className="max-w-[1400px] mx-auto">
+                <div className="h-[77px] grid grid-cols-12 gap-4 px-4 md:px-12 text-[10px] font-bold uppercase tracking-widest text-black items-center">
+                  <div className="col-span-6 md:col-span-5 flex items-center gap-1">
+                    Projekt
                   </div>
-
-                  {/* Info */}
-                  <div className="p-6 flex items-start justify-between">
-                    <div>
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{caseItem.category}</span>
-                        <span className="text-gray-300">—</span>
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{caseItem.year}</span>
-                      </div>
-                      <h3 className="text-xl font-black uppercase tracking-[-0.05em]">{caseItem.title}</h3>
-                    </div>
-                    <ArrowUpRight size={20} className="opacity-0 group-hover:opacity-100 transition-opacity mt-1" />
+                  <div className="col-span-4 md:col-span-3 flex items-center gap-1">
+                    Kategori
+                  </div>
+                  <div className="col-span-2 text-right flex items-center justify-end gap-1">
+                    År
                   </div>
                 </div>
-              ))}
+              </div>
+            </div>
+
+            <div className="max-w-[1400px] mx-auto">
+              {/* List Items */}
+              <div className="">
+                {cases.map((caseItem) => (
+                  <div 
+                    key={caseItem.id}
+                    className="group relative"
+                  >
+                    <div className="absolute inset-x-0 bottom-0 border-b border-black w-screen left-[50%] -translate-x-[50%]" />
+                    <div 
+                      className="grid grid-cols-12 gap-4 px-4 md:px-12 py-4 cursor-pointer transition-colors hover:bg-gray-100 items-center relative z-10"
+                      onMouseEnter={() => setHoveredCase(caseItem.id)}
+                      onMouseLeave={() => setHoveredCase(null)}
+                    >
+                      {/* Title */}
+                      <div className="col-span-6 md:col-span-5">
+                        <h2 className="text-base md:text-lg font-medium tracking-tight text-black">
+                          {caseItem.title}
+                        </h2>
+                      </div>
+
+                      {/* Category */}
+                      <div className="col-span-4 md:col-span-3">
+                        <span className="text-sm text-gray-600 font-medium">{caseItem.category}</span>
+                      </div>
+
+                      {/* Year */}
+                      <div className="col-span-2 text-right">
+                        <span className="text-sm font-mono text-gray-500">{caseItem.year}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 

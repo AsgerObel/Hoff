@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check, Menu } from 'lucide-react';
 import PublicSidebar from './PublicSidebar';
+import LiveClock from './LiveClock';
 
 const Kontakt: React.FC = () => {
   const borderColor = "border-[#EBE9E9]";
@@ -77,7 +78,7 @@ const Kontakt: React.FC = () => {
       />
 
       {/* MAIN CONTENT AREA */}
-      <main className="flex-1 overflow-hidden relative pt-16 md:pt-0">
+      <main className="flex-1 overflow-y-auto relative pt-16 md:pt-0">
         {/* Subtle Grid Background Pattern */}
         <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
              style={{ 
@@ -97,11 +98,11 @@ const Kontakt: React.FC = () => {
             </div>
           </div>
 
-          {/* Content - Fits exactly in viewport without scroll */}
-          <div className="max-w-[1400px] mx-auto px-4 md:px-12 py-4 h-[calc(100vh-127px)] flex flex-col overflow-hidden">
+          {/* Content */}
+          <div className="max-w-[1400px] mx-auto px-4 md:px-12 py-4 min-h-[calc(100vh-127px-200px)] flex flex-col">
             
             {/* Two Column Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 h-full overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 h-full">
               
               {/* LEFT: Contact Form */}
               <div className={`border ${borderColor} p-6 bg-white relative h-full flex flex-col`}>
@@ -239,7 +240,7 @@ const Kontakt: React.FC = () => {
               </div>
 
               {/* RIGHT COLUMN: Info Cards + Map */}
-              <div className="flex flex-col gap-3 h-full overflow-hidden">
+              <div className="flex flex-col gap-3 h-full">
                 {/* Info Cards - 2x2 Grid */}
                 <div className="grid grid-cols-2 gap-3 content-start">
                   {/* Location */}
@@ -310,6 +311,44 @@ const Kontakt: React.FC = () => {
             </div>
 
           </div>
+
+          {/* FOOTER */}
+          <footer className="px-8 md:px-16 py-10 border-t border-[#EBE9E9] mt-12 bg-white">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full h-full items-start">
+              {/* Left: Socials */}
+              <div className="flex flex-col justify-between h-full">
+                <span className="text-sm font-bold uppercase tracking-widest">©2025</span>
+                <div className="flex flex-col gap-2 mt-8">
+                  <a href="#" className="text-sm font-bold uppercase tracking-widest hover:text-gray-500 flex items-center gap-2">
+                    <span className="text-gray-300">//</span> LinkedIn
+                  </a>
+                  <a href="#" className="text-sm font-bold uppercase tracking-widest hover:text-gray-500 flex items-center gap-2">
+                    <span className="text-gray-300">//</span> Instagram
+                  </a>
+                </div>
+              </div>
+
+              {/* Center: Clock */}
+              <div className="flex justify-center items-center h-full">
+                <div className="-mt-3">
+                  <LiveClock />
+                </div>
+              </div>
+
+              {/* Right: Contact */}
+              <div className="flex flex-col justify-between h-full md:text-right">
+                <div>
+                  <h3 className="text-2xl font-black uppercase tracking-[-0.05em] leading-none">HOFFMEISTER</h3>
+                  <h3 className="text-2xl font-black uppercase tracking-[-0.05em] leading-none">STUDIO</h3>
+                </div>
+                <div className="flex flex-col gap-1 mt-8">
+                  <a href="mailto:NIKOLAJ@gmail.com" className="text-sm font-bold uppercase tracking-widest hover:underline">NIKOLAJ@gmail.com</a>
+                  <span className="text-sm font-bold uppercase tracking-widest">+45123456789</span>
+                </div>
+              </div>
+            </div>
+          </footer>
+
         </div>
       </main>
     </div>
