@@ -19,7 +19,7 @@ const INITIAL_TASKS: ProjectTask[] = [
     id: 't1',
     category: 'Branding',
     title: 'Emballage Design',
-    status: ProjectStatus.PENDING,
+    status: ProjectStatus.IN_PROGRESS,
     imageUrl: 'https://picsum.photos/600/600?random=1', // Placeholder
     createdAt: '2025-10-20T09:00:00',
     lastUpdated: new Date().toISOString(),
@@ -124,8 +124,8 @@ const INITIAL_TASKS: ProjectTask[] = [
   {
     id: 't7',
     category: 'Branding',
-    title: 'Mulepose Mockup',
-    status: ProjectStatus.PENDING,
+    title: 'Mulepose',
+    status: ProjectStatus.IN_PROGRESS,
     imageUrl: 'https://picsum.photos/600/700?random=7',
     createdAt: '2026-01-10T08:30:00',
     lastUpdated: new Date().toISOString(),
