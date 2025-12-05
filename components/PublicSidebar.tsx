@@ -7,9 +7,11 @@ interface PublicSidebarProps {
   onClose: () => void;
   darkMode?: boolean;
   backgroundColor?: string;
+  borderColor?: string;
+  customHoverClass?: string;
 }
 
-const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose, darkMode = false, backgroundColor }) => {
+const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose, darkMode = false, backgroundColor, borderColor, customHoverClass }) => {
   const location = useLocation();
   
   const menuItems = [
@@ -21,8 +23,8 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose, darkMode
   // Theme classes
   const bgClass = backgroundColor ? '' : (darkMode ? 'bg-[#0A0A0A]' : 'bg-white');
   const textClass = darkMode ? 'text-white' : 'text-black';
-  const borderClass = darkMode ? 'border-white/10' : 'border-[#EBE9E9]';
-  const hoverClass = darkMode ? 'hover:bg-white/5' : 'hover:bg-[#EBE9E9]';
+  const borderClass = borderColor || (darkMode ? 'border-white/10' : 'border-[#EBE9E9]');
+  const hoverClass = customHoverClass || (darkMode ? 'hover:bg-white/5' : 'hover:bg-[#EBE9E9]');
   const activeClass = darkMode ? 'bg-white/10' : 'bg-[#EBE9E9]';
 
   // Mobile drawer classes

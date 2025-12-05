@@ -15,6 +15,9 @@ interface CaseItem {
   brandColor?: string;
   brandFont?: string;
   isUppercase?: boolean;
+  textColor?: string;
+  letterSpacing?: string;
+  hoverFontSize?: string;
   isActive: boolean;
 }
 
@@ -33,6 +36,8 @@ const Cases: React.FC = () => {
       imageUrl: '/cases/lava/maanedens-ret.png',
       description: 'Social media strategi og content creation for restaurant.',
       brandColor: '#0C3925',
+      isUppercase: true,
+      textColor: 'white',
       isActive: true
     },
     {
@@ -41,12 +46,12 @@ const Cases: React.FC = () => {
       title: 'Nordbrew',
       category: 'Branding',
       year: '2024',
-      imageUrl: '/cases/nordbrew/thumbnail.jpg',
+      imageUrl: '/cases/nordbrew/Mockups - packaging.png',
       description: 'Komplet visuel identitet for bryggeri.',
       brandColor: 'linear-gradient(to bottom, #FFFFFF, #F6D876, #F3C94B)',
       brandFont: "'Anton', sans-serif",
       isUppercase: true,
-      isActive: false
+      isActive: true
     },
     {
       id: '3',
@@ -54,9 +59,13 @@ const Cases: React.FC = () => {
       title: 'Dubs & Donkraft',
       category: 'Branding',
       year: '2024',
-      imageUrl: '/cases/dubs-donkraft/thumbnail.jpg',
+      imageUrl: '/cases/dubs-donkraft/Artboard 1.png',
       description: 'Visuel identitet og branding.',
-      isActive: false
+      brandColor: '#fbf7df',
+      brandFont: "'PODIUM Soft', sans-serif",
+      isUppercase: true,
+      textColor: '#1b1b1b',
+      isActive: true
     },
     {
       id: '4',
@@ -64,9 +73,13 @@ const Cases: React.FC = () => {
       title: 'Grenaa Chocolaterier',
       category: 'Branding',
       year: '2024',
-      imageUrl: '/cases/grenaa-chocolaterier/thumbnail.jpg',
-      description: 'Chokolade branding og emballage design.',
-      isActive: false
+      imageUrl: '/cases/grenaa-chocolaterier/Artboard 1.png',
+      description: 'Chokolade branding, logo og visitkort.',
+      brandColor: '#F2F1E4',
+      brandFont: "'OCTIN College', sans-serif",
+      isUppercase: true,
+      textColor: '#2E2E2E',
+      isActive: true
     },
     {
       id: '5',
@@ -74,9 +87,15 @@ const Cases: React.FC = () => {
       title: 'RO Gus',
       category: 'Branding',
       year: '2024',
-      imageUrl: '/cases/ro-gus/thumbnail.jpg',
-      description: 'Logo og visuel identitet.',
-      isActive: false
+      imageUrl: '/cases/ro-gus/Bag Mockup on the Wall.png',
+      description: 'Saunagus branding og merchandise.',
+      brandColor: '#E5E5E5',
+      brandFont: "'Koulen', cursive",
+      textColor: '#1A1A1A',
+      letterSpacing: 'normal',
+      hoverFontSize: '2.5rem',
+      isUppercase: true,
+      isActive: true
     },
   ];
 
@@ -102,6 +121,9 @@ const Cases: React.FC = () => {
         {/* Font Imports */}
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap');
+          @import url('https://fonts.cdnfonts.com/css/podium-soft');
+          @import url('https://fonts.cdnfonts.com/css/octin-college');
+          @import url('https://fonts.googleapis.com/css2?family=Koulen&display=swap');
           
           .case-row {
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -118,6 +140,11 @@ const Cases: React.FC = () => {
           
           .case-row:hover .case-title {
             letter-spacing: 0.02em;
+          }
+
+          @keyframes borderSlide {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
           }
         `}</style>
 
@@ -171,12 +198,23 @@ const Cases: React.FC = () => {
               <div className="">
                 {cases.map((caseItem) => {
                   const isHovered = hoveredCase === caseItem.id;
+                  const textColor = isHovered && caseItem.textColor ? caseItem.textColor : 'black';
+                  const secondaryColor = isHovered && caseItem.textColor === 'white' ? 'rgba(255,255,255,0.8)' : (isHovered ? 'black' : '#4B5563'); // gray-600
+
+                  // Special logic for Dubs & Donkraft multicolor border
+                  const isDubs = caseItem.slug === 'dubs-donkraft';
+                  const dubsStyle = isDubs && isHovered ? {
+                    background: '#fbf7df',
+                    boxShadow: 'inset 0 0 0 2px #1b1b1b, inset 0 0 0 4px #fbf7df, inset 0 0 0 6px #656048',
+                  } : {};
+
                   return (
                     <div 
                       key={caseItem.id}
-                      className="group relative"
+                      className="group relative transition-all duration-300"
                       style={{
                         background: isHovered && caseItem.brandColor ? caseItem.brandColor : 'white',
+                        ...(isDubs && isHovered ? dubsStyle : {})
                       }}
                       onMouseEnter={() => setHoveredCase(caseItem.id)}
                       onMouseLeave={() => setHoveredCase(null)}
@@ -184,7 +222,9 @@ const Cases: React.FC = () => {
                     >
                       <div className="absolute inset-x-0 bottom-0 border-b border-[#EBE9E9] w-screen left-[50%] -translate-x-[50%]" />
                       <div 
-                        className={`case-row flex items-center gap-4 px-4 md:px-12 py-3 relative z-10 ${caseItem.isActive ? 'cursor-pointer' : 'cursor-default opacity-60'}`}
+                        className={`case-row flex items-center gap-4 px-4 md:px-12 relative z-10 ${
+                          caseItem.isActive ? 'cursor-pointer' : 'cursor-default opacity-60'
+                        } ${isDubs && isHovered ? 'py-4' : 'py-3'}`}
                       >
                         {/* Title */}
                         <div className="flex-1 min-w-0 flex items-center gap-3">
@@ -193,8 +233,10 @@ const Cases: React.FC = () => {
                             style={{
                               fontFamily: isHovered && caseItem.brandFont ? caseItem.brandFont : "'Inter', sans-serif",
                               textTransform: isHovered && caseItem.isUppercase ? 'uppercase' : 'none',
-                              fontWeight: isHovered && caseItem.brandFont ? 400 : 500,
-                              color: 'black',
+                              fontWeight: isHovered && caseItem.isUppercase ? 900 : 500,
+                              color: textColor,
+                              letterSpacing: isHovered && caseItem.letterSpacing ? caseItem.letterSpacing : undefined,
+                              fontSize: isHovered && caseItem.hoverFontSize ? caseItem.hoverFontSize : undefined,
                             }}
                           >
                             {caseItem.title}
@@ -208,14 +250,30 @@ const Cases: React.FC = () => {
 
                         {/* Category */}
                         <div className="w-32 md:w-48 shrink-0">
-                          <span className="text-sm text-gray-600 font-medium transition-all duration-300" style={{ opacity: isHovered ? 0.7 : 1 }}>{caseItem.category}</span>
+                          <span 
+                            className="text-sm font-medium transition-all duration-300" 
+                            style={{ 
+                              opacity: isHovered ? 1 : 1,
+                              color: isHovered ? secondaryColor : '#4B5563'
+                            }}
+                          >
+                            {caseItem.category}
+                          </span>
                         </div>
 
                         {/* Year */}
                         <div className="w-16 shrink-0 flex items-center gap-2">
-                          <span className="text-sm font-mono text-gray-500 transition-all duration-300" style={{ opacity: isHovered ? 0.7 : 1 }}>{caseItem.year}</span>
+                          <span 
+                            className="text-sm font-mono transition-all duration-300" 
+                            style={{ 
+                              opacity: isHovered ? 1 : 1,
+                              color: isHovered ? secondaryColor : '#6B7280'
+                            }}
+                          >
+                            {caseItem.year}
+                          </span>
                           {caseItem.isActive && isHovered && (
-                            <ArrowUpRight size={16} className="text-black" />
+                            <ArrowUpRight size={16} color={textColor} />
                           )}
                         </div>
                       </div>
