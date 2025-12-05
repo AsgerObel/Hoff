@@ -5,9 +5,11 @@ import { X, Menu } from 'lucide-react';
 interface PublicSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  darkMode?: boolean;
+  backgroundColor?: string;
 }
 
-const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose }) => {
+const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose, darkMode = false, backgroundColor }) => {
   const location = useLocation();
   
   const menuItems = [
@@ -16,9 +18,16 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose }) => {
     { id: 'kontakt', label: 'Kontakt', path: '/kontakt' },
   ];
 
+  // Theme classes
+  const bgClass = backgroundColor ? '' : (darkMode ? 'bg-[#0A0A0A]' : 'bg-white');
+  const textClass = darkMode ? 'text-white' : 'text-black';
+  const borderClass = darkMode ? 'border-white/10' : 'border-[#EBE9E9]';
+  const hoverClass = darkMode ? 'hover:bg-white/5' : 'hover:bg-[#EBE9E9]';
+  const activeClass = darkMode ? 'bg-white/10' : 'bg-[#EBE9E9]';
+
   // Mobile drawer classes
   const mobileClasses = `fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`;
-  // Desktop classes (always visible)
+  
   const desktopClasses = `md:translate-x-0 md:static md:flex`;
 
   return (
@@ -31,9 +40,12 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose }) => {
         />
       )}
 
-      <aside className={`${mobileClasses} ${desktopClasses} flex flex-col border-r border-[#EBE9E9] h-screen bg-white relative w-64 shrink-0`}>
+      <aside 
+        className={`${mobileClasses} ${desktopClasses} flex flex-col border-r ${borderClass} h-screen ${bgClass} ${textClass} relative w-64 shrink-0 transition-colors duration-300`}
+        style={{ backgroundColor: backgroundColor }}
+      >
         {/* Brand Header */}
-        <div className="h-[127px] border-b border-[#EBE9E9] p-6 flex items-center justify-between">
+        <div className={`h-[127px] border-b ${borderClass} p-6 flex items-center justify-between`}>
           <Link to="/" className="text-3xl font-black leading-tight tracking-[-0.05em] uppercase hover:opacity-70 transition-opacity">
             Hoffmeister<br />Studio
           </Link>
@@ -51,8 +63,8 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose }) => {
                 key={item.id}
                 to={item.path}
                 onClick={onClose}
-                className={`w-full text-left p-6 md:h-[77px] border-b border-[#EBE9E9] text-xl font-bold transition-colors hover:bg-[#EBE9E9] flex items-center gap-4 ${
-                  isActive ? 'bg-[#EBE9E9]' : 'bg-white'
+                className={`w-full text-left p-6 md:h-[77px] border-b ${borderClass} text-xl font-bold uppercase transition-colors flex items-center gap-4 ${hoverClass} ${
+                  isActive ? activeClass : ''
                 }`}
               >
                 <span className="tracking-[-0.05em]">{item.label}</span>
@@ -62,12 +74,12 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose }) => {
         </nav>
 
         {/* Bottom Section */}
-        <div className="mt-auto relative z-20 bg-white">
+        <div className="mt-auto relative z-20">
           {/* Login Link */}
-          <div className="border-t border-[#EBE9E9]">
+          <div className={`border-t ${borderClass}`}>
             <Link 
               to="/login"
-              className="w-full h-20 flex items-center justify-center px-6 transition-colors hover:bg-[#EBE9E9] text-xl font-bold uppercase tracking-[-0.05em]"
+              className={`w-full h-20 flex items-center justify-center px-6 transition-colors text-xl font-bold uppercase tracking-[-0.05em] ${hoverClass}`}
             >
               Login
             </Link>

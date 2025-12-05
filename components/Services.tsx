@@ -193,39 +193,20 @@ const Services: React.FC = () => {
 
           {/* Services Grid - Technical Layout */}
           <div className="max-w-[1400px] mx-auto px-4 md:px-12 pt-4 pb-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-t border-l border-black bg-black">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-t border-l border-[#EBE9E9] bg-[#EBE9E9]">
               {services.map((service, index) => (
                 <div 
                   key={service.id}
                   onClick={() => setExpandedService(expandedService === service.id ? null : service.id)}
-                  className={`group relative border-r border-b border-black p-8 md:p-12 flex flex-col justify-between transition-all duration-500 ease-in-out cursor-pointer overflow-hidden h-full ${
+                  className={`group relative border-r border-b border-[#EBE9E9] p-8 md:p-12 flex flex-col justify-between transition-all duration-500 ease-in-out cursor-pointer overflow-hidden h-full ${
                     expandedService === service.id 
                       ? 'min-h-[600px] bg-black text-white' 
                       : 'min-h-[500px] bg-white hover:bg-black text-black'
                   }`}
                 >
-                  {/* Crosshair Decorations */}
-                  <div className={`absolute top-2 left-2 ${expandedService === service.id ? 'text-white/20' : 'text-black/20 group-hover:text-white/20'}`}><Plus size={12} strokeWidth={1} /></div>
-                  <div className={`absolute top-2 right-2 ${expandedService === service.id ? 'text-white/20' : 'text-black/20 group-hover:text-white/20'}`}><Plus size={12} strokeWidth={1} /></div>
-
-                  {/* Giant Editorial Number Background */}
-                  <div 
-                    className={`absolute bottom-[-20px] right-[-20px] text-[200px] leading-none font-black tracking-tighter select-none pointer-events-none transition-all duration-700 ease-out ${
-                      expandedService === service.id 
-                        ? 'opacity-10 translate-y-0 scale-100' 
-                        : 'opacity-0 translate-y-10 scale-95'
-                    }`}
-                    style={{ 
-                      WebkitTextStroke: '2px rgba(255,255,255,0.3)',
-                      color: 'transparent' 
-                    }}
-                  >
-                    {String(index + 1).padStart(2, '0')}
-                  </div>
-
                   {/* Top Bar */}
                   <div className="flex justify-between items-start mb-12">
-                    <div className={`border px-3 py-1 text-xs font-bold font-mono ${expandedService === service.id ? 'border-white text-white' : 'border-black group-hover:border-white group-hover:text-white'}`}>
+                    <div className={`border px-3 py-1 text-xs font-bold font-mono ${expandedService === service.id ? 'border-white text-white' : 'border-[#EBE9E9] group-hover:border-white group-hover:text-white'}`}>
                       {String(index + 1).padStart(2, '0')}
                     </div>
                     <div className={`text-[10px] font-mono tracking-widest uppercase ${expandedService === service.id ? 'text-white/60' : 'text-gray-400 group-hover:text-white/60'}`}>

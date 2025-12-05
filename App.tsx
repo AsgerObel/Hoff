@@ -5,6 +5,7 @@ import Portal from './components/Portal';
 import Kontakt from './components/Kontakt';
 import Cases from './components/Cases';
 import Services from './components/Services';
+import LavaCase from './components/cases/LavaCase';
 
 const App: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<Portal />} />
         <Route path="/kontakt" element={<Kontakt />} />
         <Route path="/cases" element={<Cases />} />
+        <Route path="/cases/lava" element={<LavaCase />} />
         <Route path="/services" element={<Services />} />
         {/* Add a catch-all route if needed, or redirect */}
         <Route path="*" element={<LandingPage />} />
