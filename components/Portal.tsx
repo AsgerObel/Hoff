@@ -31,7 +31,7 @@ const INITIAL_TASKS: ProjectTask[] = [
       {
         id: 'c1',
         userId: 'u1',
-        text: 'Kan Berry Bad Boy varianten laves i en mere blå nuance?',
+        text: 'Kan vi prøve at gøre farven lidt mørkere, så den står skarpere?',
         timestamp: '2025-08-10T15:14:00'
       }
     ]
@@ -49,13 +49,13 @@ const INITIAL_TASKS: ProjectTask[] = [
       {
         id: 'c2',
         userId: 'u1', // Client
-        text: 'Flot design, man kan vi få ændret kaffekoppen til at være en telefon i stedet for?',
+        text: 'Flot design, men kan vi få ændret farven på ikonet til at være mere fremtrædende?',
         timestamp: '2025-11-20T10:35:00'
       },
       {
         id: 'c3',
         userId: 'admin',
-        text: 'Kaffekoppen bliver ændret til en telefon.',
+        text: 'Vi kigger på det og sender et nyt udkast i morgen.',
         timestamp: '2025-11-20T14:15:00'
       }
     ]
@@ -63,7 +63,7 @@ const INITIAL_TASKS: ProjectTask[] = [
   {
     id: 't3',
     category: 'Web Design',
-    title: 'Forside Layout',
+    title: 'Hjemmeside Layout',
     status: ProjectStatus.APPROVED,
     imageUrl: 'https://picsum.photos/600/400?random=3',
     createdAt: '2025-09-01T10:00:00',
@@ -80,7 +80,7 @@ const INITIAL_TASKS: ProjectTask[] = [
   {
     id: 't4',
     category: 'SoMe',
-    title: 'Instagram Kampagne Q4',
+    title: 'Instagram Opslag',
     status: ProjectStatus.PENDING,
     imageUrl: 'https://picsum.photos/600/800?random=4',
     createdAt: '2025-12-05T09:00:00',
@@ -89,13 +89,13 @@ const INITIAL_TASKS: ProjectTask[] = [
         { name: 'IG_Story_Mockup.png', url: '#', type: 'PNG', size: '1.2 MB' }
     ],
     comments: [
-        { id: 'c5', userId: 'admin', text: 'Skal vi bruge billeder fra den nye fotoshoot til disse opslag?', timestamp: '2025-12-05T11:00:00' }
+        { id: 'c5', userId: 'admin', text: 'Her er udkast til jeres opslag. Er teksten som I ønskede?', timestamp: '2025-12-05T11:00:00' }
     ]
   },
   {
     id: 't5',
     category: 'Visuel Identitet',
-    title: 'Farvepalette Guide',
+    title: 'Brand Farver',
     status: ProjectStatus.APPROVED,
     imageUrl: 'https://picsum.photos/600/600?random=5',
     createdAt: '2025-06-15T10:00:00',
@@ -111,14 +111,14 @@ const INITIAL_TASKS: ProjectTask[] = [
   {
     id: 't6',
     category: 'Web Design',
-    title: 'Kontaktformular Flow',
+    title: 'Hjemmeside Design',
     status: ProjectStatus.IN_PROGRESS,
     imageUrl: 'https://picsum.photos/800/600?random=6',
     createdAt: '2025-11-25T13:45:00',
     lastUpdated: new Date().toISOString(),
     assets: [],
     comments: [
-        { id: 'c7', userId: 'admin', text: 'Vi har tilføjet validering på email feltet som aftalt.', timestamp: '2025-11-26T10:00:00' }
+        { id: 'c7', userId: 'admin', text: 'Vi har opdateret layoutet, så det matcher jeres ønsker.', timestamp: '2025-11-26T10:00:00' }
     ]
   },
   {
@@ -133,13 +133,13 @@ const INITIAL_TASKS: ProjectTask[] = [
         { name: 'Tote_Bag_Mockup.psd', url: '#', type: 'PNG', size: '45 MB' }
     ],
     comments: [
-        { id: 'c8', userId: 'u1', text: 'Kan logoet gøres ca 20% større på forsiden?', timestamp: '2026-01-10T14:20:00' }
+        { id: 'c8', userId: 'u1', text: 'Ser godt ud. Kan vi se det med sort baggrund også?', timestamp: '2026-01-10T14:20:00' }
     ]
   },
   {
     id: 't8',
     category: 'SoMe',
-    title: 'LinkedIn Bannere',
+    title: 'LinkedIn Grafik',
     status: ProjectStatus.IN_PROGRESS,
     imageUrl: 'https://picsum.photos/800/400?random=8',
     createdAt: '2025-10-01T12:00:00',
@@ -150,7 +150,7 @@ const INITIAL_TASKS: ProjectTask[] = [
   {
     id: 't9',
     category: 'Visuel Identitet',
-    title: 'Ikonpakke (Outline)',
+    title: 'Ikoner',
     status: ProjectStatus.PENDING,
     imageUrl: 'https://picsum.photos/500/500?random=9',
     createdAt: '2025-12-20T15:00:00',
@@ -165,7 +165,7 @@ const INITIAL_TASKS: ProjectTask[] = [
   {
     id: 't10',
     category: 'Web Design',
-    title: 'Mobil Optimering',
+    title: 'Mobil Design',
     status: ProjectStatus.APPROVED,
     imageUrl: 'https://picsum.photos/400/800?random=10',
     createdAt: '2025-08-15T09:15:00',
@@ -174,7 +174,7 @@ const INITIAL_TASKS: ProjectTask[] = [
         { name: 'Mobile_Screens_Export.png', url: '#', type: 'PNG', size: '2.2 MB' }
     ],
     comments: [
-        { id: 'c10', userId: 'u1', text: 'Menuen fungerer perfekt på iPhone nu.', timestamp: '2025-08-20T11:00:00' }
+        { id: 'c10', userId: 'u1', text: 'Menuen fungerer perfekt nu. Godt arbejde!', timestamp: '2025-08-20T11:00:00' }
     ]
   }
 ];
