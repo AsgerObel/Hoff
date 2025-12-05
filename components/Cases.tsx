@@ -93,7 +93,7 @@ const Cases: React.FC = () => {
       brandFont: "'Koulen', cursive",
       textColor: '#1A1A1A',
       letterSpacing: 'normal',
-      hoverFontSize: '2.5rem',
+      hoverFontSize: '1.3rem',
       isUppercase: true,
       isActive: true
     },
