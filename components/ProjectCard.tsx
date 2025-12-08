@@ -10,9 +10,19 @@ interface ProjectCardProps {
   onUndoApprove: (taskId: string) => void;
   onExpand?: () => void; // Optional expand handler
   isExpanded?: boolean; // Expanded state
+  viewMode?: 'single' | 'grid' | 'compact'; // Layout mode
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ task, currentUser, onAddComment, onApprove, onUndoApprove, onExpand, isExpanded = false }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ 
+  task, 
+  currentUser, 
+  onAddComment, 
+  onApprove, 
+  onUndoApprove, 
+  onExpand, 
+  isExpanded = false,
+  viewMode = 'grid' 
+}) => {
   const [newComment, setNewComment] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showApprovedDesign, setShowApprovedDesign] = useState(false);
@@ -112,14 +122,28 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ task, currentUser, onAddComme
 
   const isApproved = task.status === ProjectStatus.APPROVED;
 
+  // Height and Layout logic based on viewMode
+  // Single: Calculates height to fit viewport (Screen - Header - Sticky - Padding)
+  // Compact: Smaller fixed height for dense grid
+  const heightClass = viewMode === 'single' ? 'h-[calc(100vh-320px)] min-h-[450px]' : 
+                      viewMode === 'compact' ? 'h-[250px]' : 
+                      'h-[480px]';
+
   // Conditional classes for Expanded mode - Removed animate-enter
   const containerClasses = isExpanded 
     ? "border border-black bg-white flex flex-col h-full shadow-2xl z-50"
-    : "border border-black bg-white flex flex-col h-[480px] group relative transition-transform hover:-translate-y-1 duration-300";
+    : `border border-black bg-white flex flex-col ${heightClass} group relative transition-all duration-500 ease-in-out hover:-translate-y-1 ${viewMode === 'compact' ? 'cursor-pointer' : ''}`;
+
+  // Handle card click for compact mode
+  const handleCardClick = () => {
+    if (viewMode === 'compact' && onExpand) {
+      onExpand();
+    }
+  };
 
   return (
     <>
-        <div className={containerClasses}>
+        <div className={containerClasses} onClick={handleCardClick}>
         
         {/* Sticker Badge - Added animate-sticker and key prop to re-trigger on status change */}
         <div 
@@ -130,9 +154,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ task, currentUser, onAddComme
         </div>
 
         {/* Header Section */}
-        <div className="grid grid-cols-2 border-b border-black h-12 shrink-0">
+        <div className={`border-b border-black shrink-0 ${viewMode === 'compact' ? 'h-10' : 'h-12 grid grid-cols-2'}`}>
             {/* Left Header: Title + Minimize Button (Only visible when Expanded) */}
-            <div className={`flex flex-col justify-center pl-3 border-r border-black relative transition-all ${isExpanded && onExpand ? 'pr-12' : 'pr-3'}`}>
+            <div className={`flex flex-col justify-center pl-3 border-r border-black relative transition-all overflow-hidden ${viewMode === 'compact' ? 'border-r-0 pr-3' : ''} ${isExpanded && onExpand ? 'pr-12' : 'pr-3'}`}>
                 {/* Minimize Button - Icon Only - Compact - Aligned Right for Symmetry with Godkend button */}
                 {isExpanded && onExpand && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 z-20">
@@ -146,15 +170,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ task, currentUser, onAddComme
                     </div>
                 )}
 
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest flex items-center gap-1.5 whitespace-nowrap">
-                    {task.category} 
-                    <span className="text-gray-300">|</span> 
-                    <span>{formatDate(task.createdAt)}</span>
-                </span>
-                <h3 className="text-base font-bold uppercase truncate tracking-[-0.05em]">{task.title}</h3>
+                {viewMode === 'compact' ? (
+                    <h3 className="text-xs font-bold uppercase truncate tracking-[-0.05em]">{task.title}</h3>
+                ) : (
+                    <>
+                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+                            <span className="truncate">{task.category}</span>
+                            <span className="text-gray-300 shrink-0">|</span> 
+                            <span className="shrink-0">{formatDate(task.createdAt)}</span>
+                        </span>
+                        <h3 className="text-base font-bold uppercase truncate tracking-[-0.05em]">{task.title}</h3>
+                    </>
+                )}
             </div>
 
-            {/* Right Header: Comments + Approve Button */}
+            {/* Right Header: Comments + Approve Button - Hidden in compact mode */}
+            {viewMode !== 'compact' && (
             <div className="flex items-center justify-between px-3">
                 {/* Maximize Button - Only visible when NOT expanded and expand handler exists */}
                 {!isExpanded && onExpand && (
@@ -201,19 +232,29 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ task, currentUser, onAddComme
                     )}
                 </div>
             </div>
+            )}
         </div>
 
         {/* Content Body */}
-        <div className="flex-1 flex flex-col md:grid md:grid-cols-2 min-h-0">
+        <div className={`flex-1 flex flex-col min-h-0 ${viewMode === 'compact' ? '' : 'md:grid md:grid-cols-2'}`}>
             {/* Left: Design Preview */}
-            <div className="border-r border-black bg-white flex items-center justify-center relative overflow-hidden min-h-[240px] md:min-h-0 group">
+            <div className={`bg-white flex items-center justify-center relative overflow-hidden group ${viewMode === 'compact' ? 'h-full' : 'border-r border-black min-h-[240px] md:min-h-0'}`}>
                 
                 {/* Main Image */}
                 <img 
                     src={task.imageUrl} 
                     alt={task.title} 
-                    className={`max-w-full max-h-full object-contain shadow-lg border border-black/10 transition-all duration-500 p-6`}
+                    className={`max-w-full max-h-full object-contain shadow-lg border border-black/10 transition-all duration-500 ${viewMode === 'compact' ? 'p-3' : 'p-6'}`}
                 />
+
+                {/* Compact Mode Hover Overlay - Click to expand indicator */}
+                {viewMode === 'compact' && onExpand && (
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <div className="bg-white p-2 transform scale-90 group-hover:scale-100 transition-transform duration-300">
+                            <Maximize2 size={18} />
+                        </div>
+                    </div>
+                )}
 
                 {/* APPROVED STAMP (Animated) */}
                 {isApproved && !showApprovedDesign && (
@@ -225,8 +266,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ task, currentUser, onAddComme
                 )}
             </div>
 
-            {/* Right: Comments */}
-            <div className="flex flex-col bg-white h-full relative">
+            {/* Right: Comments - Hidden in compact mode on desktop if needed, or just stacked */}
+            <div className={`flex flex-col bg-white h-full relative ${viewMode === 'compact' ? 'hidden' : ''}`}>
             <div ref={commentsContainerRef} className="flex-1 overflow-y-auto p-3 space-y-3">
                 {task.comments.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-gray-400 text-center p-3">

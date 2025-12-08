@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { ProjectTask, User, ProjectStatus } from '../types';
 import ProjectCard from './ProjectCard';
-import { ArrowDownUp, Search, X, Bell } from 'lucide-react';
+import { ArrowDownUp, Search, X, Bell, Square, Grid2x2, LayoutGrid } from 'lucide-react';
 
 interface Notification {
   id: string;
@@ -28,6 +28,7 @@ type SortOrder = 'NEWEST' | 'OLDEST';
 
 const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddComment, onApprove, onUndoApprove, onFocusTask }) => {
   const [filter, setFilter] = useState<ProjectStatus | 'ALL'>('ALL');
+  const [gridCols, setGridCols] = useState<1 | 2 | 4>(1);
   const [sortOrder, setSortOrder] = useState<SortOrder>('NEWEST');
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
@@ -168,6 +169,31 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
 
             {/* Right Side: Search + Sort + Notifications */}
             <div className="relative flex items-center gap-2 self-end md:self-auto w-full md:w-auto justify-end z-50">
+                {/* View Toggles */}
+                <div className="hidden md:flex bg-white border border-black p-0.5 gap-0.5 mr-2">
+                    <button 
+                        onClick={() => setGridCols(1)}
+                        className={`p-1.5 transition-colors ${gridCols === 1 ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
+                        title="Enkeltvisning"
+                    >
+                        <Square size={14} />
+                    </button>
+                    <button 
+                        onClick={() => setGridCols(2)}
+                        className={`p-1.5 transition-colors ${gridCols === 2 ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
+                        title="2 kolonner"
+                    >
+                        <Grid2x2 size={14} />
+                    </button>
+                    <button 
+                        onClick={() => setGridCols(4)}
+                        className={`p-1.5 transition-colors ${gridCols === 4 ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
+                        title="4 kolonner"
+                    >
+                        <LayoutGrid size={14} />
+                    </button>
+                </div>
+
                 {/* Search Input */}
                 <div className="relative group w-full md:w-auto">
                     <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors" size={12} />
@@ -281,7 +307,11 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
 
       {/* Grid Content - With Padding */}
       <div className="max-w-[1600px] mx-auto px-4 md:px-12 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 pb-24">
+        <div className={`grid pb-24 transition-all duration-500 ease-in-out ${
+            gridCols === 1 ? 'grid-cols-1 max-w-5xl mx-auto gap-24' : 
+            gridCols === 2 ? 'grid-cols-1 lg:grid-cols-2 gap-y-20 gap-x-8' : 
+            'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'
+        }`}>
             {filteredAndSortedTasks.map(task => (
             <ProjectCard 
                 key={task.id} 
@@ -291,6 +321,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                 onApprove={onApprove}
                 onUndoApprove={onUndoApprove}
                 onExpand={() => onFocusTask(task.id)}
+                viewMode={gridCols === 1 ? 'single' : gridCols === 4 ? 'compact' : 'grid'}
             />
             ))}
         </div>
