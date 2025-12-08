@@ -139,9 +139,9 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
       {/* Sticky Controls & Filters - Full Width Background */}
       <div className="sticky top-0 z-40 bg-white border-b border-[#EBE9E9]">
         {/* Changed items-center to items-end for bottom alignment */}
-        <div className="max-w-[1600px] mx-auto px-4 md:px-12 py-6 flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
+        <div className={`mx-auto py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 transition-all duration-500 ease-in-out ${gridCols === 1 ? 'max-w-[1600px] px-4 md:px-12' : 'max-w-[1600px] px-4 md:px-12'}`}>
             {/* Filter Buttons */}
-            <div className="flex flex-wrap gap-2 md:gap-4">
+            <div className="flex flex-wrap gap-1.5 md:gap-2">
             <FilterButton 
                 label="Alle Opgaver" 
                 active={filter === 'ALL'} 
@@ -167,71 +167,72 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
             />
             </div>
 
-            {/* Right Side: Search + Sort + Notifications */}
+            {/* Right Side: Search + Sort + Notifications + Grid Toggle */}
             <div className="relative flex items-center gap-2 self-end md:self-auto w-full md:w-auto justify-end z-50">
-                {/* View Toggles */}
-                <div className="hidden md:flex bg-white border border-black p-0.5 gap-0.5 mr-2">
-                    <button 
-                        onClick={() => setGridCols(1)}
-                        className={`p-1.5 transition-colors ${gridCols === 1 ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
-                        title="Enkeltvisning"
-                    >
-                        <Square size={14} />
-                    </button>
-                    <button 
-                        onClick={() => setGridCols(2)}
-                        className={`p-1.5 transition-colors ${gridCols === 2 ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
-                        title="2 kolonner"
-                    >
-                        <Grid2x2 size={14} />
-                    </button>
-                    <button 
-                        onClick={() => setGridCols(4)}
-                        className={`p-1.5 transition-colors ${gridCols === 4 ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
-                        title="4 kolonner"
-                    >
-                        <LayoutGrid size={14} />
-                    </button>
-                </div>
-
                 {/* Search Input */}
-                <div className="relative group w-full md:w-auto">
-                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors" size={12} />
+                <div className="relative group flex items-stretch">
+                    <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors flex items-center h-full pointer-events-none z-10">
+                        <Search size={14} />
+                    </div>
                     <input 
                         type="text" 
-                        placeholder="SØG PROJEKT..." 
+                        placeholder="SØG..." 
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full md:w-[180px] pl-8 pr-8 py-1.5 border border-black bg-white text-[10px] md:text-xs font-bold uppercase placeholder-gray-400 focus:outline-none focus:bg-gray-50 transition-colors tracking-[-0.05em]"
+                        className="w-[110px] md:w-[130px] pl-8 pr-6 h-9 border border-black bg-white text-[10px] font-bold uppercase placeholder-gray-400 focus:outline-none focus:bg-gray-50 transition-colors tracking-[-0.05em]"
                     />
                     {searchQuery && (
                         <button 
                             onClick={() => setSearchQuery('')}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-colors"
+                            className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-colors flex items-center h-full"
                         >
                             <X size={12} />
                         </button>
                     )}
                 </div>
 
+                {/* View Toggles */}
+                <div className="hidden md:flex bg-white border border-black h-9 items-center">
+                    <button 
+                        onClick={() => setGridCols(1)}
+                        className={`px-2.5 h-full flex items-center justify-center transition-colors ${gridCols === 1 ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
+                        title="Enkeltvisning"
+                    >
+                        <Square size={14} />
+                    </button>
+                    <button 
+                        onClick={() => setGridCols(2)}
+                        className={`px-2.5 h-full flex items-center justify-center transition-colors ${gridCols === 2 ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
+                        title="2 kolonner"
+                    >
+                        <Grid2x2 size={14} />
+                    </button>
+                    <button 
+                        onClick={() => setGridCols(4)}
+                        className={`px-2.5 h-full flex items-center justify-center transition-colors ${gridCols === 4 ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
+                        title="4 kolonner"
+                    >
+                        <LayoutGrid size={14} />
+                    </button>
+                </div>
+
                 {/* Sort Toggle */}
                 <button 
                     onClick={toggleSort}
-                    className="flex items-center gap-2 px-3 py-1.5 border border-black hover:bg-gray-50 transition-colors uppercase font-bold text-[10px] md:text-xs tracking-[-0.05em] whitespace-nowrap"
+                    className="flex items-center gap-2 px-3 h-9 border border-black hover:bg-gray-50 transition-colors uppercase font-bold text-[10px] tracking-[-0.05em] whitespace-nowrap"
                 >
                     <ArrowDownUp size={14} />
-                    <span className="hidden sm:inline">{sortOrder === 'NEWEST' ? 'Nyeste Først' : 'Ældste Først'}</span>
-                    <span className="sm:hidden">Sorter</span>
+                    <span className="hidden sm:inline">{sortOrder === 'NEWEST' ? 'Nyeste' : 'Ældste'}</span>
                 </button>
 
                 {/* Notification Bell */}
                 <button 
                     onClick={() => setShowNotifications(!showNotifications)}
-                    className="flex items-center justify-center px-3 py-1.5 border border-black hover:bg-gray-50 transition-colors relative active:scale-95 duration-100 cursor-pointer z-[60]"
+                    className="flex items-center justify-center px-3 h-9 border border-black hover:bg-gray-50 transition-colors relative active:scale-95 duration-100 cursor-pointer z-[60]"
                 >
                     <Bell size={16} className="text-black" />
                     {unreadCount > 0 && (
-                        <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#FF3B30] text-white text-[9px] font-bold flex items-center justify-center rounded-full border border-white">
+                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#FF3B30] text-white text-[9px] font-bold flex items-center justify-center rounded-full border border-white">
                             {unreadCount}
                         </div>
                     )}
@@ -308,7 +309,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
       {/* Grid Content - With Padding */}
       <div className="max-w-[1600px] mx-auto px-4 md:px-12 py-12">
         <div className={`grid pb-24 transition-all duration-500 ease-in-out ${
-            gridCols === 1 ? 'grid-cols-1 max-w-5xl mx-auto gap-24' : 
+            gridCols === 1 ? 'grid-cols-1 max-w-[1600px] gap-24' : 
             gridCols === 2 ? 'grid-cols-1 lg:grid-cols-2 gap-y-20 gap-x-8' : 
             'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'
         }`}>
@@ -345,7 +346,7 @@ const FilterButton: React.FC<{
   onClick: () => void;
   status?: ProjectStatus;
 }> = ({ label, active, onClick, status }) => {
-    let baseClasses = "px-4 py-2 md:px-6 md:py-3 font-bold uppercase text-xs md:text-sm transition-all border tracking-[-0.05em]";
+    let baseClasses = "px-3 py-1.5 md:px-4 md:py-2 font-bold uppercase text-[10px] md:text-xs transition-all border tracking-[-0.05em]";
     
     // Determine active styling based on status
     let activeStyle = "bg-black text-white border-black"; // Default (All)
