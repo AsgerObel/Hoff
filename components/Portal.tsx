@@ -243,6 +243,22 @@ const Portal: React.FC = () => {
     }));
   };
 
+  const handleAddProject = (data: { title: string; category: string; figmaUrl: string }) => {
+    const newTask: ProjectTask = {
+      id: `t${Date.now()}`,
+      category: data.category,
+      title: data.title,
+      status: ProjectStatus.IN_PROGRESS,
+      imageUrl: data.figmaUrl, // Store the Figma URL
+      createdAt: new Date().toISOString(),
+      lastUpdated: new Date().toISOString(),
+      assets: [],
+      comments: []
+    };
+    
+    setTasks(prev => [newTask, ...prev]);
+  };
+
   const handleCloseFocus = () => {
     setIsClosing(true);
     setTimeout(() => {
@@ -300,6 +316,7 @@ const Portal: React.FC = () => {
         onApprove={handleApprove}
         onUndoApprove={handleUndoApprove}
         onFocusTask={setFocusedTaskId}
+        onAddProject={handleAddProject}
       />
     );
   };

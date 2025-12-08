@@ -2,7 +2,8 @@
 import React, { useState, useMemo } from 'react';
 import { ProjectTask, User, ProjectStatus } from '../types';
 import ProjectCard from './ProjectCard';
-import { ArrowDownUp, Search, X, Bell, Square, Grid2x2, LayoutGrid } from 'lucide-react';
+import AddProjectModal from './AddProjectModal';
+import { ArrowDownUp, Search, X, Bell, Square, Grid2x2, LayoutGrid, Plus } from 'lucide-react';
 
 interface Notification {
   id: string;
@@ -22,11 +23,12 @@ interface DashboardProps {
   onApprove: (taskId: string) => void;
   onUndoApprove: (taskId: string) => void;
   onFocusTask: (taskId: string) => void;
+  onAddProject?: (data: { title: string; category: string; figmaUrl: string }) => void;
 }
 
 type SortOrder = 'NEWEST' | 'OLDEST';
 
-const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddComment, onApprove, onUndoApprove, onFocusTask }) => {
+const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddComment, onApprove, onUndoApprove, onFocusTask, onAddProject }) => {
   const [filter, setFilter] = useState<ProjectStatus | 'ALL'>('ALL');
   const [gridCols, setGridCols] = useState<1 | 2 | 4>(1);
   const [sortOrder, setSortOrder] = useState<SortOrder>('NEWEST');
@@ -34,6 +36,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
   const [showNotifications, setShowNotifications] = useState(false);
   const [readNotificationIds, setReadNotificationIds] = useState<Set<string>>(new Set());
   const [initialized, setInitialized] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   // Derive notifications from tasks (Mock logic for demo)
   const notifications: Notification[] = useMemo(() => {
@@ -313,6 +316,14 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
             gridCols === 2 ? 'grid-cols-1 lg:grid-cols-2 gap-y-20 gap-x-8' : 
             'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'
         }`}>
+            {/* Add Project Card */}
+            {onAddProject && (
+              <AddProjectCard 
+                onClick={() => setShowAddModal(true)} 
+                viewMode={gridCols === 1 ? 'single' : gridCols === 4 ? 'compact' : 'grid'}
+              />
+            )}
+            
             {filteredAndSortedTasks.map(task => (
             <ProjectCard 
                 key={task.id} 
@@ -327,7 +338,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
             ))}
         </div>
         
-        {filteredAndSortedTasks.length === 0 && (
+        {filteredAndSortedTasks.length === 0 && !onAddProject && (
             <div className="text-center py-24 text-gray-400">
                 <p className="text-2xl font-bold uppercase tracking-[-0.05em]">Ingen opgaver fundet</p>
                 {searchQuery && (
@@ -336,6 +347,15 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
             </div>
         )}
       </div>
+
+      {/* Add Project Modal */}
+      {onAddProject && (
+        <AddProjectModal 
+          isOpen={showAddModal}
+          onClose={() => setShowAddModal(false)}
+          onSubmit={onAddProject}
+        />
+      )}
     </div>
   );
 };
@@ -368,6 +388,33 @@ const FilterButton: React.FC<{
             {label}
         </button>
     );
+}
+
+// Add Project Card Component
+const AddProjectCard: React.FC<{ 
+  onClick: () => void;
+  viewMode: 'single' | 'grid' | 'compact';
+}> = ({ onClick, viewMode }) => {
+  const heightClass = viewMode === 'single' ? 'h-[calc(100vh-320px)] min-h-[450px]' :
+                      viewMode === 'compact' ? 'h-[250px]' :
+                      'h-[480px]';
+
+  return (
+    <button
+      onClick={onClick}
+      className={`border-2 border-dashed border-gray-300 bg-[#F9F9F9] flex flex-col items-center justify-center ${heightClass} group relative transition-all duration-300 hover:border-black hover:bg-white cursor-pointer`}
+    >
+      <div className="flex flex-col items-center gap-4 text-gray-400 group-hover:text-black transition-colors">
+        <div className="w-16 h-16 border-2 border-dashed border-current rounded-full flex items-center justify-center group-hover:border-solid transition-all">
+          <Plus size={32} className="transition-transform group-hover:scale-110" />
+        </div>
+        <div className="text-center">
+          <p className="font-bold uppercase tracking-[-0.05em] text-sm">Tilføj Projekt</p>
+          <p className="text-xs mt-1 font-medium">Klik for at oprette</p>
+        </div>
+      </div>
+    </button>
+  );
 }
 
 export default Dashboard;

@@ -83,6 +83,18 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     }).toUpperCase();
   };
 
+  // Helper to convert Figma URL to embed URL
+  const getFigmaEmbedUrl = (url: string) => {
+    // If already an embed URL (embed.figma.com or figma.com/embed), return as is
+    if (url.includes('embed.figma.com') || url.includes('figma.com/embed')) {
+      return url;
+    }
+    // Convert file/design/proto URLs to embed format
+    // Example: https://www.figma.com/file/ABC123/... → https://www.figma.com/embed?embed_host=share&url=...
+    const encodedUrl = encodeURIComponent(url);
+    return `https://www.figma.com/embed?embed_host=share&url=${encodedUrl}`;
+  };
+
   // Helper to render text with clickable links
   const renderCommentWithLinks = (text: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -240,12 +252,21 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             {/* Left: Design Preview */}
             <div className={`bg-white flex items-center justify-center relative overflow-hidden group ${viewMode === 'compact' ? 'h-full' : 'border-r border-black min-h-[240px] md:min-h-0'}`}>
                 
-                {/* Main Image */}
-                <img 
-                    src={task.imageUrl} 
-                    alt={task.title} 
-                    className={`max-w-full max-h-full object-contain shadow-lg border border-black/10 transition-all duration-500 ${viewMode === 'compact' ? 'p-3' : 'p-6'}`}
-                />
+                {/* Main Image or Figma Embed */}
+                {(task.imageUrl.includes('figma.com') || task.imageUrl.includes('embed.figma.com')) ? (
+                    <iframe
+                        src={getFigmaEmbedUrl(task.imageUrl)}
+                        className="w-full h-full border-0"
+                        allowFullScreen
+                        title={task.title}
+                    />
+                ) : (
+                    <img 
+                        src={task.imageUrl} 
+                        alt={task.title} 
+                        className={`max-w-full max-h-full object-contain shadow-lg border border-black/10 transition-all duration-500 ${viewMode === 'compact' ? 'p-3' : 'p-6'}`}
+                    />
+                )}
 
                 {/* Compact Mode Hover Overlay - Click to expand indicator */}
                 {viewMode === 'compact' && onExpand && (
