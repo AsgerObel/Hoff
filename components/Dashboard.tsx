@@ -309,7 +309,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
       {/* Grid Content - With Padding */}
       <div className="max-w-[1600px] mx-auto px-4 md:px-12 py-12">
         <div className={`grid pb-24 transition-all duration-500 ease-in-out ${
-            gridCols === 1 ? 'grid-cols-1 max-w-[1600px] gap-24' : 
+            gridCols === 1 ? 'grid-cols-1 max-w-[1600px] gap-40' : 
             gridCols === 2 ? 'grid-cols-1 lg:grid-cols-2 gap-y-20 gap-x-8' : 
             'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'
         }`}>
