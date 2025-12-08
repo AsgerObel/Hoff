@@ -10,6 +10,7 @@ import NordbrewCase from './components/cases/NordbrewCase';
 import DubsAndDonkraftCase from './components/cases/DubsAndDonkraftCase';
 import GrenaaChocolaterierCase from './components/cases/GrenaaChocolaterierCase';
 import RoGusCase from './components/cases/RoGusCase';
+import EchobloomCase from './components/cases/EchobloomCase';
 
 const App: React.FC = () => {
   return (
@@ -24,6 +25,7 @@ const App: React.FC = () => {
         <Route path="/cases/dubs-donkraft" element={<DubsAndDonkraftCase />} />
         <Route path="/cases/grenaa-chocolaterier" element={<GrenaaChocolaterierCase />} />
         <Route path="/cases/ro-gus" element={<RoGusCase />} />
+        <Route path="/cases/echobloom" element={<EchobloomCase />} />
         <Route path="/services" element={<Services />} />
         {/* Add a catch-all route if needed, or redirect */}
         <Route path="*" element={<LandingPage />} />

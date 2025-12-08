@@ -97,6 +97,20 @@ const Cases: React.FC = () => {
       isUppercase: true,
       isActive: true
     },
+    {
+      id: '6',
+      slug: 'echobloom',
+      title: 'Echobloom Records',
+      category: 'Web Design',
+      year: '2025',
+      imageUrl: '/cases/echobloom/Echobloom Records 1.png',
+      description: 'Landing page design for pladeselskab.',
+      brandColor: '#E7000B',
+      brandFont: "'Komu New', 'Anton', sans-serif",
+      textColor: '#151515',
+      isUppercase: true,
+      isActive: true
+    },
   ];
 
   return (
