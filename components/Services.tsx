@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, Plus, ArrowRight } from 'lucide-react';
+import { Menu, ArrowUpRight } from 'lucide-react';
 import PublicSidebar from './PublicSidebar';
 import LiveClock from './LiveClock';
 
@@ -9,160 +9,54 @@ interface ServiceItem {
   title: string;
   description: string;
   features: string[];
-  code: string;
-  imageUrls: string[];
 }
 
 const Services: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [expandedService, setExpandedService] = useState<string | null>(null);
-  const serviceRefs = useRef<Map<string, HTMLDivElement>>(new Map());
-
-  // Mouse position for spotlight effect
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      setMousePos({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
-    }
-  };
-
-  // Handle clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setExpandedService(null);
-      } else {
-        // Check if click is on the "background" (the grid gaps or container itself)
-        // This is tricky with the current structure, but we can check if the target is NOT inside a service card
-        const target = event.target as HTMLElement;
-        const isCard = target.closest('.group.relative');
-        if (!isCard) {
-          setExpandedService(null);
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  const [hoveredService, setHoveredService] = useState<string | null>(null);
+  const borderColor = "border-[#EBE9E9]";
 
   const services: ServiceItem[] = [
     {
       id: 'digital-design',
-      title: 'DIGITAL DESIGN',
+      title: 'Digital Design',
       description: 'Brugervenlige digitale oplevelser der engagerer og konverterer på tværs af platforme.',
-      features: ['UI Design', 'UX Design', 'App Design', 'Prototyping'],
-      code: 'DIG.DES.01',
-      imageUrls: [
-        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400&q=80',
-        'https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=400&q=80',
-        'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&q=80',
-        'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&q=80'
-      ]
+      features: ['UI Design', 'UX Design', 'App Design', 'Prototyping']
     },
     {
       id: 'branding',
-      title: 'BRANDING',
+      title: 'Branding',
       description: 'Vi skaber stærke brands der skiller sig ud og skaber forbindelse til din målgruppe.',
-      features: ['Logo Design', 'Brand Guidelines', 'Tone of Voice', 'Brand Strategy'],
-      code: 'BRND.SYS.02',
-      imageUrls: [
-        'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&q=80',
-        'https://images.unsplash.com/photo-1634942537034-2531766767d1?w=400&q=80',
-        'https://images.unsplash.com/photo-1600607686527-6fb886090705?w=400&q=80',
-        'https://images.unsplash.com/photo-1626785774573-4b799314346d?w=400&q=80'
-      ]
+      features: ['Logo Design', 'Brand Guidelines', 'Tone of Voice', 'Brand Strategy']
     },
     {
       id: 'identity',
-      title: 'VISUEL IDENTITET',
-      description: 'The visual dialect of your brand. High-fidelity graphical assets and art direction.',
-      features: ['Art Direction', 'Motion Graphics', '3D Asset Gen', 'Photography'],
-      code: 'VIS.ID.03',
-      imageUrls: [
-        'https://images.unsplash.com/photo-1547658719-da2b51169166?w=400&q=80',
-        'https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=400&q=80',
-        'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=400&q=80',
-        'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=400&q=80'
-      ]
+      title: 'Visuel Identitet',
+      description: 'Den visuelle dialekt af dit brand. High-fidelity grafiske assets og art direction.',
+      features: ['Art Direction', 'Motion Graphics', '3D Assets', 'Photography']
     },
     {
       id: 'web',
-      title: 'WEB DESIGN',
-      description: 'Responsive architectural layouts for the web. Performance-first methodology.',
-      features: ['E-commerce', 'Portfolio', 'Landing Pages', 'Microsites'],
-      code: 'WEB.ARCH.04',
-      imageUrls: [
-        'https://images.unsplash.com/photo-1600132806370-bf17e65e942f?w=400&q=80',
-        'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=400&q=80',
-        'https://images.unsplash.com/photo-1555421689-491a97ff2040?w=400&q=80',
-        'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=400&q=80'
-      ]
+      title: 'Web Design',
+      description: 'Responsive layouts til web med fokus på performance og brugeroplevelse.',
+      features: ['E-commerce', 'Portfolio', 'Landing Pages', 'Microsites']
     },
     {
       id: 'some',
-      title: 'SoMe OPTIMERING',
+      title: 'SoMe Optimering',
       description: 'Strategisk indhold og kampagner der engagerer din målgruppe på sociale medier.',
-      features: ['Content Strategi', 'Grafisk Design', 'Kampagner', 'Community Management'],
-      code: 'SOC.MED.05',
-      imageUrls: [
-        'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=80',
-        'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=400&q=80',
-        'https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?w=400&q=80',
-        'https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=400&q=80'
-      ]
+      features: ['Content Strategi', 'Grafisk Design', 'Kampagner', 'Community']
     },
     {
       id: 'custom-code',
-      title: 'CUSTOM KODE',
+      title: 'Custom Kode',
       description: 'Skræddersyede løsninger og integrationer der løfter din digitale platform.',
-      features: ['Web Development', 'API Integration', 'Animations', 'Custom Features'],
-      code: 'DEV.OPS.06',
-      imageUrls: [
-        'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&q=80',
-        'https://images.unsplash.com/photo-1555099962-4199c345e5dd?w=400&q=80',
-        'https://images.unsplash.com/photo-1542831371-29b0f74f9713?w=400&q=80',
-        'https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=400&q=80'
-      ]
+      features: ['Web Development', 'API Integration', 'Animations', 'Custom Features']
     },
   ];
 
   return (
-    <div 
-      className="flex h-screen bg-white text-black font-sans overflow-hidden selection:bg-black selection:text-white"
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-    >
-      {/* Global Grain Overlay */}
-      <div className="fixed inset-0 pointer-events-none z-50 opacity-[0.03] mix-blend-overlay"
-           style={{
-             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-           }}
-      />
-      
-      {/* Interactive Spotlight Grid */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div 
-          className="absolute inset-0 opacity-[0.15]"
-          style={{ 
-            background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(0,0,0,0.1), transparent 40%)`
-          }}
-        />
-        <div className="absolute inset-0 opacity-[0.03]" 
-             style={{ 
-               backgroundImage: 'linear-gradient(#1b1b1b 1px, transparent 1px), linear-gradient(90deg, #1b1b1b 1px, transparent 1px)', 
-               backgroundSize: '40px 40px' 
-             }}>
-        </div>
-      </div>
+    <div className="flex h-screen bg-white text-black font-sans overflow-hidden selection:bg-black selection:text-white">
       
       {/* Mobile Header */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-[#EBE9E9] flex items-center justify-between px-6 z-40">
@@ -180,7 +74,32 @@ const Services: React.FC = () => {
 
       {/* MAIN CONTENT AREA */}
       <main className="flex-1 overflow-y-auto relative pt-16 md:pt-0">
-        <div className="relative z-10">
+        {/* CSS for animations */}
+        <style>{`
+          .service-row {
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+          }
+          .service-row:hover {
+            padding-left: 2rem;
+          }
+        `}</style>
+
+        {/* Global Grain Overlay */}
+        <div className="fixed inset-0 pointer-events-none z-50 opacity-[0.03] mix-blend-overlay"
+             style={{
+               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+             }}
+        />
+        
+        {/* Subtle Grid Background Pattern */}
+        <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
+             style={{ 
+               backgroundImage: 'linear-gradient(#1b1b1b 1px, transparent 1px), linear-gradient(90deg, #1b1b1b 1px, transparent 1px)', 
+               backgroundSize: '40px 40px' 
+             }}>
+        </div>
+
+        <div className="relative z-10 min-h-screen flex flex-col">
           
           {/* Header Area */}
           <div className="bg-white w-full border-b border-[#EBE9E9]">
@@ -191,122 +110,93 @@ const Services: React.FC = () => {
             </div>
           </div>
 
-          {/* Services Grid - Technical Layout */}
-          <div className="max-w-[1400px] mx-auto px-4 md:px-12 pt-4 pb-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-t border-l border-[#EBE9E9] bg-[#EBE9E9]">
-              {services.map((service, index) => (
-                <div 
-                  key={service.id}
-                  onClick={() => setExpandedService(expandedService === service.id ? null : service.id)}
-                  className={`group relative border-r border-b border-[#EBE9E9] p-8 md:p-12 flex flex-col justify-between transition-all duration-500 ease-in-out cursor-pointer overflow-hidden h-full ${
-                    expandedService === service.id 
-                      ? 'min-h-[600px] bg-black text-white' 
-                      : 'min-h-[500px] bg-white hover:bg-black text-black'
-                  }`}
-                >
-                  {/* Top Bar */}
-                  <div className="flex justify-between items-start mb-12">
-                    <div className={`border px-3 py-1 text-xs font-bold font-mono ${expandedService === service.id ? 'border-white text-white' : 'border-[#EBE9E9] group-hover:border-white group-hover:text-white'}`}>
-                      {String(index + 1).padStart(2, '0')}
-                    </div>
-                    <div className={`text-[10px] font-mono tracking-widest uppercase ${expandedService === service.id ? 'text-white/60' : 'text-gray-400 group-hover:text-white/60'}`}>
-                      {service.code}
-                    </div>
-                  </div>
-
-                  {/* Main Content */}
-                  <div className="flex-1">
-                    <h3 className={`text-4xl md:text-5xl font-black tracking-[-0.05em] leading-[0.9] mb-6 break-words hyphens-auto ${expandedService === service.id ? 'text-white' : 'group-hover:text-white'}`}>
-                      {service.title}
-                    </h3>
+          {/* Services List - Data Table Style (like Cases page) */}
+          <div className="flex-1">
+            {/* Service Rows */}
+            <div className="max-w-[1400px] mx-auto">
+              {services.map((service, index) => {
+                const isHovered = hoveredService === service.id;
+                
+                return (
+                  <div 
+                    key={service.id}
+                    className="group relative transition-all duration-300"
+                    style={{
+                      background: isHovered ? '#F9F9F9' : 'white',
+                    }}
+                    onMouseEnter={() => setHoveredService(service.id)}
+                    onMouseLeave={() => setHoveredService(null)}
+                  >
+                    {/* Full width border */}
+                    <div className="absolute inset-x-0 bottom-0 border-b border-[#EBE9E9] w-screen left-[50%] -translate-x-[50%]" />
                     
-                    {/* Expanded Content - Animated Reveal */}
-                    <div className={`transition-all duration-500 overflow-hidden flex flex-col ${expandedService === service.id ? 'max-h-[600px] opacity-100 mt-6' : 'max-h-0 opacity-0'}`}>
-                        <p className={`text-sm font-medium max-w-md leading-relaxed mb-8 ${expandedService === service.id ? 'text-white/80' : 'text-gray-500 group-hover:text-white/80'}`}>
+                    <div className="service-row flex items-center gap-4 px-4 md:px-12 py-5 relative z-10 cursor-pointer">
+                      {/* Title */}
+                      <div className="flex-1 min-w-0">
+                        <h2 className="text-base md:text-lg font-black uppercase tracking-[-0.05em] transition-all duration-300">
+                          {service.title}
+                        </h2>
+                        {/* Features - visible on hover or mobile */}
+                        <div className={`flex flex-wrap gap-2 mt-2 transition-all duration-300 ${isHovered ? 'opacity-100 max-h-20' : 'opacity-0 max-h-0 md:opacity-0'} overflow-hidden md:hidden`}>
+                          {service.features.map((feature, i) => (
+                            <span key={i} className="text-[9px] font-bold uppercase tracking-widest text-gray-500">
+                              {feature}{i < service.features.length - 1 ? ' —' : ''}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Description - Desktop */}
+                      <div className="hidden md:block w-80 shrink-0">
+                        <p className="text-xs text-gray-500 leading-relaxed">
                           {service.description}
                         </p>
-                    </div>
-                  </div>
+                        {/* Features */}
+                        <div className={`flex flex-wrap gap-x-3 mt-2 transition-all duration-300 overflow-hidden ${isHovered ? 'opacity-100 max-h-20' : 'opacity-0 max-h-0'}`}>
+                          {service.features.map((feature, i) => (
+                            <span key={i} className="text-[9px] font-bold uppercase tracking-widest text-gray-400">
+                              {feature}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
 
-                  {/* Footer */}
-                  <div className={`mt-12 pt-8 border-t border-dashed overflow-hidden ${expandedService === service.id ? 'border-white/30' : 'border-black/20 group-hover:border-white/30'}`}>
-                    <div className="flex whitespace-nowrap animate-marquee">
-                      {[...service.features, ...service.features, ...service.features, ...service.features, ...service.features, ...service.features].map((feature, i) => (
-                        <span key={i} className={`mx-4 text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 shrink-0 ${expandedService === service.id ? 'text-white' : 'group-hover:text-white'}`}>
-                          <span className={`w-1 h-1 rounded-full ${expandedService === service.id ? 'bg-white' : 'bg-black group-hover:bg-white'}`}></span>
-                          {feature}
-                        </span>
-                      ))}
+                      {/* Arrow */}
+                      <div className="w-20 shrink-0 flex justify-end">
+                        <div className={`transition-all duration-300 ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'}`}>
+                          <ArrowUpRight size={18} />
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
+          </div>
 
-            {/* THE SYSTEM - Methodology Section */}
-            <div className="mt-24 mb-12">
-              <div className="flex items-center gap-4 mb-12">
-                <div className="h-px bg-black flex-1" />
-                <span className="font-mono text-xs tracking-widest uppercase">System Architecture</span>
-                <div className="h-px bg-black flex-1" />
+          {/* Process Section - Grid Cards Style (like Kontakt info cards) */}
+          <div className="border-t border-[#EBE9E9] bg-white">
+            <div className="max-w-[1400px] mx-auto px-4 md:px-12 py-12">
+              {/* Section Label */}
+              <div className="mb-6">
+                <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400">Vores Tilgang</span>
+                <h2 className="text-2xl font-black uppercase tracking-[-0.05em] mt-1">PROCESSEN</h2>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              {/* Process Grid - 4 cards */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {[
-                  { step: '01', id: 'INPUT', title: 'DISCOVERY', desc: 'Analysing requirements and defining system parameters.' },
-                  { step: '02', id: 'PROCESS', title: 'DESIGN', desc: 'Architecting visual systems and user interfaces.' },
-                  { step: '03', id: 'COMPILE', title: 'DEVELOPMENT', desc: 'Writing clean, performant code and integration.' },
-                  { step: '04', id: 'DEPLOY', title: 'LAUNCH', desc: 'System activation and performance monitoring.' }
-                ].map((item, i) => (
-                  <div key={i} className="relative group cursor-default">
-                    {/* Connecting Line (Desktop) */}
-                    {i < 3 && (
-                      <div className="hidden md:block absolute top-[1.6rem] left-[60%] right-[-40%] h-px bg-black/10 group-hover:bg-black transition-colors delay-100" />
-                    )}
-                    
-                    <div className="text-4xl font-black tracking-tighter mb-4 opacity-20 group-hover:opacity-100 transition-opacity">
-                      {item.step}
-                    </div>
-                    
-                    <div className="font-mono text-xs text-black/50 mb-2 group-hover:text-black transition-colors">
-                      {`// ${item.id}`}
-                    </div>
-                    
-                    <h4 className="text-xl font-bold uppercase tracking-tight mb-3">
-                      {item.title}
-                    </h4>
-                    
-                    <p className="text-sm text-gray-500 leading-relaxed max-w-[200px]">
-                      {item.desc}
-                    </p>
+                  { num: '01', title: 'Discovery', desc: 'Vi forstår din virksomhed, mål og målgruppe.' },
+                  { num: '02', title: 'Design', desc: 'Vi udvikler koncepter og designs.' },
+                  { num: '03', title: 'Develop', desc: 'Vi bygger med fokus på kvalitet.' },
+                  { num: '04', title: 'Launch', desc: 'Vi lancerer og optimerer.' }
+                ].map((step, i) => (
+                  <div key={i} className={`p-4 border ${borderColor} group hover:bg-[#F9F9F9] transition-colors bg-white`}>
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 block mb-0.5">{step.num}</span>
+                    <h4 className="text-sm font-black uppercase tracking-[-0.05em] mb-1.5">{step.title}</h4>
+                    <p className="text-xs text-gray-500 leading-relaxed">{step.desc}</p>
                   </div>
                 ))}
-              </div>
-            </div>
-
-            {/* Creative Data Strip Separator */}
-            <div className="mt-24 py-4 overflow-hidden bg-black text-white flex items-center">
-              <div className="animate-marquee whitespace-nowrap flex gap-8 font-mono text-xs tracking-[0.2em] opacity-70">
-                {[...Array(10)].map((_, i) => (
-                  <span key={i} className="flex items-center gap-8">
-                     /// READY TO BUILD /// SYSTEM.INIT /// SCROLL.DOWN /// HOFFMEISTER.STUDIO ///
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Big CTA */}
-            <div className="">
-              <div className="py-24 px-8 md:px-0 text-center">
-                <h2 className="text-[12vw] leading-[0.9] font-black uppercase tracking-[-0.05em] mb-8">
-                  Let's Talk
-                </h2>
-                <Link 
-                  to="/kontakt"
-                  className="inline-block bg-black text-white px-12 py-5 text-xl font-bold uppercase tracking-widest hover:bg-gray-800 transition-all hover:scale-105 active:scale-95"
-                >
-                  Start Project
-                </Link>
               </div>
             </div>
           </div>
@@ -350,20 +240,6 @@ const Services: React.FC = () => {
 
         </div>
       </main>
-
-      {/* CSS for animations */}
-      <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-marquee {
-          animation: marquee 20s linear infinite;
-        }
-        .animate-marquee:hover {
-          animation-play-state: paused;
-        }
-      `}</style>
     </div>
   );
 };
