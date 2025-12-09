@@ -1,6 +1,68 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Send, CheckCircle, X, Paperclip, RotateCcw, Maximize2, Minimize2, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { ProjectTask, ProjectStatus, User } from '../types';
+
+// Memoized Figma Embed component to prevent reloading on parent re-renders
+const FigmaEmbed = React.memo(({ src, title }: { src: string; title: string }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
+  
+  useEffect(() => {
+    // Reset states when src changes
+    setIsLoaded(false);
+    setMinTimeElapsed(false);
+    
+    // Enforce minimum loading time of 5 seconds to ensure content is ready
+    const timer = setTimeout(() => {
+      setMinTimeElapsed(true);
+    }, 5000);
+    
+    return () => clearTimeout(timer);
+  }, [src]);
+  
+  // Show content only when BOTH: actual load finished AND minimum time elapsed
+  const showContent = isLoaded && minTimeElapsed;
+  
+  return (
+    <div className="w-full h-full overflow-y-auto overflow-x-hidden relative bg-gray-50">
+      {/* Loading skeleton - Always shows until both conditions are met */}
+      <div 
+        className={`absolute inset-0 flex items-center justify-center bg-gray-50 z-20 transition-opacity duration-500 ${showContent ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+      >
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 border-[3px] border-black border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Indlæser design...</span>
+        </div>
+      </div>
+
+      <div 
+        className="relative overflow-hidden"
+        style={{ 
+          width: 'calc(100% + 60px)',
+          height: '1500px',
+          marginLeft: '-30px',
+          opacity: showContent ? 1 : 0,
+          transition: 'opacity 0.5s ease-in-out',
+        }}
+      >
+        <iframe
+          src={src}
+          className="border-0 absolute pointer-events-none"
+          style={{ 
+            width: '100%',
+            height: 'calc(100% + 160px)', 
+            top: '-50px',
+            left: '0',
+          }}
+          allowFullScreen
+          loading="eager"
+          title={title}
+          onLoad={() => setIsLoaded(true)}
+        />
+      </div>
+    </div>
+  );
+});
 
 interface ProjectCardProps {
   task: ProjectTask;
@@ -83,17 +145,25 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     }).toUpperCase();
   };
 
-  // Helper to convert Figma URL to embed URL
-  const getFigmaEmbedUrl = (url: string) => {
-    // If already an embed URL (embed.figma.com or figma.com/embed), return as is
+  // Memoized Figma embed URL to prevent recalculation on re-renders
+  const figmaEmbedUrl = useMemo(() => {
+    const url = task.imageUrl;
+    // If already an embed URL (embed.figma.com or figma.com/embed), add hide-ui if not present
     if (url.includes('embed.figma.com') || url.includes('figma.com/embed')) {
+      // Add hide-ui=1 to hide the footer bar if not already present
+      if (!url.includes('hide-ui=')) {
+        const separator = url.includes('?') ? '&' : '?';
+        return `${url}${separator}hide-ui=1`;
+      }
       return url;
     }
     // Convert file/design/proto URLs to embed format
     // Example: https://www.figma.com/file/ABC123/... → https://www.figma.com/embed?embed_host=share&url=...
     const encodedUrl = encodeURIComponent(url);
-    return `https://www.figma.com/embed?embed_host=share&url=${encodedUrl}`;
-  };
+    return `https://www.figma.com/embed?embed_host=share&url=${encodedUrl}&hide-ui=1`;
+  }, [task.imageUrl]);
+  
+  const isFigmaUrl = task.imageUrl.includes('figma.com') || task.imageUrl.includes('embed.figma.com');
 
   // Helper to render text with clickable links
   const renderCommentWithLinks = (text: string) => {
@@ -253,13 +323,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             <div className={`bg-white flex items-center justify-center relative overflow-hidden group ${viewMode === 'compact' ? 'h-full' : 'border-r border-black min-h-[240px] md:min-h-0'}`}>
                 
                 {/* Main Image or Figma Embed */}
-                {(task.imageUrl.includes('figma.com') || task.imageUrl.includes('embed.figma.com')) ? (
-                    <iframe
-                        src={getFigmaEmbedUrl(task.imageUrl)}
-                        className="w-full h-full border-0"
-                        allowFullScreen
-                        title={task.title}
-                    />
+                {isFigmaUrl ? (
+                    <FigmaEmbed src={figmaEmbedUrl} title={task.title} />
                 ) : (
                     <img 
                         src={task.imageUrl} 
