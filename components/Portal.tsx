@@ -5,6 +5,7 @@ import Settings from './Settings';
 import ProjectCard from './ProjectCard';
 import { User, UserRole, ProjectTask, ProjectStatus, Comment } from '../types';
 import { Menu } from 'lucide-react';
+import { useTheme } from './ThemeContext';
 
 // Initial Mock Data
 const INITIAL_USER: User = {
@@ -186,6 +187,15 @@ const Portal: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [focusedTaskId, setFocusedTaskId] = useState<string | null>(null);
   const [isClosing, setIsClosing] = useState(false);
+  const { darkMode } = useTheme();
+
+  // Theme classes
+  const bgColor = darkMode ? 'bg-[#1b1b1b]' : 'bg-white';
+  const textColor = darkMode ? 'text-white' : 'text-black';
+  const borderColor = darkMode ? 'border-white/20' : 'border-[#EBE9E9]';
+  const gridColor = darkMode ? '#ffffff' : '#1b1b1b';
+  const selectionClass = darkMode ? 'selection:bg-white selection:text-black' : 'selection:bg-black selection:text-white';
+  const mobileHeaderBg = darkMode ? 'bg-[#1b1b1b]' : 'bg-white';
 
   const handleUpdateProfile = (firstName: string, lastName: string, email: string) => {
     const newName = `${firstName.trim()} ${lastName.trim()}`.trim();
@@ -324,9 +334,9 @@ const Portal: React.FC = () => {
   const focusedTask = tasks.find(t => t.id === focusedTaskId);
 
   return (
-    <div className="flex h-screen bg-white text-black font-sans overflow-hidden selection:bg-black selection:text-white">
+    <div className={`flex h-screen ${bgColor} ${textColor} font-sans overflow-hidden ${selectionClass} transition-colors duration-300`}>
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-[#EBE9E9] flex items-center justify-between px-6 z-40">
+      <div className={`md:hidden fixed top-0 left-0 right-0 h-16 ${mobileHeaderBg} border-b ${borderColor} flex items-center justify-between px-6 z-40 transition-colors duration-300`}>
         <span className="font-black uppercase tracking-[-0.05em] text-lg">Hoffmeister Studio</span>
         <button onClick={() => setMobileMenuOpen(true)}>
             <Menu size={24} />
@@ -344,9 +354,9 @@ const Portal: React.FC = () => {
       {/* Main Content Area: Removed padding on desktop to allow full-bleed sticky headers */}
       <main className="flex-1 overflow-y-auto relative pt-16 md:pt-0">
          {/* Subtle Grid Background Pattern */}
-         <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
+         <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0 transition-colors duration-300" 
               style={{ 
-                  backgroundImage: 'linear-gradient(#1b1b1b 1px, transparent 1px), linear-gradient(90deg, #1b1b1b 1px, transparent 1px)', 
+                  backgroundImage: `linear-gradient(${gridColor} 1px, transparent 1px), linear-gradient(90deg, ${gridColor} 1px, transparent 1px)`, 
                   backgroundSize: '40px 40px' 
               }}>
          </div>
@@ -361,7 +371,7 @@ const Portal: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
              {/* Background layer with fade in/out */}
              <div 
-                className={`absolute inset-0 bg-white/95 backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'}`} 
+                className={`absolute inset-0 ${darkMode ? 'bg-black/90' : 'bg-white/95'} backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'} transition-colors duration-300`} 
                 onClick={handleCloseFocus}
              ></div>
              
@@ -375,6 +385,7 @@ const Portal: React.FC = () => {
                     onUndoApprove={handleUndoApprove}
                     isExpanded={true}
                     onExpand={handleCloseFocus} 
+                    darkMode={darkMode}
                 />
              </div>
         </div>
@@ -384,4 +395,3 @@ const Portal: React.FC = () => {
 };
 
 export default Portal;
-

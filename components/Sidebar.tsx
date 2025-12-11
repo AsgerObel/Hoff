@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { LayoutDashboard, Palette, Monitor, Box, Briefcase, Settings, X, ChevronUp } from 'lucide-react';
 import { User } from '../types';
+import { useTheme } from './ThemeContext';
 
 interface SidebarProps {
   currentUser: User;
@@ -12,6 +13,15 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ currentUser, activeTab, onTabChange, isOpen, onClose }) => {
+  const { darkMode, toggleDarkMode } = useTheme();
+
+  // Theme classes
+  const bgColor = darkMode ? 'bg-[#1b1b1b]' : 'bg-white';
+  const textColor = darkMode ? 'text-white' : 'text-black';
+  const borderColor = darkMode ? 'border-white/20' : 'border-[#EBE9E9]';
+  const hoverBg = darkMode ? 'hover:bg-white/10' : 'hover:bg-[#EBE9E9]';
+  const activeBg = darkMode ? 'bg-white/10' : 'bg-[#EBE9E9]';
+
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'some', label: 'SoMe', icon: Box },
@@ -35,12 +45,26 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser, activeTab, onTabChange, 
             />
         )}
 
-        <aside className={`${mobileClasses} ${desktopClasses} flex flex-col border-r border-[#EBE9E9] h-screen bg-white relative`}>
+        <aside className={`${mobileClasses} ${desktopClasses} flex flex-col border-r ${borderColor} h-screen ${bgColor} ${textColor} relative transition-colors duration-300`}>
         {/* Brand Header */}
-        <div className="h-32 border-b border-[#EBE9E9] p-6 flex items-center justify-between">
-            <Link to="/" className="text-3xl font-black leading-tight tracking-[-0.05em] uppercase hover:opacity-70 transition-opacity">
-            Hoffmeister<br />Studio
-            </Link>
+        <div className={`h-[127px] border-b ${borderColor} p-6 flex items-center justify-between`}>
+            <div className="flex items-center gap-2">
+                <Link to="/" className="text-3xl font-black leading-tight tracking-[-0.05em] uppercase hover:opacity-70 transition-opacity">
+                Hoffmeister<br />Studio
+                </Link>
+                {/* Logo - Click to toggle dark mode */}
+                <button 
+                  onClick={toggleDarkMode}
+                  className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110 flex-shrink-0"
+                  title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                >
+                  <img 
+                    src={darkMode ? '/assets/LogoDarkmode.png' : '/assets/Logo.png'} 
+                    alt="Hoffmeister Logo" 
+                    className="w-full h-full object-contain"
+                  />
+                </button>
+            </div>
             <button className="md:hidden" onClick={onClose}>
                 <X size={24} />
             </button>
@@ -54,8 +78,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser, activeTab, onTabChange, 
                 <button
                 key={item.id}
                 onClick={() => onTabChange(item.id)}
-                className={`w-full text-left p-6 md:h-[77px] border-b border-[#EBE9E9] text-xl font-bold transition-colors hover:bg-[#EBE9E9] flex items-center gap-4 ${
-                    isActive ? 'bg-[#EBE9E9]' : 'bg-white'
+                className={`w-full text-left p-6 md:h-[77px] border-b ${borderColor} text-xl font-bold transition-colors ${hoverBg} flex items-center gap-4 ${
+                    isActive ? activeBg : ''
                 }`}
                 >
                 <span className="tracking-[-0.05em]">{item.label}</span>
@@ -65,13 +89,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser, activeTab, onTabChange, 
         </nav>
 
         {/* User Section - Fixed at bottom */}
-        <div className="mt-auto relative z-20 bg-white">
+        <div className={`mt-auto relative z-20 ${bgColor}`}>
             
             {/* User Profile */}
-            <div className="border-t border-[#EBE9E9] p-0">
+            <div className={`border-t ${borderColor} p-0`}>
                 <button 
                     onClick={() => onTabChange('settings')}
-                    className={`w-full h-24 flex items-center px-6 transition-colors hover:bg-[#EBE9E9] ${activeTab === 'settings' ? 'bg-[#EBE9E9]' : ''}`}
+                    className={`w-full h-24 flex items-center px-6 transition-colors ${hoverBg} ${activeTab === 'settings' ? activeBg : ''}`}
                 >
                     <div className="flex items-center justify-between w-full">
                         <span className="text-3xl font-bold uppercase tracking-[-0.05em]">{currentUser.initials}</span>

@@ -1,9 +1,9 @@
-
 import React, { useState, useMemo } from 'react';
 import { ProjectTask, User, ProjectStatus } from '../types';
 import ProjectCard from './ProjectCard';
 import AddProjectModal from './AddProjectModal';
 import { ArrowDownUp, Search, X, Bell, Square, Grid2x2, LayoutGrid, Plus } from 'lucide-react';
+import { useTheme } from './ThemeContext';
 
 interface Notification {
   id: string;
@@ -37,6 +37,17 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
   const [readNotificationIds, setReadNotificationIds] = useState<Set<string>>(new Set());
   const [initialized, setInitialized] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const { darkMode } = useTheme();
+
+  // Theme classes
+  const bgColor = darkMode ? 'bg-[#1b1b1b]' : 'bg-white';
+  const textColor = darkMode ? 'text-white' : 'text-black';
+  const borderColor = darkMode ? 'border-white/20' : 'border-[#EBE9E9]';
+  const inputBgColor = darkMode ? 'bg-[#2a2a2a]' : 'bg-white';
+  const inputBorderColor = darkMode ? 'border-white/20' : 'border-black';
+  const controlHover = darkMode ? 'hover:bg-white/10' : 'hover:bg-gray-50';
+  const activeButton = darkMode ? 'bg-white text-black' : 'bg-black text-white';
+  const inactiveButton = darkMode ? 'bg-[#1b1b1b] text-white border-white/20 hover:bg-white/10' : 'bg-white text-black border-black hover:bg-[#EBE9E9]';
 
   // Derive notifications from tasks (Mock logic for demo)
   const notifications: Notification[] = useMemo(() => {
@@ -121,7 +132,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
   };
 
   return (
-    <div className="w-full relative">
+    <div className={`w-full relative ${textColor} transition-colors duration-300`}>
       
       {/* Header Area 
           Calculated Height for Alignment:
@@ -129,7 +140,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
           Sticky Bar Content is approx 95px high.
           Header Height = 205px - 95px = 110px to align borders.
       */}
-      <div className="bg-white w-full">
+      <div className={`w-full`}>
         <div className="max-w-[1600px] mx-auto px-4 md:px-12 pt-8 md:pt-0 mb-0 flex flex-col justify-end md:h-[110px]">
             <div className="md:pb-4 text-center md:text-left flex items-center justify-between relative">
                 <h1 className="text-4xl md:text-5xl font-black uppercase mb-2 md:mb-0 tracking-[-0.05em] leading-none">
@@ -140,7 +151,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
       </div>
 
       {/* Sticky Controls & Filters - Full Width Background */}
-      <div className="sticky top-0 z-40 bg-white border-b border-[#EBE9E9]">
+      <div className={`sticky top-0 z-40 ${bgColor} border-b ${borderColor} transition-colors duration-300`}>
         {/* Changed items-center to items-end for bottom alignment */}
         <div className={`mx-auto py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 transition-all duration-500 ease-in-out ${gridCols === 1 ? 'max-w-[1600px] px-4 md:px-12' : 'max-w-[1600px] px-4 md:px-12'}`}>
             {/* Filter Buttons */}
@@ -149,24 +160,28 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                 label="Alle Opgaver" 
                 active={filter === 'ALL'} 
                 onClick={() => setFilter('ALL')} 
+                darkMode={darkMode}
             />
             <FilterButton 
                 label="Afventer Dig" 
                 status={ProjectStatus.PENDING}
                 active={filter === ProjectStatus.PENDING} 
                 onClick={() => setFilter(ProjectStatus.PENDING)} 
+                darkMode={darkMode}
             />
             <FilterButton 
                 label="Igangværende" 
                 status={ProjectStatus.IN_PROGRESS}
                 active={filter === ProjectStatus.IN_PROGRESS} 
                 onClick={() => setFilter(ProjectStatus.IN_PROGRESS)} 
+                darkMode={darkMode}
             />
             <FilterButton 
                 label="Godkendt" 
                 status={ProjectStatus.APPROVED}
                 active={filter === ProjectStatus.APPROVED} 
                 onClick={() => setFilter(ProjectStatus.APPROVED)} 
+                darkMode={darkMode}
             />
             </div>
 
@@ -175,14 +190,14 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                 {/* Search Input */}
                 <div className="relative group flex items-stretch">
                     <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors flex items-center h-full pointer-events-none z-10">
-                        <Search size={14} />
+                        <Search size={14} className={darkMode ? 'text-gray-500' : 'text-gray-400'} />
                     </div>
                     <input 
                         type="text" 
                         placeholder="SØG..." 
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-[110px] md:w-[130px] pl-8 pr-6 h-9 border border-black bg-white text-[10px] font-bold uppercase placeholder-gray-400 focus:outline-none focus:bg-gray-50 transition-colors tracking-[-0.05em]"
+                        className={`w-[110px] md:w-[130px] pl-8 pr-6 h-9 border ${inputBorderColor} ${inputBgColor} text-[10px] font-bold uppercase placeholder-gray-400 focus:outline-none transition-colors tracking-[-0.05em] ${darkMode ? 'text-white focus:bg-[#333]' : 'text-black focus:bg-gray-50'}`}
                     />
                     {searchQuery && (
                         <button 
@@ -195,24 +210,24 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                 </div>
 
                 {/* View Toggles */}
-                <div className="hidden md:flex bg-white border border-black h-9 items-center">
+                <div className={`hidden md:flex ${bgColor} border ${inputBorderColor} h-9 items-center`}>
                     <button 
                         onClick={() => setGridCols(1)}
-                        className={`px-2.5 h-full flex items-center justify-center transition-colors ${gridCols === 1 ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
+                        className={`px-2.5 h-full flex items-center justify-center transition-colors ${gridCols === 1 ? activeButton : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-400 hover:text-black')}`}
                         title="Enkeltvisning"
                     >
                         <Square size={14} />
                     </button>
                     <button 
                         onClick={() => setGridCols(2)}
-                        className={`px-2.5 h-full flex items-center justify-center transition-colors ${gridCols === 2 ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
+                        className={`px-2.5 h-full flex items-center justify-center transition-colors ${gridCols === 2 ? activeButton : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-400 hover:text-black')}`}
                         title="2 kolonner"
                     >
                         <Grid2x2 size={14} />
                     </button>
                     <button 
                         onClick={() => setGridCols(4)}
-                        className={`px-2.5 h-full flex items-center justify-center transition-colors ${gridCols === 4 ? 'bg-black text-white' : 'text-gray-400 hover:text-black'}`}
+                        className={`px-2.5 h-full flex items-center justify-center transition-colors ${gridCols === 4 ? activeButton : (darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-400 hover:text-black')}`}
                         title="4 kolonner"
                     >
                         <LayoutGrid size={14} />
@@ -222,7 +237,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                 {/* Sort Toggle */}
                 <button 
                     onClick={toggleSort}
-                    className="flex items-center gap-2 px-3 h-9 border border-black hover:bg-gray-50 transition-colors uppercase font-bold text-[10px] tracking-[-0.05em] whitespace-nowrap"
+                    className={`flex items-center gap-2 px-3 h-9 border ${inputBorderColor} ${controlHover} transition-colors uppercase font-bold text-[10px] tracking-[-0.05em] whitespace-nowrap`}
                 >
                     <ArrowDownUp size={14} />
                     <span className="hidden sm:inline">{sortOrder === 'NEWEST' ? 'Nyeste' : 'Ældste'}</span>
@@ -231,9 +246,9 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                 {/* Notification Bell */}
                 <button 
                     onClick={() => setShowNotifications(!showNotifications)}
-                    className="flex items-center justify-center px-3 h-9 border border-black hover:bg-gray-50 transition-colors relative active:scale-95 duration-100 cursor-pointer z-[60]"
+                    className={`flex items-center justify-center px-3 h-9 border ${inputBorderColor} ${controlHover} transition-colors relative active:scale-95 duration-100 cursor-pointer z-[60]`}
                 >
-                    <Bell size={16} className="text-black" />
+                    <Bell size={16} className={textColor} />
                     {unreadCount > 0 && (
                         <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#FF3B30] text-white text-[9px] font-bold flex items-center justify-center rounded-full border border-white">
                             {unreadCount}
@@ -241,14 +256,13 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                     )}
                 </button>
 
-                {/* Dropdown Panel - Now part of the container to align width */}
+                {/* Dropdown Panel */}
                 {showNotifications && (
                     <>
-                            {/* Backdrop - High Z-Index to capture clicks */}
                         <div className="fixed inset-0 z-40 bg-transparent cursor-default" onClick={() => setShowNotifications(false)} />
                         
-                        <div className="absolute top-full mt-2 w-full left-0 bg-white border border-black z-50 animate-in slide-in-from-top-2 fade-in duration-200 origin-top cursor-default">
-                            <div className="p-4 border-b border-[#EBE9E9] bg-black text-white flex justify-between items-center">
+                        <div className={`absolute top-full mt-2 w-full left-0 ${bgColor} border ${inputBorderColor} z-50 animate-in slide-in-from-top-2 fade-in duration-200 origin-top cursor-default`}>
+                            <div className={`p-4 border-b ${borderColor} ${darkMode ? 'bg-white text-black' : 'bg-black text-white'} flex justify-between items-center`}>
                                 <h3 className="font-bold uppercase tracking-[-0.05em] text-sm">Notifikationer</h3>
                                 <span className="text-xs text-gray-400">{unreadCount} Nye</span>
                             </div>
@@ -262,7 +276,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                                                 onFocusTask(notif.taskId);
                                                 setShowNotifications(false);
                                             }}
-                                            className={`p-5 border-b border-[#EBE9E9] cursor-pointer transition-colors flex flex-col gap-3 group ${notif.isRead ? 'bg-white hover:bg-[#F9F9F9] opacity-60' : 'bg-white hover:bg-[#F9F9F9]'}`}
+                                            className={`p-5 border-b ${borderColor} cursor-pointer transition-colors flex flex-col gap-3 group ${notif.isRead ? `${bgColor} ${darkMode ? 'hover:bg-white/5' : 'hover:bg-[#F9F9F9]'} opacity-60` : `${bgColor} ${darkMode ? 'hover:bg-white/5' : 'hover:bg-[#F9F9F9]'}`}`}
                                         >
                                             <div className="flex justify-between items-start">
                                                 <div className="flex flex-col gap-1">
@@ -271,7 +285,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                                                          notif.type === 'STATUS' ? 'STATUS OPDATERING' : 
                                                          'NYT MATERIALE'}
                                                     </span>
-                                                    <span className={`font-black text-base uppercase tracking-[-0.05em] ${notif.isRead ? 'text-gray-500' : 'text-black'}`}>{notif.taskTitle}</span>
+                                                    <span className={`font-black text-base uppercase tracking-[-0.05em] ${notif.isRead ? 'text-gray-500' : textColor}`}>{notif.taskTitle}</span>
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
@@ -283,7 +297,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                                                 </div>
                                             </div>
                                             
-                                            <p className={`text-sm leading-relaxed mt-1 ${notif.isRead ? 'text-gray-400' : 'text-black font-medium'}`}>
+                                            <p className={`text-sm leading-relaxed mt-1 ${notif.isRead ? 'text-gray-400' : `${textColor} font-medium`}`}>
                                                 {notif.message}
                                             </p>
                                         </div>
@@ -294,10 +308,10 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                                     </div>
                                 )}
                             </div>
-                            <div className="p-3 bg-[#F9F9F9] text-center border-t border-[#EBE9E9]">
+                            <div className={`p-3 ${darkMode ? 'bg-[#2a2a2a]' : 'bg-[#F9F9F9]'} text-center border-t ${borderColor}`}>
                                 <button 
                                     onClick={markAllAsRead}
-                                    className="text-[10px] font-bold uppercase tracking-wide text-gray-500 hover:text-black transition-colors"
+                                    className={`text-[10px] font-bold uppercase tracking-wide text-gray-500 hover:${textColor} transition-colors`}
                                 >
                                     Marker alle som læst
                                 </button>
@@ -321,6 +335,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
               <AddProjectCard 
                 onClick={() => setShowAddModal(true)} 
                 viewMode={gridCols === 1 ? 'single' : gridCols === 4 ? 'compact' : 'grid'}
+                darkMode={darkMode}
               />
             )}
             
@@ -365,20 +380,23 @@ const FilterButton: React.FC<{
   active: boolean; 
   onClick: () => void;
   status?: ProjectStatus;
-}> = ({ label, active, onClick, status }) => {
+  darkMode: boolean;
+}> = ({ label, active, onClick, status, darkMode }) => {
     let baseClasses = "px-3 py-1.5 md:px-4 md:py-2 font-bold uppercase text-[10px] md:text-xs transition-all border tracking-[-0.05em]";
     
     // Determine active styling based on status
-    let activeStyle = "bg-black text-white border-black"; // Default (All)
+    let activeStyle = darkMode ? "bg-white text-black border-white" : "bg-black text-white border-black"; // Default (All)
     if (status === ProjectStatus.PENDING) activeStyle = "bg-[#FF3B30] text-white border-[#FF3B30]";
     if (status === ProjectStatus.IN_PROGRESS) activeStyle = "bg-[#FFCC00] text-black border-[#FFCC00]";
     if (status === ProjectStatus.APPROVED) activeStyle = "bg-[#34C759] text-white border-[#34C759]";
 
-    // Active classes - Removed Shadow as requested
+    // Active classes
     let activeClasses = `${activeStyle}`;
     
-    // Inactive classes - Updated to match Sidebar Aesthetic (White bg, black text, black border)
-    let inactiveClasses = "bg-white text-black border-black hover:bg-[#EBE9E9] transition-colors";
+    // Inactive classes
+    let inactiveClasses = darkMode 
+        ? "bg-[#1b1b1b] text-white border-white/20 hover:bg-white/10" 
+        : "bg-white text-black border-black hover:bg-[#EBE9E9] transition-colors";
 
     return (
         <button 
@@ -394,7 +412,8 @@ const FilterButton: React.FC<{
 const AddProjectCard: React.FC<{ 
   onClick: () => void;
   viewMode: 'single' | 'grid' | 'compact';
-}> = ({ onClick, viewMode }) => {
+  darkMode: boolean;
+}> = ({ onClick, viewMode, darkMode }) => {
   const heightClass = viewMode === 'single' ? 'h-[calc(100vh-320px)] min-h-[450px]' :
                       viewMode === 'compact' ? 'h-[250px]' :
                       'h-[480px]';
@@ -402,9 +421,9 @@ const AddProjectCard: React.FC<{
   return (
     <button
       onClick={onClick}
-      className={`border-2 border-dashed border-gray-300 bg-[#F9F9F9] flex flex-col items-center justify-center ${heightClass} group relative transition-all duration-300 hover:border-black hover:bg-white cursor-pointer`}
+      className={`border-2 border-dashed ${darkMode ? 'border-gray-700 bg-[#2a2a2a] hover:border-white hover:bg-[#333]' : 'border-gray-300 bg-[#F9F9F9] hover:border-black hover:bg-white'} flex flex-col items-center justify-center ${heightClass} group relative transition-all duration-300 cursor-pointer`}
     >
-      <div className="flex flex-col items-center gap-4 text-gray-400 group-hover:text-black transition-colors">
+      <div className={`flex flex-col items-center gap-4 ${darkMode ? 'text-gray-500 group-hover:text-white' : 'text-gray-400 group-hover:text-black'} transition-colors`}>
         <div className="w-16 h-16 border-2 border-dashed border-current rounded-full flex items-center justify-center group-hover:border-solid transition-all">
           <Plus size={32} className="transition-transform group-hover:scale-110" />
         </div>

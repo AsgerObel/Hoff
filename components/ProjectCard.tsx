@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Send, CheckCircle, X, Paperclip, RotateCcw, Maximize2, Minimize2, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { ProjectTask, ProjectStatus, User } from '../types';
+import { useTheme } from './ThemeContext';
 
 // Memoized Figma Embed component to prevent reloading on parent re-renders
-const FigmaEmbed = React.memo(({ src, title }: { src: string; title: string }) => {
+const FigmaEmbed = React.memo(({ src, title, darkMode }: { src: string; title: string, darkMode: boolean }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [minTimeElapsed, setMinTimeElapsed] = useState(false);
   
@@ -24,14 +25,14 @@ const FigmaEmbed = React.memo(({ src, title }: { src: string; title: string }) =
   const showContent = isLoaded && minTimeElapsed;
   
   return (
-    <div className="w-full h-full overflow-y-auto overflow-x-hidden relative bg-gray-50">
+    <div className={`w-full h-full overflow-y-auto overflow-x-hidden relative ${darkMode ? 'bg-[#111]' : 'bg-gray-50'}`}>
       {/* Loading skeleton - Always shows until both conditions are met */}
       <div 
-        className={`absolute inset-0 flex items-center justify-center bg-gray-50 z-20 transition-opacity duration-500 ${showContent ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        className={`absolute inset-0 flex items-center justify-center ${darkMode ? 'bg-[#111]' : 'bg-gray-50'} z-20 transition-opacity duration-500 ${showContent ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-[3px] border-black border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold">Indlæser design...</span>
+          <div className={`w-10 h-10 border-[3px] ${darkMode ? 'border-white' : 'border-black'} border-t-transparent rounded-full animate-spin`}></div>
+          <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} uppercase tracking-wider font-semibold`}>Indlæser design...</span>
         </div>
       </div>
 
@@ -90,6 +91,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const [showApprovedDesign, setShowApprovedDesign] = useState(false);
   const commentsContainerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { darkMode } = useTheme();
+
+  // Theme classes
+  const bgColor = darkMode ? 'bg-[#1b1b1b]' : 'bg-white';
+  const textColor = darkMode ? 'text-white' : 'text-black';
+  const borderColor = darkMode ? 'border-white/20' : 'border-black';
+  const inputBgColor = darkMode ? 'bg-[#2a2a2a]' : 'bg-[#F9F9F9]';
+  const inputBorderColor = darkMode ? 'border-white/20' : 'border-[#EBE9E9]';
+  const secondaryText = darkMode ? 'text-gray-400' : 'text-gray-500';
 
   const scrollToBottom = () => {
     if (commentsContainerRef.current) {
@@ -213,8 +223,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
   // Conditional classes for Expanded mode - Removed animate-enter
   const containerClasses = isExpanded 
-    ? "border border-black bg-white flex flex-col h-full shadow-2xl z-50"
-    : `border border-black bg-white flex flex-col ${heightClass} group relative transition-all duration-500 ease-in-out hover:-translate-y-1 ${viewMode === 'compact' ? 'cursor-pointer' : ''}`;
+    ? `border ${borderColor} ${bgColor} flex flex-col h-full shadow-2xl z-50`
+    : `border ${borderColor} ${bgColor} flex flex-col ${heightClass} group relative transition-all duration-500 ease-in-out hover:-translate-y-1 ${viewMode === 'compact' ? 'cursor-pointer' : ''}`;
 
   // Handle card click for compact mode
   const handleCardClick = () => {
@@ -236,15 +246,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         </div>
 
         {/* Header Section */}
-        <div className={`border-b border-black shrink-0 ${viewMode === 'compact' ? 'h-10' : 'h-12 grid grid-cols-2'}`}>
+        <div className={`border-b ${borderColor} shrink-0 ${viewMode === 'compact' ? 'h-10' : 'h-12 grid grid-cols-2'}`}>
             {/* Left Header: Title + Minimize Button (Only visible when Expanded) */}
-            <div className={`flex flex-col justify-center pl-3 border-r border-black relative transition-all overflow-hidden ${viewMode === 'compact' ? 'border-r-0 pr-3' : ''} ${isExpanded && onExpand ? 'pr-12' : 'pr-3'}`}>
+            <div className={`flex flex-col justify-center pl-3 border-r ${borderColor} relative transition-all overflow-hidden ${viewMode === 'compact' ? 'border-r-0 pr-3' : ''} ${isExpanded && onExpand ? 'pr-12' : 'pr-3'}`}>
                 {/* Minimize Button - Icon Only - Compact - Aligned Right for Symmetry with Godkend button */}
                 {isExpanded && onExpand && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 z-20">
                         <button 
                             onClick={(e) => { e.stopPropagation(); onExpand(); }}
-                            className="border border-black p-1 bg-white hover:bg-black hover:text-white transition-colors shadow-sm flex items-center justify-center"
+                            className={`border ${borderColor} p-1 ${bgColor} ${darkMode ? 'hover:bg-white hover:text-black' : 'hover:bg-black hover:text-white'} transition-colors shadow-sm flex items-center justify-center`}
                             title="Minimer"
                         >
                             <Minimize2 size={12} /> 
@@ -253,15 +263,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 )}
 
                 {viewMode === 'compact' ? (
-                    <h3 className="text-xs font-bold uppercase truncate tracking-[-0.05em]">{task.title}</h3>
+                    <h3 className={`text-xs font-bold uppercase truncate tracking-[-0.05em] ${textColor}`}>{task.title}</h3>
                 ) : (
                     <>
-                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+                        <span className={`text-[10px] font-bold ${secondaryText} uppercase tracking-widest flex items-center gap-1.5 whitespace-nowrap overflow-hidden`}>
                             <span className="truncate">{task.category}</span>
-                            <span className="text-gray-300 shrink-0">|</span> 
+                            <span className={`${darkMode ? 'text-gray-600' : 'text-gray-300'} shrink-0`}>|</span> 
                             <span className="shrink-0">{formatDate(task.createdAt)}</span>
                         </span>
-                        <h3 className="text-base font-bold uppercase truncate tracking-[-0.05em]">{task.title}</h3>
+                        <h3 className={`text-base font-bold uppercase truncate tracking-[-0.05em] ${textColor}`}>{task.title}</h3>
                     </>
                 )}
             </div>
@@ -273,7 +283,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 {!isExpanded && onExpand && (
                     <button 
                         onClick={(e) => { e.stopPropagation(); onExpand(); }}
-                        className="hover:bg-black hover:text-white transition-colors p-1 rounded-sm opacity-0 group-hover:opacity-100"
+                        className={`${darkMode ? 'hover:bg-white hover:text-black' : 'hover:bg-black hover:text-white'} transition-colors p-1 rounded-sm opacity-0 group-hover:opacity-100 ${textColor}`}
                         title="Fokus Mode"
                     >
                         <Maximize2 size={14} /> 
@@ -289,7 +299,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     {isApproved && (
                         <button 
                             onClick={() => setShowApprovedDesign(!showApprovedDesign)}
-                            className="text-[9px] border border-black px-2 py-0.5 hover:bg-black hover:text-white transition-all uppercase font-bold flex items-center gap-1 tracking-[-0.05em]"
+                            className={`text-[9px] border ${borderColor} px-2 py-0.5 ${darkMode ? 'hover:bg-white hover:text-black' : 'hover:bg-black hover:text-white'} transition-all uppercase font-bold flex items-center gap-1 tracking-[-0.05em] ${textColor}`}
                             title={showApprovedDesign ? "Skjul design" : "Se design"}
                         >
                             {showApprovedDesign ? <EyeOff size={10} /> : <Eye size={10} />}
@@ -300,7 +310,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     {!isApproved ? (
                         <button 
                             onClick={() => onApprove(task.id)}
-                            className="text-[9px] border border-black px-2 py-0.5 hover:bg-[#34C759] hover:text-white hover:border-[#34C759] transition-all uppercase font-bold flex items-center gap-1 tracking-[-0.05em]"
+                            className={`text-[9px] border ${borderColor} px-2 py-0.5 hover:bg-[#34C759] hover:text-white hover:border-[#34C759] transition-all uppercase font-bold flex items-center gap-1 tracking-[-0.05em] ${textColor}`}
                         >
                             <CheckCircle size={10} /> Godkend
                         </button>
@@ -320,11 +330,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         {/* Content Body */}
         <div className={`flex-1 flex flex-col min-h-0 ${viewMode === 'compact' ? '' : 'md:grid md:grid-cols-2'}`}>
             {/* Left: Design Preview */}
-            <div className={`bg-white flex items-center justify-center relative overflow-hidden group ${viewMode === 'compact' ? 'h-full' : 'border-r border-black min-h-[240px] md:min-h-0'}`}>
+            <div className={`${bgColor} flex items-center justify-center relative overflow-hidden group ${viewMode === 'compact' ? 'h-full' : `border-r ${borderColor} min-h-[240px] md:min-h-0`}`}>
                 
                 {/* Main Image or Figma Embed */}
                 {isFigmaUrl ? (
-                    <FigmaEmbed src={figmaEmbedUrl} title={task.title} />
+                    <FigmaEmbed src={figmaEmbedUrl} title={task.title} darkMode={darkMode} />
                 ) : (
                     <img 
                         src={task.imageUrl} 
@@ -353,10 +363,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </div>
 
             {/* Right: Comments - Hidden in compact mode on desktop if needed, or just stacked */}
-            <div className={`flex flex-col bg-white h-full relative ${viewMode === 'compact' ? 'hidden' : ''}`}>
+            <div className={`flex flex-col ${bgColor} h-full relative ${viewMode === 'compact' ? 'hidden' : ''}`}>
             <div ref={commentsContainerRef} className="flex-1 overflow-y-auto p-3 space-y-3">
                 {task.comments.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-gray-400 text-center p-3">
+                    <div className={`h-full flex flex-col items-center justify-center ${secondaryText} text-center p-3`}>
                         <p className="text-xs">Ingen kommentarer endnu.</p>
                         <p className="text-[10px] mt-1.5">Skriv herunder for at give feedback.</p>
                     </div>
@@ -385,17 +395,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     return (
                         <div key={comment.id} className={`flex flex-col mb-4 ${isMe ? 'items-end' : 'items-start'}`}>
                             {/* Header: Name & Time */}
-                            <div className={`flex items-center gap-1.5 mb-1.5 text-[9px] font-bold uppercase tracking-wider text-gray-400 select-none`}>
+                            <div className={`flex items-center gap-1.5 mb-1.5 text-[9px] font-bold uppercase tracking-wider ${secondaryText} select-none`}>
                                 {isMe ? (
                                     <>
                                         <span>{formattedTime}</span>
-                                        <span className="text-gray-300">—</span>
-                                        <span className="text-black">{senderName}</span>
+                                        <span className={`${darkMode ? 'text-gray-600' : 'text-gray-300'}`}>—</span>
+                                        <span className={textColor}>{senderName}</span>
                                     </>
                                 ) : (
                                     <>
-                                        <span className="text-black">{senderName}</span>
-                                        <span className="text-gray-300">—</span>
+                                        <span className={textColor}>{senderName}</span>
+                                        <span className={`${darkMode ? 'text-gray-600' : 'text-gray-300'}`}>—</span>
                                         <span>{formattedTime}</span>
                                     </>
                                 )}
@@ -404,7 +414,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                             {/* Message Bubble */}
                             <div className={`max-w-[85%] flex flex-col gap-1.5 ${isMe ? 'items-end' : 'items-start'}`}>
                                 {comment.text && (
-                                    <div className={`p-3 text-xs border border-black ${isMe ? 'bg-black text-white' : 'bg-white text-black'}`}>
+                                    <div className={`p-3 text-xs border ${borderColor} ${isMe ? (darkMode ? 'bg-white text-black' : 'bg-black text-white') : `${bgColor} ${textColor}`}`}>
                                         {renderCommentWithLinks(comment.text)}
                                     </div>
                                 )}
@@ -413,7 +423,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                                 {comment.attachments && comment.attachments.length > 0 && (
                                     <div className="flex flex-wrap gap-1.5">
                                         {comment.attachments.map((url, idx) => (
-                                            <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className="block w-20 h-20 border border-black/10 overflow-hidden hover:opacity-90 transition-opacity">
+                                            <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className={`block w-20 h-20 border ${darkMode ? 'border-white/10' : 'border-black/10'} overflow-hidden hover:opacity-90 transition-opacity`}>
                                                 <img src={url} alt="Attachment" className="w-full h-full object-cover" />
                                             </a>
                                         ))}
@@ -427,10 +437,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </div>
 
             {/* Input Area */}
-            <div className="p-3 border-t border-black bg-white relative">
+            <div className={`p-3 border-t ${borderColor} ${bgColor} relative`}>
                  {/* File Preview */}
                  {selectedFile && (
-                    <div className="absolute -top-8 left-3 bg-[#EBE9E9] px-2 py-0.5 text-[10px] font-bold uppercase flex items-center gap-1.5 border border-black shadow-sm">
+                    <div className={`absolute -top-8 left-3 ${darkMode ? 'bg-[#333]' : 'bg-[#EBE9E9]'} px-2 py-0.5 text-[10px] font-bold uppercase flex items-center gap-1.5 border ${borderColor} shadow-sm ${textColor}`}>
                         <span className="truncate max-w-[120px]">{selectedFile.name}</span>
                         <button onClick={clearFile} className="hover:text-red-500"><X size={10} /></button>
                     </div>
@@ -443,7 +453,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     onChange={(e) => setNewComment(e.target.value)}
                     placeholder="Skriv en besked..."
                     disabled={isApproved}
-                    className="w-full bg-[#F9F9F9] border border-[#EBE9E9] p-2.5 pr-16 text-xs font-medium focus:outline-none focus:border-black placeholder-gray-500 transition-colors"
+                    className={`w-full ${inputBgColor} border ${inputBorderColor} p-2.5 pr-16 text-xs font-medium focus:outline-none focus:border-${darkMode ? 'white' : 'black'} placeholder-gray-500 transition-colors ${textColor}`}
                 />
                 
                 {/* Hidden File Input */}
@@ -461,7 +471,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                         type="button"
                         onClick={handlePaperclipClick}
                         disabled={isApproved}
-                        className="p-1 text-gray-500 hover:text-black transition-colors"
+                        className={`p-1 ${darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-black'} transition-colors`}
                         title="Vedhæft fil"
                     >
                         <Paperclip size={14} />
@@ -471,7 +481,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     <button
                         type="submit"
                         disabled={isApproved || (!newComment.trim() && !selectedFile)}
-                        className="p-1.5 text-black hover:opacity-70 disabled:opacity-30 transition-opacity"
+                        className={`p-1.5 ${textColor} hover:opacity-70 disabled:opacity-30 transition-opacity`}
                     >
                         <ArrowRight size={16} />
                     </button>
