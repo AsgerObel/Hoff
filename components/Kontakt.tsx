@@ -3,10 +3,20 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Check, Menu } from 'lucide-react';
 import PublicSidebar from './PublicSidebar';
 import LiveClock from './LiveClock';
+import { useTheme } from './ThemeContext';
 
 const Kontakt: React.FC = () => {
-  const borderColor = "border-[#EBE9E9]";
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { darkMode } = useTheme();
+  
+  // Theme classes
+  const bgColor = darkMode ? 'bg-[#1b1b1b]' : 'bg-white';
+  const textColor = darkMode ? 'text-white' : 'text-black';
+  const borderColor = darkMode ? 'border-white/20' : 'border-[#EBE9E9]';
+  const inputBgColor = darkMode ? 'bg-[#2a2a2a]' : 'bg-white';
+  const inputFocusBgColor = darkMode ? 'focus:bg-[#333]' : 'focus:bg-[#F9F9F9]';
+  const cardHoverBg = darkMode ? 'hover:bg-white/5' : 'hover:bg-[#F9F9F9]';
+  const gridColor = darkMode ? '#ffffff' : '#1b1b1b';
   
   // Form state
   const [formData, setFormData] = useState({
@@ -18,7 +28,6 @@ const Kontakt: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   // Live time for Copenhagen
   const [time, setTime] = useState(new Date());
@@ -26,12 +35,6 @@ const Kontakt: React.FC = () => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
-
-  const formattedTime = time.toLocaleTimeString('da-DK', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,10 +64,10 @@ const Kontakt: React.FC = () => {
   const [budgetOpen, setBudgetOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-white text-black font-sans overflow-hidden selection:bg-black selection:text-white">
+    <div className={`flex h-screen ${bgColor} ${textColor} font-sans overflow-hidden transition-colors duration-300 ${darkMode ? 'selection:bg-white selection:text-black' : 'selection:bg-black selection:text-white'}`}>
       
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-[#EBE9E9] flex items-center justify-between px-6 z-40">
+      <div className={`md:hidden fixed top-0 left-0 right-0 h-16 ${bgColor} border-b ${borderColor} flex items-center justify-between px-6 z-40 transition-colors duration-300`}>
         <Link to="/" className="font-black uppercase tracking-[-0.05em] text-lg">Hoffmeister Studio</Link>
         <button onClick={() => setMobileMenuOpen(true)}>
           <Menu size={24} />
@@ -78,11 +81,11 @@ const Kontakt: React.FC = () => {
       />
 
       {/* MAIN CONTENT AREA */}
-      <main className="flex-1 overflow-y-auto relative pt-16 md:pt-0">
+      <main className="flex-1 overflow-y-auto relative pt-16 md:pt-0 transition-colors duration-300">
         {/* Subtle Grid Background Pattern */}
-        <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
+        <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0 transition-colors duration-300" 
              style={{ 
-               backgroundImage: 'linear-gradient(#1b1b1b 1px, transparent 1px), linear-gradient(90deg, #1b1b1b 1px, transparent 1px)', 
+               backgroundImage: `linear-gradient(${gridColor} 1px, transparent 1px), linear-gradient(90deg, ${gridColor} 1px, transparent 1px)`, 
                backgroundSize: '40px 40px' 
              }}>
         </div>
@@ -90,7 +93,7 @@ const Kontakt: React.FC = () => {
         <div className="relative z-10">
           
           {/* Header Area - aligned with sidebar header border */}
-          <div className="bg-white w-full border-b border-[#EBE9E9]">
+          <div className={`${bgColor} w-full border-b ${borderColor} transition-colors duration-300`}>
             <div className="max-w-[1400px] mx-auto px-4 md:px-12 h-[127px] flex items-center">
               <h1 className="text-4xl md:text-5xl font-black uppercase tracking-[-0.05em] leading-none">
                 KONTAKT
@@ -105,22 +108,22 @@ const Kontakt: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 h-full">
               
               {/* LEFT: Contact Form */}
-              <div className={`border ${borderColor} p-6 bg-white relative h-full flex flex-col`}>
+              <div className={`border ${borderColor} p-6 ${bgColor} relative h-full flex flex-col transition-colors duration-300`}>
 
                 {isSubmitted ? (
                   /* Success State */
                   <div className="flex-1 flex flex-col items-center justify-center">
-                    <div className="w-14 h-14 border-2 border-black flex items-center justify-center mb-5">
-                      <Check size={28} className="text-black" />
+                    <div className={`w-14 h-14 border-2 ${darkMode ? 'border-white' : 'border-black'} flex items-center justify-center mb-5`}>
+                      <Check size={28} />
                     </div>
                     <h3 className="text-2xl font-black uppercase tracking-[-0.05em] mb-2">Tak for din besked</h3>
-                    <p className="text-gray-500 text-sm mb-6">Vi vender tilbage inden for 24 timer.</p>
+                    <p className={`${darkMode ? 'text-gray-400' : 'text-gray-500'} text-sm mb-6`}>Vi vender tilbage inden for 24 timer.</p>
                     <button 
                       onClick={() => {
                         setIsSubmitted(false);
                         setFormData({ name: '', email: '', company: '', budget: '', message: '' });
                       }}
-                      className="bg-black text-white px-5 py-2.5 font-bold uppercase text-sm tracking-[-0.05em] hover:bg-gray-800 transition-colors"
+                      className={`${darkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'} px-5 py-2.5 font-bold uppercase text-sm tracking-[-0.05em] transition-colors`}
                     >
                       Send ny besked
                     </button>
@@ -131,26 +134,26 @@ const Kontakt: React.FC = () => {
                     {/* Name & Email Row */}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-black uppercase tracking-[-0.05em] text-black block mb-1.5">Navn</label>
+                        <label className="text-sm font-black uppercase tracking-[-0.05em] block mb-1.5">Navn</label>
                         <input 
                           type="text"
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
                           required
-                          className="w-full bg-white border border-[#EBE9E9] p-3 text-xs font-bold text-black focus:outline-none focus:border-black focus:bg-[#F9F9F9] transition-colors"
+                          className={`w-full ${inputBgColor} border ${borderColor} p-3 text-xs font-bold focus:outline-none ${darkMode ? 'focus:border-white' : 'focus:border-black'} ${inputFocusBgColor} transition-colors`}
                           placeholder="Dit fulde navn"
                         />
                       </div>
                       <div>
-                        <label className="text-sm font-black uppercase tracking-[-0.05em] text-black block mb-1.5">Email</label>
+                        <label className="text-sm font-black uppercase tracking-[-0.05em] block mb-1.5">Email</label>
                         <input 
                           type="email"
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
                           required
-                          className="w-full bg-white border border-[#EBE9E9] p-3 text-xs font-bold text-black focus:outline-none focus:border-black focus:bg-[#F9F9F9] transition-colors"
+                          className={`w-full ${inputBgColor} border ${borderColor} p-3 text-xs font-bold focus:outline-none ${darkMode ? 'focus:border-white' : 'focus:border-black'} ${inputFocusBgColor} transition-colors`}
                           placeholder="din@email.dk"
                         />
                       </div>
@@ -159,24 +162,24 @@ const Kontakt: React.FC = () => {
                     {/* Company & Budget Row */}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="text-sm font-black uppercase tracking-[-0.05em] text-black block mb-1.5">Virksomhed</label>
+                        <label className="text-sm font-black uppercase tracking-[-0.05em] block mb-1.5">Virksomhed</label>
                         <input 
                           type="text"
                           name="company"
                           value={formData.company}
                           onChange={handleChange}
-                          className="w-full bg-white border border-[#EBE9E9] p-3 text-xs font-bold text-black focus:outline-none focus:border-black focus:bg-[#F9F9F9] transition-colors"
+                          className={`w-full ${inputBgColor} border ${borderColor} p-3 text-xs font-bold focus:outline-none ${darkMode ? 'focus:border-white' : 'focus:border-black'} ${inputFocusBgColor} transition-colors`}
                           placeholder="Virksomhedsnavn"
                         />
                       </div>
                       <div className="relative">
-                        <label className="text-sm font-black uppercase tracking-[-0.05em] text-black block mb-1.5">Budget</label>
+                        <label className="text-sm font-black uppercase tracking-[-0.05em] block mb-1.5">Budget</label>
                         <button
                           type="button"
                           onClick={() => setBudgetOpen(!budgetOpen)}
-                          className="w-full bg-white border border-[#EBE9E9] p-3 text-xs font-bold text-black focus:outline-none focus:border-black transition-colors text-left flex items-center justify-between"
+                          className={`w-full ${inputBgColor} border ${borderColor} p-3 text-xs font-bold focus:outline-none ${darkMode ? 'focus:border-white' : 'focus:border-black'} transition-colors text-left flex items-center justify-between`}
                         >
-                          <span className={formData.budget ? 'text-black' : 'text-gray-400'}>
+                          <span className={formData.budget ? '' : (darkMode ? 'text-gray-500' : 'text-gray-400')}>
                             {formData.budget ? budgetOptions.find(o => o.value === formData.budget)?.label : 'Vælg budget...'}
                           </span>
                           <svg width="10" height="6" viewBox="0 0 12 8" fill="none" className={`transition-transform ${budgetOpen ? 'rotate-180' : ''}`}>
@@ -185,7 +188,7 @@ const Kontakt: React.FC = () => {
                         </button>
                         {/* Dropdown */}
                         {budgetOpen && (
-                          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#EBE9E9] shadow-lg z-20">
+                          <div className={`absolute top-full left-0 right-0 mt-1 ${inputBgColor} border ${borderColor} shadow-lg z-20`}>
                             {budgetOptions.filter(o => o.value).map(opt => (
                               <button
                                 key={opt.value}
@@ -194,7 +197,7 @@ const Kontakt: React.FC = () => {
                                   setFormData(prev => ({ ...prev, budget: opt.value }));
                                   setBudgetOpen(false);
                                 }}
-                                className={`w-full text-left px-3 py-2 text-xs font-bold text-black hover:bg-[#F9F9F9] transition-colors ${formData.budget === opt.value ? 'bg-[#F9F9F9]' : ''}`}
+                                className={`w-full text-left px-3 py-2 text-xs font-bold ${cardHoverBg} transition-colors ${formData.budget === opt.value ? (darkMode ? 'bg-white/10' : 'bg-[#F9F9F9]') : ''}`}
                               >
                                 {opt.label}
                               </button>
@@ -206,13 +209,13 @@ const Kontakt: React.FC = () => {
 
                     {/* Message - Expands to fill space */}
                     <div className="flex-1 flex flex-col">
-                      <label className="text-sm font-black uppercase tracking-[-0.05em] text-black block mb-1.5">Besked</label>
+                      <label className="text-sm font-black uppercase tracking-[-0.05em] block mb-1.5">Besked</label>
                       <textarea 
                         name="message"
                         value={formData.message}
                         onChange={handleChange}
                         required
-                        className="flex-1 w-full bg-white border border-[#EBE9E9] p-3 text-xs font-bold text-black focus:outline-none focus:border-black focus:bg-[#F9F9F9] transition-colors resize-none"
+                        className={`flex-1 w-full ${inputBgColor} border ${borderColor} p-3 text-xs font-bold focus:outline-none ${darkMode ? 'focus:border-white' : 'focus:border-black'} ${inputFocusBgColor} transition-colors resize-none`}
                         placeholder="Fortæl os om dit projekt, dine mål og din tidslinje..."
                       />
                     </div>
@@ -221,11 +224,11 @@ const Kontakt: React.FC = () => {
                     <button 
                       type="submit"
                       disabled={isSubmitting || !formData.name || !formData.email || !formData.message}
-                      className="w-full bg-black text-white px-5 py-3 font-bold uppercase flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors tracking-[-0.05em] text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                      className={`w-full ${darkMode ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'} px-5 py-3 font-bold uppercase flex items-center justify-center gap-2 transition-colors tracking-[-0.05em] text-sm disabled:opacity-40 disabled:cursor-not-allowed`}
                     >
                       {isSubmitting ? (
                         <>
-                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          <div className={`w-4 h-4 border-2 ${darkMode ? 'border-black/30 border-t-black' : 'border-white/30 border-t-white'} rounded-full animate-spin`} />
                           <span>Sender...</span>
                         </>
                       ) : (
@@ -244,44 +247,44 @@ const Kontakt: React.FC = () => {
                 {/* Info Cards - 2x2 Grid */}
                 <div className="grid grid-cols-2 gap-3 content-start">
                   {/* Location */}
-                  <div className={`p-4 border ${borderColor} group hover:bg-[#F9F9F9] transition-colors bg-white`}>
-                    <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 block mb-0.5">Adresse</span>
+                  <div className={`p-4 border ${borderColor} group ${cardHoverBg} transition-colors ${bgColor}`}>
+                    <span className={`text-[9px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'} block mb-0.5`}>Adresse</span>
                     <h4 className="text-sm font-black uppercase tracking-[-0.05em] mb-1.5">Besøg Os</h4>
-                    <div className="text-xs font-medium text-gray-600 leading-relaxed">
+                    <div className={`text-xs font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'} leading-relaxed`}>
                       <p>Åboulevarden 70, 3. sal</p>
                       <p>8000 Aarhus C</p>
                     </div>
                   </div>
 
                   {/* Email */}
-                  <div className={`p-4 border ${borderColor} group hover:bg-[#F9F9F9] transition-colors bg-white`}>
-                    <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 block mb-0.5">Email</span>
+                  <div className={`p-4 border ${borderColor} group ${cardHoverBg} transition-colors ${bgColor}`}>
+                    <span className={`text-[9px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'} block mb-0.5`}>Email</span>
                     <h4 className="text-sm font-black uppercase tracking-[-0.05em] mb-1.5">Skriv Til Os</h4>
                     <div className="text-xs font-medium">
-                      <a href="mailto:hej@hoffmeister.dk" className="text-black hover:underline transition-colors">
+                      <a href="mailto:hej@hoffmeister.dk" className="hover:underline transition-colors">
                         hej@hoffmeister.dk
                       </a>
                     </div>
                   </div>
 
                   {/* Phone */}
-                  <div className={`p-4 border ${borderColor} group hover:bg-[#F9F9F9] transition-colors bg-white`}>
-                    <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 block mb-0.5">Telefon</span>
+                  <div className={`p-4 border ${borderColor} group ${cardHoverBg} transition-colors ${bgColor}`}>
+                    <span className={`text-[9px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'} block mb-0.5`}>Telefon</span>
                     <h4 className="text-sm font-black uppercase tracking-[-0.05em] mb-1.5">Ring Til Os</h4>
                     <div className="text-xs font-medium">
-                      <a href="tel:+4512345678" className="text-black hover:underline transition-colors">
+                      <a href="tel:+4512345678" className="hover:underline transition-colors">
                         +45 12 34 56 78
                       </a>
                     </div>
                   </div>
 
                   {/* Hours */}
-                  <div className={`p-4 border ${borderColor} group hover:bg-[#F9F9F9] transition-colors bg-white`}>
-                    <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400 block mb-0.5">Åbningstider</span>
+                  <div className={`p-4 border ${borderColor} group ${cardHoverBg} transition-colors ${bgColor}`}>
+                    <span className={`text-[9px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'} block mb-0.5`}>Åbningstider</span>
                     <h4 className="text-sm font-black uppercase tracking-[-0.05em] mb-1.5">Vi Er Her</h4>
-                    <div className="text-xs font-medium text-gray-600">
+                    <div className={`text-xs font-medium ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                       <span>Man-Fre: </span>
-                      <span className="font-bold text-black">09-17</span>
+                      <span className="font-bold">09-17</span>
                     </div>
                   </div>
                 </div>
@@ -292,17 +295,17 @@ const Kontakt: React.FC = () => {
                   <img 
                     src="/assets/aarhus-map.png" 
                     alt="Kort over Aarhus" 
-                    className="w-full h-full object-cover"
+                    className={`w-full h-full object-cover ${darkMode ? 'invert' : ''}`}
                   />
                   
                   {/* Location Marker - X cross made from rotated lines */}
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                     <div className="relative w-5 h-5">
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-full h-[2px] bg-gray-400 rotate-45" />
+                        <div className={`w-full h-[2px] ${darkMode ? 'bg-gray-600' : 'bg-gray-400'} rotate-45`} />
                       </div>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-full h-[2px] bg-gray-400 -rotate-45" />
+                        <div className={`w-full h-[2px] ${darkMode ? 'bg-gray-600' : 'bg-gray-400'} -rotate-45`} />
                       </div>
                     </div>
                   </div>
@@ -313,17 +316,17 @@ const Kontakt: React.FC = () => {
           </div>
 
           {/* FOOTER */}
-          <footer className="px-8 md:px-16 py-10 border-t border-[#EBE9E9] mt-12 bg-white">
+          <footer className={`px-8 md:px-16 py-10 border-t ${borderColor} mt-12 ${bgColor} transition-colors duration-300`}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full h-full items-start">
               {/* Left: Socials */}
               <div className="flex flex-col justify-between h-full">
                 <span className="text-sm font-bold uppercase tracking-widest">©2025</span>
                 <div className="flex flex-col gap-2 mt-8">
-                  <a href="#" className="text-sm font-bold uppercase tracking-widest hover:text-gray-500 flex items-center gap-2">
-                    <span className="text-gray-300">//</span> LinkedIn
+                  <a href="#" className={`text-sm font-bold uppercase tracking-widest ${darkMode ? 'hover:text-gray-400' : 'hover:text-gray-500'} flex items-center gap-2`}>
+                    <span className={darkMode ? 'text-gray-600' : 'text-gray-300'}>//</span> LinkedIn
                   </a>
-                  <a href="#" className="text-sm font-bold uppercase tracking-widest hover:text-gray-500 flex items-center gap-2">
-                    <span className="text-gray-300">//</span> Instagram
+                  <a href="#" className={`text-sm font-bold uppercase tracking-widest ${darkMode ? 'hover:text-gray-400' : 'hover:text-gray-500'} flex items-center gap-2`}>
+                    <span className={darkMode ? 'text-gray-600' : 'text-gray-300'}>//</span> Instagram
                   </a>
                 </div>
               </div>

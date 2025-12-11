@@ -1,18 +1,16 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { X, Menu } from 'lucide-react';
+import { X } from 'lucide-react';
+import { useTheme } from './ThemeContext';
 
 interface PublicSidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  darkMode?: boolean;
-  backgroundColor?: string;
-  borderColor?: string;
-  customHoverClass?: string;
 }
 
-const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose, darkMode = false, backgroundColor, borderColor, customHoverClass }) => {
+const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
+  const { darkMode, toggleDarkMode } = useTheme();
   
   const menuItems = [
     { id: 'cases', label: 'Cases', path: '/cases' },
@@ -21,10 +19,10 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose, darkMode
   ];
 
   // Theme classes
-  const bgClass = backgroundColor ? '' : (darkMode ? 'bg-[#0A0A0A]' : 'bg-white');
+  const bgClass = darkMode ? 'bg-[#1b1b1b]' : 'bg-white';
   const textClass = darkMode ? 'text-white' : 'text-black';
-  const borderClass = borderColor || (darkMode ? 'border-white/10' : 'border-[#EBE9E9]');
-  const hoverClass = customHoverClass || (darkMode ? 'hover:bg-white/5' : 'hover:bg-[#EBE9E9]');
+  const borderClass = darkMode ? 'border-white/20' : 'border-[#EBE9E9]';
+  const hoverClass = darkMode ? 'hover:bg-white/10' : 'hover:bg-[#EBE9E9]';
   const activeClass = darkMode ? 'bg-white/10' : 'bg-[#EBE9E9]';
 
   // Mobile drawer classes
@@ -44,13 +42,26 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose, darkMode
 
       <aside 
         className={`${mobileClasses} ${desktopClasses} flex flex-col border-r ${borderClass} h-screen ${bgClass} ${textClass} relative w-64 shrink-0 transition-colors duration-300`}
-        style={{ backgroundColor: backgroundColor }}
       >
-        {/* Brand Header */}
+        {/* Brand Header with Logo */}
         <div className={`h-[127px] border-b ${borderClass} p-6 flex items-center justify-between`}>
-          <Link to="/" className="text-3xl font-black leading-tight tracking-[-0.05em] uppercase hover:opacity-70 transition-opacity">
-            Hoffmeister<br />Studio
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link to="/" className="text-3xl font-black leading-tight tracking-[-0.05em] uppercase hover:opacity-70 transition-opacity">
+              Hoffmeister<br />Studio
+            </Link>
+            {/* Logo - Click to toggle dark mode */}
+            <button 
+              onClick={toggleDarkMode}
+              className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110"
+              title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              <img 
+                src={darkMode ? '/assets/LogoDarkmode.png' : '/assets/logo-light.png'} 
+                alt="Hoffmeister Logo" 
+                className="w-full h-full object-contain"
+              />
+            </button>
+          </div>
           <button className="md:hidden" onClick={onClose}>
             <X size={24} />
           </button>
@@ -93,4 +104,3 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({ isOpen, onClose, darkMode
 };
 
 export default PublicSidebar;
-

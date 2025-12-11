@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './components/ThemeContext';
 import LandingPage from './components/LandingPage';
 import Portal from './components/Portal';
 import Kontakt from './components/Kontakt';
@@ -14,23 +15,25 @@ import EchobloomCase from './components/cases/EchobloomCase';
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Portal />} />
-        <Route path="/kontakt" element={<Kontakt />} />
-        <Route path="/cases" element={<Cases />} />
-        <Route path="/cases/lava" element={<LavaCase />} />
-        <Route path="/cases/nordbrew" element={<NordbrewCase />} />
-        <Route path="/cases/dubs-donkraft" element={<DubsAndDonkraftCase />} />
-        <Route path="/cases/grenaa-chocolaterier" element={<GrenaaChocolaterierCase />} />
-        <Route path="/cases/ro-gus" element={<RoGusCase />} />
-        <Route path="/cases/echobloom" element={<EchobloomCase />} />
-        <Route path="/services" element={<Services />} />
-        {/* Add a catch-all route if needed, or redirect */}
-        <Route path="*" element={<LandingPage />} />
-      </Routes>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Portal />} />
+          <Route path="/kontakt" element={<Kontakt />} />
+          <Route path="/cases" element={<Cases />} />
+          <Route path="/cases/lava" element={<LavaCase />} />
+          <Route path="/cases/nordbrew" element={<NordbrewCase />} />
+          <Route path="/cases/dubs-donkraft" element={<DubsAndDonkraftCase />} />
+          <Route path="/cases/grenaa-chocolaterier" element={<GrenaaChocolaterierCase />} />
+          <Route path="/cases/ro-gus" element={<RoGusCase />} />
+          <Route path="/cases/echobloom" element={<EchobloomCase />} />
+          <Route path="/services" element={<Services />} />
+          {/* Add a catch-all route if needed, or redirect */}
+          <Route path="*" element={<LandingPage />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 };
 

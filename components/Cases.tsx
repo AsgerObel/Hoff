@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Menu, ArrowUpRight } from 'lucide-react';
 import PublicSidebar from './PublicSidebar';
 import LiveClock from './LiveClock';
+import { useTheme } from './ThemeContext';
 
 interface CaseItem {
   id: string;
@@ -25,6 +26,13 @@ const Cases: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hoveredCase, setHoveredCase] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { darkMode } = useTheme();
+
+  // Theme classes
+  const bgColor = darkMode ? 'bg-[#1b1b1b]' : 'bg-white';
+  const textColor = darkMode ? 'text-white' : 'text-black';
+  const borderColor = darkMode ? 'border-white/20' : 'border-[#EBE9E9]';
+  const gridColor = darkMode ? '#ffffff' : '#1b1b1b';
 
   const cases: CaseItem[] = [
     {
@@ -114,10 +122,10 @@ const Cases: React.FC = () => {
   ];
 
   return (
-    <div className="flex h-screen bg-white text-black font-sans overflow-hidden selection:bg-black selection:text-white">
+    <div className={`flex h-screen ${bgColor} ${textColor} font-sans overflow-hidden transition-colors duration-300 ${darkMode ? 'selection:bg-white selection:text-black' : 'selection:bg-black selection:text-white'}`}>
       
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-[#EBE9E9] flex items-center justify-between px-6 z-40">
+      <div className={`md:hidden fixed top-0 left-0 right-0 h-16 ${bgColor} border-b ${borderColor} flex items-center justify-between px-6 z-40 transition-colors duration-300`}>
         <Link to="/" className="font-black uppercase tracking-[-0.05em] text-lg">Hoffmeister Studio</Link>
         <button onClick={() => setMobileMenuOpen(true)}>
           <Menu size={24} />
@@ -131,7 +139,7 @@ const Cases: React.FC = () => {
       />
 
       {/* MAIN CONTENT AREA */}
-      <main className="flex-1 overflow-y-auto relative pt-16 md:pt-0">
+      <main className="flex-1 overflow-y-auto relative pt-16 md:pt-0 transition-colors duration-300">
         {/* Font Imports */}
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap');
@@ -170,9 +178,9 @@ const Cases: React.FC = () => {
         />
         
         {/* Subtle Grid Background Pattern */}
-        <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" 
+        <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0 transition-colors duration-300" 
              style={{ 
-               backgroundImage: 'linear-gradient(#1b1b1b 1px, transparent 1px), linear-gradient(90deg, #1b1b1b 1px, transparent 1px)', 
+               backgroundImage: `linear-gradient(${gridColor} 1px, transparent 1px), linear-gradient(90deg, ${gridColor} 1px, transparent 1px)`, 
                backgroundSize: '40px 40px' 
              }}>
         </div>
@@ -180,7 +188,7 @@ const Cases: React.FC = () => {
         <div className="relative z-10 min-h-screen flex flex-col">
           
           {/* Header Area */}
-          <div className="bg-white w-full border-b border-[#EBE9E9]">
+          <div className={`${bgColor} w-full border-b ${borderColor} transition-colors duration-300`}>
             <div className="max-w-[1400px] mx-auto px-4 md:px-12 h-[127px] flex items-center">
               <h1 className="text-4xl md:text-5xl font-black uppercase tracking-[-0.05em] leading-none">
                 CASES
@@ -191,9 +199,9 @@ const Cases: React.FC = () => {
           {/* Cases List - Data Table Style */}
           <div className="flex-1 pb-24">
             {/* List Header - Full Width Border */}
-            <div className="w-full border-b border-[#EBE9E9] bg-white">
+            <div className={`w-full border-b ${borderColor} ${bgColor} transition-colors duration-300`}>
               <div className="max-w-[1400px] mx-auto">
-                <div className="flex items-center gap-4 px-4 md:px-12 py-3 text-sm font-black uppercase tracking-[-0.05em] text-black">
+                <div className="flex items-center gap-4 px-4 md:px-12 py-3 text-sm font-black uppercase tracking-[-0.05em]">
                   <div className="flex-1 min-w-0">
                     Projekt
                   </div>
@@ -212,8 +220,8 @@ const Cases: React.FC = () => {
               <div className="">
                 {cases.map((caseItem) => {
                   const isHovered = hoveredCase === caseItem.id;
-                  const textColor = isHovered && caseItem.textColor ? caseItem.textColor : 'black';
-                  const secondaryColor = isHovered && caseItem.textColor === 'white' ? 'rgba(255,255,255,0.8)' : (isHovered ? 'black' : '#4B5563'); // gray-600
+                  const itemTextColor = isHovered && caseItem.textColor ? caseItem.textColor : (darkMode ? 'white' : 'black');
+                  const secondaryColor = isHovered && caseItem.textColor === 'white' ? 'rgba(255,255,255,0.8)' : (isHovered ? 'black' : (darkMode ? '#9CA3AF' : '#4B5563')); // gray-600
 
                   // Special logic for Dubs & Donkraft multicolor border
                   const isDubs = caseItem.slug === 'dubs-donkraft';
@@ -227,14 +235,14 @@ const Cases: React.FC = () => {
                       key={caseItem.id}
                       className="group relative transition-all duration-300"
                       style={{
-                        background: isHovered && caseItem.brandColor ? caseItem.brandColor : 'white',
+                        background: isHovered && caseItem.brandColor ? caseItem.brandColor : (darkMode ? '#1b1b1b' : 'white'),
                         ...(isDubs && isHovered ? dubsStyle : {})
                       }}
                       onMouseEnter={() => setHoveredCase(caseItem.id)}
                       onMouseLeave={() => setHoveredCase(null)}
                       onClick={() => caseItem.isActive && navigate(`/cases/${caseItem.slug}`)}
                     >
-                      <div className="absolute inset-x-0 bottom-0 border-b border-[#EBE9E9] w-screen left-[50%] -translate-x-[50%]" />
+                      <div className={`absolute inset-x-0 bottom-0 border-b ${borderColor} w-screen left-[50%] -translate-x-[50%]`} />
                       <div 
                         className={`case-row flex items-center gap-4 px-4 md:px-12 relative z-10 ${
                           caseItem.isActive ? 'cursor-pointer' : 'cursor-default opacity-60'
@@ -248,7 +256,7 @@ const Cases: React.FC = () => {
                               fontFamily: isHovered && caseItem.brandFont ? caseItem.brandFont : "'Inter', sans-serif",
                               textTransform: isHovered && caseItem.isUppercase ? 'uppercase' : 'none',
                               fontWeight: isHovered && caseItem.isUppercase ? 900 : 500,
-                              color: textColor,
+                              color: itemTextColor,
                               letterSpacing: isHovered && caseItem.letterSpacing ? caseItem.letterSpacing : undefined,
                               fontSize: isHovered && caseItem.hoverFontSize ? caseItem.hoverFontSize : undefined,
                             }}
@@ -256,7 +264,7 @@ const Cases: React.FC = () => {
                             {caseItem.title}
                           </h2>
                           {!caseItem.isActive && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 bg-gray-100 px-2 py-0.5 rounded">
+                            <span className={`text-[10px] font-bold uppercase tracking-wider ${darkMode ? 'text-gray-500 bg-gray-800' : 'text-gray-400 bg-gray-100'} px-2 py-0.5 rounded`}>
                               Kommer snart
                             </span>
                           )}
@@ -268,7 +276,7 @@ const Cases: React.FC = () => {
                             className="text-sm font-medium transition-all duration-300" 
                             style={{ 
                               opacity: isHovered ? 1 : 1,
-                              color: isHovered ? secondaryColor : '#4B5563'
+                              color: isHovered ? secondaryColor : (darkMode ? '#9CA3AF' : '#4B5563')
                             }}
                           >
                             {caseItem.category}
@@ -281,13 +289,13 @@ const Cases: React.FC = () => {
                             className="text-sm font-mono transition-all duration-300" 
                             style={{ 
                               opacity: isHovered ? 1 : 1,
-                              color: isHovered ? secondaryColor : '#6B7280'
+                              color: isHovered ? secondaryColor : (darkMode ? '#6B7280' : '#6B7280')
                             }}
                           >
                             {caseItem.year}
                           </span>
                           {caseItem.isActive && isHovered && (
-                            <ArrowUpRight size={16} color={textColor} />
+                            <ArrowUpRight size={16} color={itemTextColor} />
                           )}
                         </div>
                       </div>
@@ -299,17 +307,17 @@ const Cases: React.FC = () => {
           </div>
 
           {/* FOOTER */}
-          <footer className="px-8 md:px-16 py-10 border-t border-[#EBE9E9] bg-white">
+          <footer className={`px-8 md:px-16 py-10 border-t ${borderColor} ${bgColor} transition-colors duration-300`}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full h-full items-start">
               {/* Left: Socials */}
               <div className="flex flex-col justify-between h-full">
                 <span className="text-sm font-bold uppercase tracking-widest">©2025</span>
                 <div className="flex flex-col gap-2 mt-8">
-                  <a href="#" className="text-sm font-bold uppercase tracking-widest hover:text-gray-500 flex items-center gap-2">
-                    <span className="text-gray-300">//</span> LinkedIn
+                  <a href="#" className={`text-sm font-bold uppercase tracking-widest ${darkMode ? 'hover:text-gray-400' : 'hover:text-gray-500'} flex items-center gap-2`}>
+                    <span className={darkMode ? 'text-gray-600' : 'text-gray-300'}>//</span> LinkedIn
                   </a>
-                  <a href="#" className="text-sm font-bold uppercase tracking-widest hover:text-gray-500 flex items-center gap-2">
-                    <span className="text-gray-300">//</span> Instagram
+                  <a href="#" className={`text-sm font-bold uppercase tracking-widest ${darkMode ? 'hover:text-gray-400' : 'hover:text-gray-500'} flex items-center gap-2`}>
+                    <span className={darkMode ? 'text-gray-600' : 'text-gray-300'}>//</span> Instagram
                   </a>
                 </div>
               </div>
@@ -342,4 +350,3 @@ const Cases: React.FC = () => {
 };
 
 export default Cases;
-
