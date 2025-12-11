@@ -66,22 +66,27 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({
       >
         {/* Brand Header with Logo */}
         <div className={`h-[127px] border-b p-6 flex items-center justify-between ${!borderColor ? borderClass : ''}`} style={borderStyle}>
-          <div className="flex items-center gap-2">
-            <Link to="/" className="text-3xl font-black leading-tight tracking-[-0.05em] uppercase hover:opacity-70 transition-opacity">
-              Hoffmeister<br />Studio
+          <div className="flex flex-col items-start leading-none group">
+            <Link to="/" className="text-3xl font-black tracking-[-0.05em] uppercase group-hover:opacity-70 transition-opacity block -mb-1">
+              Hoffmeister
             </Link>
-            {/* Logo - Click to toggle dark mode */}
-            <button 
-              onClick={toggleDarkMode}
-              className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110 flex-shrink-0"
-              title={contextDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            >
-              <img 
-                src={isDark ? '/assets/LogoDarkmode.png' : '/assets/logo-light.png'} 
-                alt="Hoffmeister Logo" 
-                className="w-full h-full object-contain"
-              />
-            </button>
+            <div className="flex items-center gap-2">
+              <Link to="/" className="text-3xl font-black tracking-[-0.05em] uppercase group-hover:opacity-70 transition-opacity block">
+                Studio
+              </Link>
+              {/* Logo - Click to toggle dark mode */}
+              <button 
+                onClick={toggleDarkMode}
+                className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110 flex-shrink-0"
+                title={contextDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                <img 
+                  src={isDark ? '/assets/LogoDarkmode.png' : '/assets/logo-light.png'} 
+                  alt="Hoffmeister Logo" 
+                  className="w-full h-full object-contain"
+                />
+              </button>
+            </div>
           </div>
           <button className="md:hidden" onClick={onClose}>
             <X size={24} />

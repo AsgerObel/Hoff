@@ -42,22 +42,27 @@ const LandingPage: React.FC = () => {
           
           {/* Sticky Header: LOGO */}
           <header className={`sticky top-0 z-40 ${darkMode ? 'bg-[#1b1b1b]/95' : 'bg-white/95'} backdrop-blur-sm h-24 shrink-0 flex items-center justify-center border-b ${borderColor} transition-colors duration-300`}>
-              <div className="flex items-center gap-2">
-                <span className="text-3xl font-black leading-tight tracking-[-0.05em] uppercase">
-                    Hoffmeister<br />Studio
+              <div className="flex flex-col items-start leading-none group">
+                <span className="text-3xl font-black tracking-[-0.05em] uppercase -mb-1">
+                    Hoffmeister
                 </span>
-                {/* Logo - Click to toggle dark mode */}
-                <button 
-                  onClick={toggleDarkMode}
-                  className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110 flex-shrink-0"
-                  title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-                >
-                  <img 
-                    src={darkMode ? '/assets/LogoDarkmode.png' : '/assets/Logo.png'} 
-                    alt="Hoffmeister Logo" 
-                    className="w-full h-full object-contain"
-                  />
-                </button>
+                <div className="flex items-center gap-2">
+                    <span className="text-3xl font-black tracking-[-0.05em] uppercase">
+                        Studio
+                    </span>
+                    {/* Logo - Click to toggle dark mode */}
+                    <button 
+                      onClick={toggleDarkMode}
+                      className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110 flex-shrink-0"
+                      title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                    >
+                      <img 
+                        src={darkMode ? '/assets/LogoDarkmode.png' : '/assets/Logo.png'} 
+                        alt="Hoffmeister Logo" 
+                        className="w-full h-full object-contain"
+                      />
+                    </button>
+                </div>
               </div>
           </header>
 
