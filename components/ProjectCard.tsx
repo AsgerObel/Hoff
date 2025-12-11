@@ -74,6 +74,7 @@ interface ProjectCardProps {
   onExpand?: () => void; // Optional expand handler
   isExpanded?: boolean; // Expanded state
   viewMode?: 'single' | 'grid' | 'compact'; // Layout mode
+  darkMode?: boolean; // Optional prop for dark mode override (e.g. from Portal)
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ 
@@ -376,12 +377,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     
                     let senderName = 'HOFFMEISTER S.';
                     if (isMe) {
-                        const parts = currentUser.name.trim().split(/\s+/);
-                        if (parts.length >= 2) {
-                            senderName = `${parts[0]} ${parts[parts.length - 1].charAt(0)}.`.toUpperCase();
-                        } else {
-                            senderName = parts[0].toUpperCase();
-                        }
+                        senderName = 'HOFFMEISTER S.';
+                    } else {
+                        senderName = 'ASGER O.';
                     }
 
                     const formattedTime = new Date(comment.timestamp).toLocaleString('da-DK', {

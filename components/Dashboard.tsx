@@ -421,7 +421,7 @@ const AddProjectCard: React.FC<{
   return (
     <button
       onClick={onClick}
-      className={`border-2 border-dashed ${darkMode ? 'border-gray-700 bg-[#2a2a2a] hover:border-white hover:bg-[#333]' : 'border-gray-300 bg-[#F9F9F9] hover:border-black hover:bg-white'} flex flex-col items-center justify-center ${heightClass} group relative transition-all duration-300 cursor-pointer`}
+      className={`border-2 border-dashed ${darkMode ? 'border-gray-700 bg-[#2a2a2a] hover:border-white hover:bg-[#333] focus:ring-white' : 'border-gray-300 bg-[#F9F9F9] hover:border-black hover:bg-white focus:ring-black'} flex flex-col items-center justify-center ${heightClass} group relative transition-all duration-300 cursor-pointer focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-offset-transparent`}
     >
       <div className={`flex flex-col items-center gap-4 ${darkMode ? 'text-gray-500 group-hover:text-white' : 'text-gray-400 group-hover:text-black'} transition-colors`}>
         <div className="w-16 h-16 border-2 border-dashed border-current rounded-full flex items-center justify-center group-hover:border-solid transition-all">

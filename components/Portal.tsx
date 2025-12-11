@@ -10,9 +10,9 @@ import { useTheme } from './ThemeContext';
 // Initial Mock Data
 const INITIAL_USER: User = {
   id: 'u1',
-  name: 'Sebastian Bang',
-  initials: 'SB',
-  role: UserRole.CLIENT,
+  name: 'Hoffmeister Studio',
+  initials: 'HS',
+  role: UserRole.ADMIN,
 };
 
 const INITIAL_TASKS: ProjectTask[] = [
@@ -31,7 +31,7 @@ const INITIAL_TASKS: ProjectTask[] = [
     comments: [
       {
         id: 'c1',
-        userId: 'u1',
+        userId: 'c1', // Asger (Client)
         text: 'Kan vi prøve at gøre farven lidt mørkere, så den står skarpere?',
         timestamp: '2025-08-10T15:14:00'
       }
@@ -49,13 +49,13 @@ const INITIAL_TASKS: ProjectTask[] = [
     comments: [
       {
         id: 'c2',
-        userId: 'u1', // Client
+        userId: 'c1', // Asger (Client)
         text: 'Flot design, men kan vi få ændret farven på ikonet til at være mere fremtrædende?',
         timestamp: '2025-11-20T10:35:00'
       },
       {
         id: 'c3',
-        userId: 'admin',
+        userId: 'u1', // Hoffmeister (Admin)
         text: 'Vi kigger på det og sender et nyt udkast i morgen.',
         timestamp: '2025-11-20T14:15:00'
       }
@@ -74,7 +74,7 @@ const INITIAL_TASKS: ProjectTask[] = [
         { name: 'Assets_Export.zip', url: '#', type: 'PDF', size: '25 MB' }
     ],
     comments: [
-        { id: 'c4', userId: 'u1', text: 'Ser super godt ud! Godkendt herfra.', timestamp: new Date().toISOString() }
+        { id: 'c4', userId: 'c1', text: 'Ser super godt ud! Godkendt herfra.', timestamp: new Date().toISOString() }
     ]
   },
   // New Tasks for Testing
@@ -90,7 +90,7 @@ const INITIAL_TASKS: ProjectTask[] = [
         { name: 'IG_Story_Mockup.png', url: '#', type: 'PNG', size: '1.2 MB' }
     ],
     comments: [
-        { id: 'c5', userId: 'admin', text: 'Her er udkast til jeres opslag. Er teksten som I ønskede?', timestamp: '2025-12-05T11:00:00' }
+        { id: 'c5', userId: 'u1', text: 'Her er udkast til jeres opslag. Er teksten som I ønskede?', timestamp: '2025-12-05T11:00:00' }
     ]
   },
   {
@@ -106,7 +106,7 @@ const INITIAL_TASKS: ProjectTask[] = [
         { name: 'Color_Codes.txt', url: '#', type: 'PDF', size: '2 KB' }
     ],
     comments: [
-        { id: 'c6', userId: 'u1', text: 'Præcis de farver vi ledte efter. Tak!', timestamp: '2025-06-16T09:30:00' }
+        { id: 'c6', userId: 'c1', text: 'Præcis de farver vi ledte efter. Tak!', timestamp: '2025-06-16T09:30:00' }
     ]
   },
   {
@@ -119,7 +119,7 @@ const INITIAL_TASKS: ProjectTask[] = [
     lastUpdated: new Date().toISOString(),
     assets: [],
     comments: [
-        { id: 'c7', userId: 'admin', text: 'Vi har opdateret layoutet, så det matcher jeres ønsker.', timestamp: '2025-11-26T10:00:00' }
+        { id: 'c7', userId: 'u1', text: 'Vi har opdateret layoutet, så det matcher jeres ønsker.', timestamp: '2025-11-26T10:00:00' }
     ]
   },
   {
@@ -134,7 +134,7 @@ const INITIAL_TASKS: ProjectTask[] = [
         { name: 'Tote_Bag_Mockup.psd', url: '#', type: 'PNG', size: '45 MB' }
     ],
     comments: [
-        { id: 'c8', userId: 'u1', text: 'Ser godt ud. Kan vi se det med sort baggrund også?', timestamp: '2026-01-10T14:20:00' }
+        { id: 'c8', userId: 'c1', text: 'Ser godt ud. Kan vi se det med sort baggrund også?', timestamp: '2026-01-10T14:20:00' }
     ]
   },
   {
@@ -160,7 +160,7 @@ const INITIAL_TASKS: ProjectTask[] = [
          { name: 'Icons_All.svg', url: '#', type: 'SVG', size: '150 KB' }
     ],
     comments: [
-        { id: 'c9', userId: 'admin', text: 'Her er første udkast til de 10 primære ikoner.', timestamp: '2025-12-20T15:05:00' }
+        { id: 'c9', userId: 'u1', text: 'Her er første udkast til de 10 primære ikoner.', timestamp: '2025-12-20T15:05:00' }
     ]
   },
   {
@@ -175,7 +175,7 @@ const INITIAL_TASKS: ProjectTask[] = [
         { name: 'Mobile_Screens_Export.png', url: '#', type: 'PNG', size: '2.2 MB' }
     ],
     comments: [
-        { id: 'c10', userId: 'u1', text: 'Menuen fungerer perfekt nu. Godt arbejde!', timestamp: '2025-08-20T11:00:00' }
+        { id: 'c10', userId: 'c1', text: 'Menuen fungerer perfekt nu. Godt arbejde!', timestamp: '2025-08-20T11:00:00' }
     ]
   }
 ];

@@ -48,18 +48,23 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser, activeTab, onTabChange, 
         <aside className={`${mobileClasses} ${desktopClasses} flex flex-col border-r ${borderColor} h-screen ${bgColor} ${textColor} relative transition-colors duration-300`}>
         {/* Brand Header */}
         <div className={`h-[127px] border-b ${borderColor} p-6 flex items-center justify-between`}>
-            <div className="flex flex-col items-start leading-none group">
-                <Link to="/" className="text-3xl font-black tracking-[-0.05em] uppercase hover:opacity-70 transition-opacity block -mb-1">
+            <Link to="/" className="flex flex-col items-start leading-none group">
+                <span className="text-3xl font-black tracking-[-0.05em] uppercase hover:opacity-70 transition-opacity block -mb-1">
                 Hoffmeister
-                </Link>
+                </span>
                 <div className="flex items-center gap-2">
-                    <Link to="/" className="text-3xl font-black tracking-[-0.05em] uppercase hover:opacity-70 transition-opacity block">
+                    <span className="text-3xl font-black tracking-[-0.05em] uppercase hover:opacity-70 transition-opacity block">
                     Studio
-                    </Link>
-                    {/* Logo - Click to toggle dark mode */}
-                    <button 
-                      onClick={toggleDarkMode}
-                      className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110 flex-shrink-0"
+                    </span>
+                    {/* Logo - Click to toggle dark mode - PREVENT PROPAGATION */}
+                    <div 
+                      role="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleDarkMode();
+                      }}
+                      className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110 flex-shrink-0 cursor-pointer"
                       title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
                     >
                       <img 
@@ -67,9 +72,9 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser, activeTab, onTabChange, 
                         alt="Hoffmeister Logo" 
                         className="w-full h-full object-contain"
                       />
-                    </button>
+                    </div>
                 </div>
-            </div>
+            </Link>
             <button className="md:hidden" onClick={onClose}>
                 <X size={24} />
             </button>

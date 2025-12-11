@@ -18,7 +18,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onSave }) => {
     const parts = user.name.split(' ');
     return parts.slice(1).join(' ') || '';
   });
-  const [email, setEmail] = useState('sebastian@example.com'); // Default/Mock
+  const [email, setEmail] = useState('kontakt@hoffmeisterstudio.dk'); // Default/Mock
   const [copiedColor, setCopiedColor] = useState<string | null>(null);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -51,7 +51,6 @@ const Settings: React.FC<SettingsProps> = ({ user, onSave }) => {
   const brandColors = [
     { name: 'Primary Black', value: '#1b1b1b' },
     { name: 'Off White', value: '#F9F9F9' },
-    { name: 'Accent Red', value: '#FF3B30' },
     { name: 'Hoffmeister Grey', value: '#EBE9E9' },
   ];
 
