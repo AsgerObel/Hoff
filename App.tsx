@@ -29,7 +29,6 @@ const App: React.FC = () => {
           <Route path="/cases/ro-gus" element={<RoGusCase />} />
           <Route path="/cases/echobloom" element={<EchobloomCase />} />
           <Route path="/services" element={<Services />} />
-          {/* Add a catch-all route if needed, or redirect */}
           <Route path="*" element={<LandingPage />} />
         </Routes>
       </Router>

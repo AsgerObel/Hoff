@@ -3,11 +3,12 @@ import Sidebar from './Sidebar';
 import Dashboard from './Dashboard';
 import Settings from './Settings';
 import ProjectCard from './ProjectCard';
+import AddProjectModal from './AddProjectModal';
 import { User, UserRole, ProjectTask, ProjectStatus, Comment } from '../types';
 import { Menu } from 'lucide-react';
 import { useTheme } from './ThemeContext';
 
-// Initial Mock Data
+// Testdata
 const INITIAL_USER: User = {
   id: 'u1',
   name: 'Hoffmeister Studio',
@@ -21,7 +22,7 @@ const INITIAL_TASKS: ProjectTask[] = [
     category: 'Branding',
     title: 'Emballage Design',
     status: ProjectStatus.IN_PROGRESS,
-    imageUrl: 'https://picsum.photos/600/600?random=1', // Placeholder
+    imageUrl: 'https://picsum.photos/600/600?random=1',
     createdAt: '2025-10-20T09:00:00',
     lastUpdated: new Date().toISOString(),
     assets: [
@@ -31,7 +32,7 @@ const INITIAL_TASKS: ProjectTask[] = [
     comments: [
       {
         id: 'c1',
-        userId: 'c1', // Asger (Client)
+        userId: 'c1',
         text: 'Kan vi prøve at gøre farven lidt mørkere, så den står skarpere?',
         timestamp: '2025-08-10T15:14:00'
       }
@@ -49,13 +50,13 @@ const INITIAL_TASKS: ProjectTask[] = [
     comments: [
       {
         id: 'c2',
-        userId: 'c1', // Asger (Client)
+        userId: 'c1',
         text: 'Flot design, men kan vi få ændret farven på ikonet til at være mere fremtrædende?',
         timestamp: '2025-11-20T10:35:00'
       },
       {
         id: 'c3',
-        userId: 'u1', // Hoffmeister (Admin)
+        userId: 'u1',
         text: 'Vi kigger på det og sender et nyt udkast i morgen.',
         timestamp: '2025-11-20T14:15:00'
       }
@@ -77,7 +78,6 @@ const INITIAL_TASKS: ProjectTask[] = [
         { id: 'c4', userId: 'c1', text: 'Ser super godt ud! Godkendt herfra.', timestamp: new Date().toISOString() }
     ]
   },
-  // New Tasks for Testing
   {
     id: 't4',
     category: 'SoMe',
@@ -187,9 +187,9 @@ const Portal: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [focusedTaskId, setFocusedTaskId] = useState<string | null>(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
   const { darkMode } = useTheme();
 
-  // Theme classes
   const bgColor = darkMode ? 'bg-[#1b1b1b]' : 'bg-white';
   const textColor = darkMode ? 'text-white' : 'text-black';
   const borderColor = darkMode ? 'border-white/20' : 'border-[#EBE9E9]';
@@ -199,8 +199,6 @@ const Portal: React.FC = () => {
 
   const handleUpdateProfile = (firstName: string, lastName: string, email: string) => {
     const newName = `${firstName.trim()} ${lastName.trim()}`.trim();
-    
-    // Generate initials: First letter of first name + First letter of last name
     const firstInitial = firstName.trim().charAt(0) || '';
     const lastInitial = lastName.trim().charAt(0) || '';
     const newInitials = (firstInitial + lastInitial).toUpperCase();
@@ -210,8 +208,7 @@ const Portal: React.FC = () => {
       name: newName,
       initials: newInitials
     }));
-    // In a real app, you would also save email to the user object or backend
-    setActiveTab('dashboard'); // Redirect to dashboard to show changes
+    setActiveTab('dashboard');
   };
 
   const handleAddComment = (taskId: string, text: string, attachments: string[] = []) => {
@@ -220,7 +217,7 @@ const Portal: React.FC = () => {
       userId: currentUser.id,
       text,
       timestamp: new Date().toISOString(),
-      attachments // Attachments included
+      attachments
     };
 
     setTasks(prev => prev.map(task => {
@@ -246,7 +243,6 @@ const Portal: React.FC = () => {
   const handleUndoApprove = (taskId: string) => {
     setTasks(prev => prev.map(task => {
       if (task.id === taskId) {
-        // Revert to IN_PROGRESS instead of PENDING to reflect active work
         return { ...task, status: ProjectStatus.IN_PROGRESS };
       }
       return task;
@@ -274,13 +270,12 @@ const Portal: React.FC = () => {
     setTimeout(() => {
         setFocusedTaskId(null);
         setIsClosing(false);
-    }, 250); // Match animation duration (slightly less than CSS to be safe)
+    }, 250);
   };
 
   const getPageTitle = () => {
     switch(activeTab) {
       case 'dashboard': 
-        // Display only the first name in the welcome message
         return `VELKOMMEN ${currentUser.name.split(' ')[0].toUpperCase()}`;
       case 'some': return 'SoMe';
       case 'web': return 'WEB DESIGN';
@@ -300,10 +295,8 @@ const Portal: React.FC = () => {
         return <Settings user={currentUser} onSave={handleUpdateProfile} />;
     }
     
-    // Filter tasks if specific tab is selected (mock logic)
     let displayTasks = tasks;
     if (activeTab !== 'dashboard') {
-        // Simple mapping for demo purposes
         const catMap: Record<string, string> = {
             'branding': 'Branding',
             'identity': 'Visuel Identitet',
@@ -326,7 +319,7 @@ const Portal: React.FC = () => {
         onApprove={handleApprove}
         onUndoApprove={handleUndoApprove}
         onFocusTask={setFocusedTaskId}
-        onAddProject={handleAddProject}
+        onOpenAddModal={() => setShowAddModal(true)}
       />
     );
   };
@@ -335,7 +328,7 @@ const Portal: React.FC = () => {
 
   return (
     <div className={`flex h-screen ${bgColor} ${textColor} font-sans overflow-hidden ${selectionClass} transition-colors duration-300`}>
-      {/* Mobile Header */}
+      {/* Mobil header */}
       <div className={`md:hidden fixed top-0 left-0 right-0 h-16 ${mobileHeaderBg} border-b ${borderColor} flex items-center justify-between px-6 z-40 transition-colors duration-300`}>
         <span className="font-black uppercase tracking-[-0.05em] text-lg">Hoffmeister Studio</span>
         <button onClick={() => setMobileMenuOpen(true)}>
@@ -351,9 +344,8 @@ const Portal: React.FC = () => {
         onClose={() => setMobileMenuOpen(false)}
       />
       
-      {/* Main Content Area: Removed padding on desktop to allow full-bleed sticky headers */}
       <main className="flex-1 overflow-y-auto relative pt-16 md:pt-0">
-         {/* Subtle Grid Background Pattern */}
+         {/* Grid baggrund */}
          <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0 transition-colors duration-300" 
               style={{ 
                   backgroundImage: `linear-gradient(${gridColor} 1px, transparent 1px), linear-gradient(90deg, ${gridColor} 1px, transparent 1px)`, 
@@ -366,16 +358,14 @@ const Portal: React.FC = () => {
          </div>
       </main>
 
-       {/* FOCUS MODE OVERLAY - Outside Main Scroll Context for proper fixed positioning */}
+       {/* Fokus-tilstand overlay */}
        {focusedTask && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-             {/* Background layer with fade in/out */}
              <div 
                 className={`absolute inset-0 ${darkMode ? 'bg-black/90' : 'bg-white/95'} backdrop-blur-sm ${isClosing ? 'animate-fade-out' : 'animate-fade-in'} transition-colors duration-300`} 
                 onClick={handleCloseFocus}
              ></div>
              
-             {/* Content layer with spring zoom in/out */}
              <div className={`w-[95%] h-[95%] md:w-[90%] md:h-[90%] max-w-[1600px] flex flex-col relative shadow-2xl z-10 pointer-events-auto ${isClosing ? 'animate-modal-out' : 'animate-modal-in'}`}>
                 <ProjectCard 
                     task={focusedTask} 
@@ -390,6 +380,17 @@ const Portal: React.FC = () => {
              </div>
         </div>
       )}
+
+      {/* Tilføj projekt modal */}
+      <AddProjectModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onSubmit={(data) => {
+          handleAddProject(data);
+          setShowAddModal(false);
+        }}
+        darkMode={darkMode}
+      />
     </div>
   );
 };

@@ -1,16 +1,4 @@
-
-/**
- * DESIGN SYSTEM NOTES
- * 
- * TYPOGRAPHY:
- * - Headings: Inter Bold/Black.
- * - Letter Spacing for Headings: -5% (Use class `tracking-[-0.05em]`)
- * 
- * COLORS:
- * - Borders/Lines: #EBE9E9
- * - Backgrounds (Sidebar/Box): #EBE9E9
- * - Input Fields: Very Light Grey #F9F9F9 (Lighter than #EBE9E9)
- */
+// Projekt status og bruger-typer
 
 export enum ProjectStatus {
   PENDING = 'AFVENTER DIG',
@@ -36,8 +24,7 @@ export interface Comment {
   userId: string;
   text: string;
   timestamp: string;
-  isAiGenerated?: boolean;
-  attachments?: string[]; // Array of image URLs/File URLs
+  attachments?: string[];
 }
 
 export interface Asset {
@@ -49,12 +36,12 @@ export interface Asset {
 
 export interface ProjectTask {
   id: string;
-  category: string; // e.g., BRANDING
-  title: string; // e.g., EMBALLAGE DESIGN
+  category: string;
+  title: string;
   status: ProjectStatus;
   imageUrl: string;
   comments: Comment[];
-  assets: Asset[]; // Deliverable files
-  createdAt: string; // Date when the project/design was made
+  assets: Asset[];
+  createdAt: string;
   lastUpdated: string;
 }

@@ -261,8 +261,8 @@ const Kontakt: React.FC = () => {
                     <span className={`text-[9px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'} block mb-0.5`}>Email</span>
                     <h4 className="text-sm font-black uppercase tracking-[-0.05em] mb-1.5">Skriv Til Os</h4>
                     <div className="text-xs font-medium">
-                      <a href="mailto:hej@hoffmeister.dk" className="hover:underline transition-colors">
-                        hej@hoffmeister.dk
+                      <a href="mailto:nikolaj@hoffmeisterstudio.com" className="hover:underline transition-colors">
+                        nikolaj@hoffmeisterstudio.com
                       </a>
                     </div>
                   </div>
@@ -272,8 +272,8 @@ const Kontakt: React.FC = () => {
                     <span className={`text-[9px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'} block mb-0.5`}>Telefon</span>
                     <h4 className="text-sm font-black uppercase tracking-[-0.05em] mb-1.5">Ring Til Os</h4>
                     <div className="text-xs font-medium">
-                      <a href="tel:+4512345678" className="hover:underline transition-colors">
-                        +45 12 34 56 78
+                      <a href="tel:+4551141562" className="hover:underline transition-colors">
+                        +45 51 14 15 62
                       </a>
                     </div>
                   </div>
@@ -316,37 +316,40 @@ const Kontakt: React.FC = () => {
           </div>
 
           {/* FOOTER */}
-          <footer className={`px-8 md:px-16 py-10 border-t ${borderColor} mt-12 ${bgColor} transition-colors duration-300`}>
+          <footer className={`px-8 md:px-16 py-8 border-t ${borderColor} mt-12 ${bgColor} transition-colors duration-300 min-h-[250px]`}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full h-full items-start">
               {/* Left: Socials */}
               <div className="flex flex-col justify-between h-full">
                 <span className="text-sm font-bold uppercase tracking-widest">©2025</span>
-                <div className="flex flex-col gap-2 mt-8">
-                  <a href="#" className={`text-sm font-bold uppercase tracking-widest ${darkMode ? 'hover:text-gray-400' : 'hover:text-gray-500'} flex items-center gap-2`}>
-                    <span className={darkMode ? 'text-gray-600' : 'text-gray-300'}>//</span> LinkedIn
+                <div className="flex flex-col gap-2">
+                  <a href="https://www.linkedin.com/in/nikolaj-hoffmeister-3b50032a0/" target="_blank" rel="noopener noreferrer" className={`text-sm font-bold uppercase tracking-widest ${darkMode ? 'hover:text-gray-400' : 'hover:text-gray-500'} flex items-center gap-2`}>
+                    <span className={darkMode ? 'text-gray-400' : 'text-gray-500'}>//</span> LinkedIn
                   </a>
-                  <a href="#" className={`text-sm font-bold uppercase tracking-widest ${darkMode ? 'hover:text-gray-400' : 'hover:text-gray-500'} flex items-center gap-2`}>
-                    <span className={darkMode ? 'text-gray-600' : 'text-gray-300'}>//</span> Instagram
+                  <a href="https://www.instagram.com/hoffmeisterstudio/" target="_blank" rel="noopener noreferrer" className={`text-sm font-bold uppercase tracking-widest ${darkMode ? 'hover:text-gray-400' : 'hover:text-gray-500'} flex items-center gap-2`}>
+                    <span className={darkMode ? 'text-gray-400' : 'text-gray-500'}>//</span> Instagram
                   </a>
                 </div>
               </div>
 
               {/* Center: Clock */}
               <div className="flex justify-center items-center h-full">
-                <div className="-mt-3">
+                <div className="-mt-3 md:-translate-x-32">
                   <LiveClock />
                 </div>
               </div>
 
               {/* Right: Contact */}
-              <div className="flex flex-col justify-between h-full md:text-right">
-                <div>
-                  <h3 className="text-2xl font-black uppercase tracking-[-0.05em] leading-none">HOFFMEISTER</h3>
-                  <h3 className="text-2xl font-black uppercase tracking-[-0.05em] leading-none">STUDIO</h3>
+              <div className="flex flex-col justify-between h-full ml-auto">
+                <div className="flex flex-col items-start leading-none">
+                  <span className="text-3xl font-black tracking-[-0.05em] uppercase -mb-1">Hoffmeister</span>
+                  <span className="text-3xl font-black tracking-[-0.05em] uppercase">Studio</span>
                 </div>
-                <div className="flex flex-col gap-1 mt-8">
-                  <a href="mailto:NIKOLAJ@gmail.com" className="text-sm font-bold uppercase tracking-widest hover:underline">NIKOLAJ@gmail.com</a>
-                  <span className="text-sm font-bold uppercase tracking-widest">+45123456789</span>
+                <div className="flex flex-col gap-1 items-start">
+                  <a href="mailto:nikolaj@hoffmeisterstudio.com" className="text-sm font-bold uppercase tracking-widest hover:underline flex flex-col items-start">
+                    <span>nikolaj@</span>
+                    <span>hoffmeisterstudio.com</span>
+                  </a>
+                  <a href="tel:+4551141562" className="text-sm font-bold uppercase tracking-widest hover:underline">+45 51 14 15 62</a>
                 </div>
               </div>
             </div>

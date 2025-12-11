@@ -6,11 +6,10 @@ import { useTheme } from './ThemeContext';
 interface PublicSidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  // Props that might be passed from specific pages
   backgroundColor?: string;
   borderColor?: string;
   customHoverClass?: string;
-  darkMode?: boolean; // prop override (e.g. from cases)
+  darkMode?: boolean;
 }
 
 const PublicSidebar: React.FC<PublicSidebarProps> = ({ 
@@ -19,7 +18,7 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({
   backgroundColor,
   borderColor,
   customHoverClass,
-  darkMode: propsDarkMode // Allow override from props
+  darkMode: propsDarkMode
 }) => {
   const location = useLocation();
   const { darkMode: contextDarkMode, toggleDarkMode } = useTheme();
@@ -31,11 +30,7 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({
   ];
   
   const isCustomStyle = !!backgroundColor;
-  
-  // Determine effective theme state
   const isDark = isCustomStyle ? (propsDarkMode ?? true) : contextDarkMode;
-
-  // Theme classes
   const bgClass = backgroundColor ? '' : (isDark ? 'bg-[#1b1b1b]' : 'bg-white');
   const textClass = isDark ? 'text-white' : 'text-black';
   const borderClass = borderColor ? `border-[${borderColor}]` : (isDark ? 'border-white/20' : 'border-[#EBE9E9]');
@@ -45,14 +40,11 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({
 
   const style = backgroundColor ? { backgroundColor } : {};
   const borderStyle = borderColor && !borderColor.startsWith('border-') ? { borderColor } : {};
-
-  // Mobile drawer classes
   const mobileClasses = `fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`;
   const desktopClasses = `md:translate-x-0 md:static md:flex`;
 
   return (
     <>
-      {/* Mobile Overlay */}
       {isOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm"
@@ -64,7 +56,6 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({
         className={`${mobileClasses} ${desktopClasses} flex flex-col border-r h-screen ${bgClass} ${textClass} relative w-64 shrink-0 transition-colors duration-300 ${!borderColor ? borderClass : ''}`}
         style={{ ...style, ...borderStyle }}
       >
-        {/* Brand Header with Logo */}
         <div className={`h-[127px] border-b p-6 flex items-center justify-between ${!borderColor ? borderClass : ''}`} style={borderStyle}>
           <div className="flex flex-col items-start leading-none group">
             <Link to="/" className="text-3xl font-black tracking-[-0.05em] uppercase group-hover:opacity-70 transition-opacity block -mb-1">
@@ -74,7 +65,6 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({
               <Link to="/" className="text-3xl font-black tracking-[-0.05em] uppercase group-hover:opacity-70 transition-opacity block">
                 Studio
               </Link>
-              {/* Logo - Click to toggle dark mode */}
               <button 
                 onClick={toggleDarkMode}
                 className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110 flex-shrink-0"
@@ -93,7 +83,6 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({
           </button>
         </div>
 
-        {/* Navigation Items */}
         <nav className="flex-1 overflow-y-auto">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path;
@@ -113,9 +102,7 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({
           })}
         </nav>
 
-        {/* Bottom Section */}
         <div className="mt-auto relative z-20">
-          {/* Login Link */}
           <div className={`border-t ${!borderColor ? borderClass : ''}`} style={borderStyle}>
             <Link 
               to="/login"

@@ -23,4 +23,3 @@ const LiveClock: React.FC = () => {
 };
 
 export default LiveClock;
-

@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { ProjectTask, User, ProjectStatus } from '../types';
 import ProjectCard from './ProjectCard';
-import AddProjectModal from './AddProjectModal';
 import { ArrowDownUp, Search, X, Bell, Square, Grid2x2, LayoutGrid, Plus } from 'lucide-react';
 import { useTheme } from './ThemeContext';
 
@@ -23,12 +22,12 @@ interface DashboardProps {
   onApprove: (taskId: string) => void;
   onUndoApprove: (taskId: string) => void;
   onFocusTask: (taskId: string) => void;
-  onAddProject?: (data: { title: string; category: string; figmaUrl: string }) => void;
+  onOpenAddModal?: () => void;
 }
 
 type SortOrder = 'NEWEST' | 'OLDEST';
 
-const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddComment, onApprove, onUndoApprove, onFocusTask, onAddProject }) => {
+const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddComment, onApprove, onUndoApprove, onFocusTask, onOpenAddModal }) => {
   const [filter, setFilter] = useState<ProjectStatus | 'ALL'>('ALL');
   const [gridCols, setGridCols] = useState<1 | 2 | 4>(1);
   const [sortOrder, setSortOrder] = useState<SortOrder>('NEWEST');
@@ -36,10 +35,8 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
   const [showNotifications, setShowNotifications] = useState(false);
   const [readNotificationIds, setReadNotificationIds] = useState<Set<string>>(new Set());
   const [initialized, setInitialized] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false);
   const { darkMode } = useTheme();
 
-  // Theme classes
   const bgColor = darkMode ? 'bg-[#1b1b1b]' : 'bg-white';
   const textColor = darkMode ? 'text-white' : 'text-black';
   const borderColor = darkMode ? 'border-white/20' : 'border-[#EBE9E9]';
@@ -49,16 +46,14 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
   const activeButton = darkMode ? 'bg-white text-black' : 'bg-black text-white';
   const inactiveButton = darkMode ? 'bg-[#1b1b1b] text-white border-white/20 hover:bg-white/10' : 'bg-white text-black border-black hover:bg-[#EBE9E9]';
 
-  // Derive notifications from tasks (Mock logic for demo)
+  // Opret notifikationer baseret på opgaver
   const notifications: Notification[] = useMemo(() => {
     const notifs: Notification[] = [];
     
     tasks.forEach(task => {
-        // Mock: Latest comment is a notification
         if (task.comments.length > 0) {
             const lastComment = task.comments[task.comments.length - 1];
             const notifId = `n-c-${lastComment.id}`;
-            // Only show if not from current user (simulated)
             if (lastComment.userId !== currentUser.id) {
                 notifs.push({
                     id: notifId,
@@ -72,7 +67,6 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
             }
         }
         
-        // Mock: If status is PENDING, show "Ready for review"
         if (task.status === ProjectStatus.PENDING) {
              const notifId = `n-s-${task.id}`;
              notifs.push({
@@ -89,7 +83,6 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
 
     const sortedNotifs = notifs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 5);
     
-    // Pre-mark items as read for demo (Keep only top 2 unread)
     if (!initialized && sortedNotifs.length > 2) {
         const idsToMarkRead = sortedNotifs.slice(2).map(n => n.id);
         setReadNotificationIds(new Set(idsToMarkRead));
@@ -114,8 +107,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
     });
   };
 
-  // Filter then Sort
-    const filteredAndSortedTasks = tasks
+  const filteredAndSortedTasks = tasks
         .filter(t => {
             const matchesStatus = filter === 'ALL' || t.status === filter;
             const matchesSearch = t.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -134,12 +126,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
   return (
     <div className={`w-full relative ${textColor} transition-colors duration-300`}>
       
-      {/* Header Area 
-          Calculated Height for Alignment:
-          Sidebar Header (128px) + Dashboard NavItem (77px) = 205px Total Top Offset.
-          Sticky Bar Content is approx 95px high.
-          Header Height = 205px - 95px = 110px to align borders.
-      */}
+      {/* Header */}
       <div className={`w-full`}>
         <div className="max-w-[1600px] mx-auto px-4 md:px-12 pt-8 md:pt-0 mb-0 flex flex-col justify-end md:h-[110px]">
             <div className="md:pb-4 text-center md:text-left flex items-center justify-between relative">
@@ -150,11 +137,9 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
         </div>
       </div>
 
-      {/* Sticky Controls & Filters - Full Width Background */}
+      {/* Filtre og kontroller */}
       <div className={`sticky top-0 z-40 ${bgColor} border-b ${borderColor} transition-colors duration-300`}>
-        {/* Changed items-center to items-end for bottom alignment */}
         <div className={`mx-auto py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 transition-all duration-500 ease-in-out ${gridCols === 1 ? 'max-w-[1600px] px-4 md:px-12' : 'max-w-[1600px] px-4 md:px-12'}`}>
-            {/* Filter Buttons */}
             <div className="flex flex-wrap gap-1.5 md:gap-2">
             <FilterButton 
                 label="Alle Opgaver" 
@@ -185,9 +170,8 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
             />
             </div>
 
-            {/* Right Side: Search + Sort + Notifications + Grid Toggle */}
             <div className="relative flex items-center gap-2 self-end md:self-auto w-full md:w-auto justify-end z-50">
-                {/* Search Input */}
+                {/* Søgefelt */}
                 <div className="relative group flex items-stretch">
                     <div className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-black transition-colors flex items-center h-full pointer-events-none z-10">
                         <Search size={14} className={darkMode ? 'text-gray-500' : 'text-gray-400'} />
@@ -209,7 +193,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                     )}
                 </div>
 
-                {/* View Toggles */}
+                {/* Visningsskift */}
                 <div className={`hidden md:flex ${bgColor} border ${inputBorderColor} h-9 items-center`}>
                     <button 
                         onClick={() => setGridCols(1)}
@@ -234,7 +218,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                     </button>
                 </div>
 
-                {/* Sort Toggle */}
+                {/* Sortering */}
                 <button 
                     onClick={toggleSort}
                     className={`flex items-center gap-2 px-3 h-9 border ${inputBorderColor} ${controlHover} transition-colors uppercase font-bold text-[10px] tracking-[-0.05em] whitespace-nowrap`}
@@ -243,7 +227,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                     <span className="hidden sm:inline">{sortOrder === 'NEWEST' ? 'Nyeste' : 'Ældste'}</span>
                 </button>
 
-                {/* Notification Bell */}
+                {/* Notifikationer */}
                 <button 
                     onClick={() => setShowNotifications(!showNotifications)}
                     className={`flex items-center justify-center px-3 h-9 border ${inputBorderColor} ${controlHover} transition-colors relative active:scale-95 duration-100 cursor-pointer z-[60]`}
@@ -256,7 +240,6 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
                     )}
                 </button>
 
-                {/* Dropdown Panel */}
                 {showNotifications && (
                     <>
                         <div className="fixed inset-0 z-40 bg-transparent cursor-default" onClick={() => setShowNotifications(false)} />
@@ -323,17 +306,16 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
         </div>
       </div>
 
-      {/* Grid Content - With Padding */}
+      {/* Opgave-grid */}
       <div className="max-w-[1600px] mx-auto px-4 md:px-12 py-12">
         <div className={`grid pb-24 transition-all duration-500 ease-in-out ${
             gridCols === 1 ? 'grid-cols-1 max-w-[1600px] gap-40' : 
             gridCols === 2 ? 'grid-cols-1 lg:grid-cols-2 gap-y-20 gap-x-8' : 
             'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'
         }`}>
-            {/* Add Project Card */}
-            {onAddProject && (
+            {onOpenAddModal && (
               <AddProjectCard 
-                onClick={() => setShowAddModal(true)} 
+                onClick={onOpenAddModal} 
                 viewMode={gridCols === 1 ? 'single' : gridCols === 4 ? 'compact' : 'grid'}
                 darkMode={darkMode}
               />
@@ -353,7 +335,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
             ))}
         </div>
         
-        {filteredAndSortedTasks.length === 0 && !onAddProject && (
+        {filteredAndSortedTasks.length === 0 && !onOpenAddModal && (
             <div className="text-center py-24 text-gray-400">
                 <p className="text-2xl font-bold uppercase tracking-[-0.05em]">Ingen opgaver fundet</p>
                 {searchQuery && (
@@ -362,15 +344,6 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
             </div>
         )}
       </div>
-
-      {/* Add Project Modal */}
-      {onAddProject && (
-        <AddProjectModal 
-          isOpen={showAddModal}
-          onClose={() => setShowAddModal(false)}
-          onSubmit={onAddProject}
-        />
-      )}
     </div>
   );
 };
@@ -384,16 +357,12 @@ const FilterButton: React.FC<{
 }> = ({ label, active, onClick, status, darkMode }) => {
     let baseClasses = "px-3 py-1.5 md:px-4 md:py-2 font-bold uppercase text-[10px] md:text-xs transition-all border tracking-[-0.05em]";
     
-    // Determine active styling based on status
-    let activeStyle = darkMode ? "bg-white text-black border-white" : "bg-black text-white border-black"; // Default (All)
+    let activeStyle = darkMode ? "bg-white text-black border-white" : "bg-black text-white border-black";
     if (status === ProjectStatus.PENDING) activeStyle = "bg-[#FF3B30] text-white border-[#FF3B30]";
     if (status === ProjectStatus.IN_PROGRESS) activeStyle = "bg-[#FFCC00] text-black border-[#FFCC00]";
     if (status === ProjectStatus.APPROVED) activeStyle = "bg-[#34C759] text-white border-[#34C759]";
 
-    // Active classes
     let activeClasses = `${activeStyle}`;
-    
-    // Inactive classes
     let inactiveClasses = darkMode 
         ? "bg-[#1b1b1b] text-white border-white/20 hover:bg-white/10" 
         : "bg-white text-black border-black hover:bg-[#EBE9E9] transition-colors";
@@ -408,7 +377,6 @@ const FilterButton: React.FC<{
     );
 }
 
-// Add Project Card Component
 const AddProjectCard: React.FC<{ 
   onClick: () => void;
   viewMode: 'single' | 'grid' | 'compact';

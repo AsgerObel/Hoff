@@ -9,13 +9,11 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [darkMode, setDarkMode] = useState(() => {
-    // Check localStorage for saved preference
     const saved = localStorage.getItem('darkMode');
     return saved ? JSON.parse(saved) : false;
   });
 
   useEffect(() => {
-    // Save to localStorage when darkMode changes
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
   }, [darkMode]);
 
@@ -37,4 +35,3 @@ export const useTheme = (): ThemeContextType => {
   }
   return context;
 };
-

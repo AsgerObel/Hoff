@@ -42,7 +42,6 @@ const EchobloomCase: React.FC = () => {
         backgroundColor="#E7000B"
         borderColor="border-[#151515]"
         customHoverClass="hover:bg-[#151515] hover:text-[#E7000B]"
-        textColor="text-[#151515]"
       />
 
       {/* MAIN CONTENT AREA */}
@@ -188,34 +187,37 @@ const EchobloomCase: React.FC = () => {
           </div>
 
           {/* FOOTER */}
-          <footer className="px-8 md:px-16 py-10 border-t border-[#151515] bg-[#E7000B] z-20 relative text-[#151515]">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full h-full items-start">
+          <footer className="px-16 py-8 border-t border-[#151515] bg-[#E7000B] z-20 relative text-[#151515] min-h-[250px]">
+            <div className="grid grid-cols-3 w-full h-full items-start">
               <div className="flex flex-col justify-between h-full">
                 <span className="text-sm font-bold uppercase tracking-widest">©2025</span>
-                <div className="flex flex-col gap-2 mt-8">
-                  <a href="#" className="text-sm font-bold uppercase tracking-widest hover:text-[#151515]/70 flex items-center gap-2 transition-colors">
+                <div className="flex flex-col gap-2">
+                  <a href="https://www.linkedin.com/in/nikolaj-hoffmeister-3b50032a0/" target="_blank" rel="noopener noreferrer" className="text-sm font-bold uppercase tracking-widest hover:text-[#151515]/70 flex items-center gap-2 transition-colors">
                     <span>//</span> LinkedIn
                   </a>
-                  <a href="#" className="text-sm font-bold uppercase tracking-widest hover:text-[#151515]/70 flex items-center gap-2 transition-colors">
+                  <a href="https://www.instagram.com/hoffmeisterstudio/" target="_blank" rel="noopener noreferrer" className="text-sm font-bold uppercase tracking-widest hover:text-[#151515]/70 flex items-center gap-2 transition-colors">
                     <span>//</span> Instagram
                   </a>
                 </div>
               </div>
 
               <div className="flex justify-center items-center h-full">
-                <div className="-mt-3">
+                <div className="-mt-3 md:-translate-x-32">
                   <LiveClock />
                 </div>
               </div>
 
-              <div className="flex flex-col justify-between h-full md:text-right">
-                <div>
-                  <h3 className="text-2xl font-black uppercase tracking-[-0.05em] leading-none">HOFFMEISTER</h3>
-                  <h3 className="text-2xl font-black uppercase tracking-[-0.05em] leading-none">STUDIO</h3>
+              <div className="flex flex-col justify-between h-full ml-auto">
+                <div className="flex flex-col items-start leading-none">
+                  <span className="text-3xl font-black tracking-[-0.05em] uppercase -mb-1">Hoffmeister</span>
+                  <span className="text-3xl font-black tracking-[-0.05em] uppercase">Studio</span>
                 </div>
-                <div className="flex flex-col gap-1 mt-8">
-                  <a href="mailto:NIKOLAJ@gmail.com" className="text-sm font-bold uppercase tracking-widest hover:text-[#151515]/70 hover:underline transition-colors">NIKOLAJ@gmail.com</a>
-                  <span className="text-sm font-bold uppercase tracking-widest">+45123456789</span>
+                <div className="flex flex-col gap-1 items-start">
+                  <a href="mailto:nikolaj@hoffmeisterstudio.com" className="text-sm font-bold uppercase tracking-widest hover:text-[#151515]/70 hover:underline transition-colors flex flex-col items-start">
+                    <span>nikolaj@</span>
+                    <span>hoffmeisterstudio.com</span>
+                  </a>
+                  <a href="tel:+4551141562" className="text-sm font-bold uppercase tracking-widest hover:text-[#151515]/70 hover:underline transition-colors">+45 51 14 15 62</a>
                 </div>
               </div>
             </div>
@@ -248,5 +250,3 @@ const EchobloomCase: React.FC = () => {
 };
 
 export default EchobloomCase;
-
-

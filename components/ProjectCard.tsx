@@ -3,17 +3,15 @@ import { Send, CheckCircle, X, Paperclip, RotateCcw, Maximize2, Minimize2, Arrow
 import { ProjectTask, ProjectStatus, User } from '../types';
 import { useTheme } from './ThemeContext';
 
-// Memoized Figma Embed component to prevent reloading on parent re-renders
+// Figma embed komponent
 const FigmaEmbed = React.memo(({ src, title, darkMode }: { src: string; title: string, darkMode: boolean }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [minTimeElapsed, setMinTimeElapsed] = useState(false);
   
   useEffect(() => {
-    // Reset states when src changes
     setIsLoaded(false);
     setMinTimeElapsed(false);
     
-    // Enforce minimum loading time of 5 seconds to ensure content is ready
     const timer = setTimeout(() => {
       setMinTimeElapsed(true);
     }, 5000);
@@ -21,12 +19,11 @@ const FigmaEmbed = React.memo(({ src, title, darkMode }: { src: string; title: s
     return () => clearTimeout(timer);
   }, [src]);
   
-  // Show content only when BOTH: actual load finished AND minimum time elapsed
   const showContent = isLoaded && minTimeElapsed;
   
   return (
     <div className={`w-full h-full overflow-y-auto overflow-x-hidden relative ${darkMode ? 'bg-[#111]' : 'bg-gray-50'}`}>
-      {/* Loading skeleton - Always shows until both conditions are met */}
+      {/* Indlæsningsanimation */}
       <div 
         className={`absolute inset-0 flex items-center justify-center ${darkMode ? 'bg-[#111]' : 'bg-gray-50'} z-20 transition-opacity duration-500 ${showContent ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
@@ -71,10 +68,10 @@ interface ProjectCardProps {
   onAddComment: (taskId: string, text: string, attachments?: string[]) => void;
   onApprove: (taskId: string) => void;
   onUndoApprove: (taskId: string) => void;
-  onExpand?: () => void; // Optional expand handler
-  isExpanded?: boolean; // Expanded state
-  viewMode?: 'single' | 'grid' | 'compact'; // Layout mode
-  darkMode?: boolean; // Optional prop for dark mode override (e.g. from Portal)
+  onExpand?: () => void;
+  isExpanded?: boolean;
+  viewMode?: 'single' | 'grid' | 'compact';
+  darkMode?: boolean;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ 
@@ -93,8 +90,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const commentsContainerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { darkMode } = useTheme();
-
-  // Theme classes
   const bgColor = darkMode ? 'bg-[#1b1b1b]' : 'bg-white';
   const textColor = darkMode ? 'text-white' : 'text-black';
   const borderColor = darkMode ? 'border-white/20' : 'border-black';
@@ -133,10 +128,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     e.preventDefault();
     if (!newComment.trim() && !selectedFile) return;
 
-    // Handle File Attachment (Mock Upload)
     const attachments: string[] = [];
     if (selectedFile) {
-        // Create a fake URL for the uploaded file to display it immediately
         const objectUrl = URL.createObjectURL(selectedFile);
         attachments.push(objectUrl);
     }
@@ -146,7 +139,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     clearFile();
   };
 
-  // Helper to format date
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('da-DK', {
@@ -156,27 +148,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     }).toUpperCase();
   };
 
-  // Memoized Figma embed URL to prevent recalculation on re-renders
+  // Opret Figma embed URL
   const figmaEmbedUrl = useMemo(() => {
     const url = task.imageUrl;
-    // If already an embed URL (embed.figma.com or figma.com/embed), add hide-ui if not present
     if (url.includes('embed.figma.com') || url.includes('figma.com/embed')) {
-      // Add hide-ui=1 to hide the footer bar if not already present
       if (!url.includes('hide-ui=')) {
         const separator = url.includes('?') ? '&' : '?';
         return `${url}${separator}hide-ui=1`;
       }
       return url;
     }
-    // Convert file/design/proto URLs to embed format
-    // Example: https://www.figma.com/file/ABC123/... → https://www.figma.com/embed?embed_host=share&url=...
     const encodedUrl = encodeURIComponent(url);
     return `https://www.figma.com/embed?embed_host=share&url=${encodedUrl}&hide-ui=1`;
   }, [task.imageUrl]);
   
   const isFigmaUrl = task.imageUrl.includes('figma.com') || task.imageUrl.includes('embed.figma.com');
 
-  // Helper to render text with clickable links
   const renderCommentWithLinks = (text: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const parts = text.split(urlRegex);
@@ -200,7 +187,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     });
   };
 
-  // Visual distinction logic for statuses
   const statusColors = {
     [ProjectStatus.PENDING]: 'bg-[#FF3B30] text-white border border-[#FF3B30] z-30', // Red
     [ProjectStatus.IN_PROGRESS]: 'bg-[#FFCC00] text-black border border-[#FFCC00]', // Yellow
@@ -214,20 +200,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   };
 
   const isApproved = task.status === ProjectStatus.APPROVED;
-
-  // Height and Layout logic based on viewMode
-  // Single: Calculates height to fit viewport (Screen - Header - Sticky - Padding)
-  // Compact: Smaller fixed height for dense grid
   const heightClass = viewMode === 'single' ? 'h-[calc(100vh-320px)] min-h-[450px]' : 
                       viewMode === 'compact' ? 'h-[250px]' : 
                       'h-[480px]';
-
-  // Conditional classes for Expanded mode - Removed animate-enter
   const containerClasses = isExpanded 
     ? `border ${borderColor} ${bgColor} flex flex-col h-full shadow-2xl z-50`
     : `border ${borderColor} ${bgColor} flex flex-col ${heightClass} group relative transition-all duration-500 ease-in-out hover:-translate-y-1 ${viewMode === 'compact' ? 'cursor-pointer' : ''}`;
 
-  // Handle card click for compact mode
   const handleCardClick = () => {
     if (viewMode === 'compact' && onExpand) {
       onExpand();
@@ -238,7 +217,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     <>
         <div className={containerClasses} onClick={handleCardClick}>
         
-        {/* Sticker Badge - Added animate-sticker and key prop to re-trigger on status change */}
+        {/* Status badge */}
         <div 
             key={task.status}
             className={`absolute bottom-full ${isExpanded ? 'left-0 mb-0' : '-left-[1px] mb-[1px]'} px-3 py-0.5 text-[10px] font-bold uppercase shadow-sm z-20 tracking-[-0.05em] animate-sticker ${statusColors[task.status]}`}
@@ -246,11 +225,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             {statusLabels[task.status]}
         </div>
 
-        {/* Header Section */}
+        {/* Header */}
         <div className={`border-b ${borderColor} shrink-0 ${viewMode === 'compact' ? 'h-10' : 'h-12 grid grid-cols-2'}`}>
-            {/* Left Header: Title + Minimize Button (Only visible when Expanded) */}
             <div className={`flex flex-col justify-center pl-3 border-r ${borderColor} relative transition-all overflow-hidden ${viewMode === 'compact' ? 'border-r-0 pr-3' : ''} ${isExpanded && onExpand ? 'pr-12' : 'pr-3'}`}>
-                {/* Minimize Button - Icon Only - Compact - Aligned Right for Symmetry with Godkend button */}
                 {isExpanded && onExpand && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 z-20">
                         <button 
@@ -277,10 +254,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 )}
             </div>
 
-            {/* Right Header: Comments + Approve Button - Hidden in compact mode */}
             {viewMode !== 'compact' && (
             <div className="flex items-center justify-between px-3">
-                {/* Maximize Button - Only visible when NOT expanded and expand handler exists */}
                 {!isExpanded && onExpand && (
                     <button 
                         onClick={(e) => { e.stopPropagation(); onExpand(); }}
@@ -291,12 +266,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     </button>
                 )}
                 
-                {/* Spacer if maximize button is not shown to keep layout consistent if needed, or just let justify-between handle it */}
-                {/* If already expanded, we might not want anything here, or maybe a placeholder. For now, empty. */}
                 {(isExpanded || !onExpand) && <div></div>}
                 
                 <div className={`flex items-center gap-2 ${!isExpanded ? 'opacity-0 group-hover:opacity-100 transition-opacity duration-200' : ''}`}>
-                    {/* View Design Toggle for Approved Projects */}
                     {isApproved && (
                         <button 
                             onClick={() => setShowApprovedDesign(!showApprovedDesign)}
@@ -328,12 +300,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             )}
         </div>
 
-        {/* Content Body */}
+        {/* Indhold */}
         <div className={`flex-1 flex flex-col min-h-0 ${viewMode === 'compact' ? '' : 'md:grid md:grid-cols-2'}`}>
-            {/* Left: Design Preview */}
+            {/* Design preview */}
             <div className={`${bgColor} flex items-center justify-center relative overflow-hidden group ${viewMode === 'compact' ? 'h-full' : `border-r ${borderColor} min-h-[240px] md:min-h-0`}`}>
                 
-                {/* Main Image or Figma Embed */}
                 {isFigmaUrl ? (
                     <FigmaEmbed src={figmaEmbedUrl} title={task.title} darkMode={darkMode} />
                 ) : (
@@ -344,7 +315,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     />
                 )}
 
-                {/* Compact Mode Hover Overlay - Click to expand indicator */}
                 {viewMode === 'compact' && onExpand && (
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
                         <div className="bg-white p-2 transform scale-90 group-hover:scale-100 transition-transform duration-300">
@@ -353,7 +323,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     </div>
                 )}
 
-                {/* APPROVED STAMP (Animated) */}
                 {isApproved && !showApprovedDesign && (
                     <div className="absolute inset-0 bg-white/40 flex items-center justify-center backdrop-blur-[2px]">
                         <div className="text-xl md:text-2xl font-black uppercase border-[3px] border-black p-1.5 md:p-2 animate-stamp tracking-[-0.05em] text-black mix-blend-multiply opacity-90 select-none">
@@ -363,7 +332,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 )}
             </div>
 
-            {/* Right: Comments - Hidden in compact mode on desktop if needed, or just stacked */}
+            {/* Kommentarer */}
             <div className={`flex flex-col ${bgColor} h-full relative ${viewMode === 'compact' ? 'hidden' : ''}`}>
             <div ref={commentsContainerRef} className="flex-1 overflow-y-auto p-3 space-y-3">
                 {task.comments.length === 0 ? (
@@ -374,14 +343,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                 ) : (
                     task.comments.map((comment) => {
                     const isMe = comment.userId === currentUser.id;
-                    
-                    let senderName = 'HOFFMEISTER S.';
-                    if (isMe) {
-                        senderName = 'HOFFMEISTER S.';
-                    } else {
-                        senderName = 'ASGER O.';
-                    }
-
+                    const senderName = isMe ? 'HOFFMEISTER S.' : 'ASGER O.';
                     const formattedTime = new Date(comment.timestamp).toLocaleString('da-DK', {
                               day: '2-digit',
                               month: '2-digit',
@@ -392,7 +354,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
                     return (
                         <div key={comment.id} className={`flex flex-col mb-4 ${isMe ? 'items-end' : 'items-start'}`}>
-                            {/* Header: Name & Time */}
                             <div className={`flex items-center gap-1.5 mb-1.5 text-[9px] font-bold uppercase tracking-wider ${secondaryText} select-none`}>
                                 {isMe ? (
                                     <>
@@ -409,7 +370,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                                 )}
                             </div>
 
-                            {/* Message Bubble */}
                             <div className={`max-w-[85%] flex flex-col gap-1.5 ${isMe ? 'items-end' : 'items-start'}`}>
                                 {comment.text && (
                                     <div className={`p-3 text-xs border ${borderColor} ${isMe ? (darkMode ? 'bg-white text-black' : 'bg-black text-white') : `${bgColor} ${textColor}`}`}>
@@ -423,20 +383,19 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                                         {comment.attachments.map((url, idx) => (
                                             <a key={idx} href={url} target="_blank" rel="noopener noreferrer" className={`block w-20 h-20 border ${darkMode ? 'border-white/10' : 'border-black/10'} overflow-hidden hover:opacity-90 transition-opacity`}>
                                                 <img src={url} alt="Attachment" className="w-full h-full object-cover" />
-                                            </a>
-                                        ))}
-                                    </div>
-                                )}
+                                                </a>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    );
+                        );
                     })
                 )}
             </div>
 
-            {/* Input Area */}
+            {/* Besked input */}
             <div className={`p-3 border-t ${borderColor} ${bgColor} relative`}>
-                 {/* File Preview */}
                  {selectedFile && (
                     <div className={`absolute -top-8 left-3 ${darkMode ? 'bg-[#333]' : 'bg-[#EBE9E9]'} px-2 py-0.5 text-[10px] font-bold uppercase flex items-center gap-1.5 border ${borderColor} shadow-sm ${textColor}`}>
                         <span className="truncate max-w-[120px]">{selectedFile.name}</span>
@@ -454,17 +413,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     className={`w-full ${inputBgColor} border ${inputBorderColor} p-2.5 pr-16 text-xs font-medium focus:outline-none focus:border-${darkMode ? 'white' : 'black'} placeholder-gray-500 transition-colors ${textColor}`}
                 />
                 
-                {/* Hidden File Input */}
                 <input 
                     type="file" 
                     ref={fileInputRef} 
                     className="hidden" 
-                    accept="image/*,.pdf" // Accepting images and PDFs essentially
+                    accept="image/*,.pdf"
                     onChange={handleFileChange}
                 />
 
                 <div className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center gap-0.5">
-                    {/* Attachment Button */}
                     <button
                         type="button"
                         onClick={handlePaperclipClick}
@@ -475,7 +432,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                         <Paperclip size={14} />
                     </button>
 
-                    {/* Send Button */}
                     <button
                         type="submit"
                         disabled={isApproved || (!newComment.trim() && !selectedFile)}
