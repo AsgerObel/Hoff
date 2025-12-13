@@ -50,21 +50,27 @@ const Sidebar: React.FC<SidebarProps> = ({ currentUser, activeTab, onTabChange, 
                     <span className="text-3xl font-black tracking-[-0.05em] uppercase hover:opacity-70 transition-opacity block">
                     Studio
                     </span>
-                    <div 
-                      role="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        toggleDarkMode();
-                      }}
-                      className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110 flex-shrink-0 cursor-pointer"
-                      title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-                    >
-                      <img 
-                        src={darkMode ? '/assets/LogoDarkmode.png' : '/assets/Logo.png'} 
-                        alt="Hoffmeister Logo" 
-                        className="w-full h-full object-contain"
-                      />
+                    <div className="relative group/logo">
+                      <div 
+                        role="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          toggleDarkMode();
+                        }}
+                        className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110 flex-shrink-0 cursor-pointer"
+                      >
+                        <img 
+                          src={darkMode ? '/assets/LogoDarkmode.png' : '/assets/Logo.png'} 
+                          alt="Hoffmeister Logo" 
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                      {/* Tooltip - positioned to the right */}
+                      <div className={`absolute top-1/2 -translate-y-1/2 left-full ml-3 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap opacity-0 group-hover/logo:opacity-100 transition-all duration-200 translate-x-1 group-hover/logo:translate-x-0 pointer-events-none ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
+                        {darkMode ? 'LIGHT MODE' : 'DARK MODE'}
+                        <div className={`absolute top-1/2 -translate-y-1/2 right-full w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-r-[5px] ${darkMode ? 'border-r-white' : 'border-r-black'}`}></div>
+                      </div>
                     </div>
                 </div>
             </Link>

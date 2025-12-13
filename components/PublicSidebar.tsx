@@ -65,17 +65,23 @@ const PublicSidebar: React.FC<PublicSidebarProps> = ({
               <Link to="/" className="text-3xl font-black tracking-[-0.05em] uppercase group-hover:opacity-70 transition-opacity block">
                 Studio
               </Link>
-              <button 
-                onClick={toggleDarkMode}
-                className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110 flex-shrink-0"
-                title={contextDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-              >
-                <img 
-                  src={isDark ? '/assets/LogoDarkmode.png' : '/assets/logo-light.png'} 
-                  alt="Hoffmeister Logo" 
-                  className="w-full h-full object-contain"
-                />
-              </button>
+              <div className="relative group/logo">
+                <button 
+                  onClick={toggleDarkMode}
+                  className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110 flex-shrink-0"
+                >
+                  <img 
+                    src={isDark ? '/assets/LogoDarkmode.png' : '/assets/logo-light.png'} 
+                    alt="Hoffmeister Logo" 
+                    className="w-full h-full object-contain"
+                  />
+                </button>
+                {/* Tooltip - positioned to the right */}
+                <div className={`absolute top-1/2 -translate-y-1/2 left-full ml-3 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap opacity-0 group-hover/logo:opacity-100 transition-all duration-200 translate-x-1 group-hover/logo:translate-x-0 pointer-events-none ${isDark ? 'bg-white text-black' : 'bg-black text-white'}`}>
+                  {isDark ? 'LIGHT MODE' : 'DARK MODE'}
+                  <div className={`absolute top-1/2 -translate-y-1/2 right-full w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-r-[5px] ${isDark ? 'border-r-white' : 'border-r-black'}`}></div>
+                </div>
+              </div>
             </div>
           </div>
           <button className="md:hidden" onClick={onClose}>

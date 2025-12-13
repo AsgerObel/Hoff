@@ -68,12 +68,8 @@ const LandingPage: React.FC = () => {
               <span className="text-lg font-bold uppercase tracking-[-0.05em]">SERVICES</span>
           </Link>
 
-          {/* Middle Decoration (Optional) */}
-          <div className="flex-1 flex flex-col justify-center items-center">
-              <div className={`text-[11px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'} rotate-180 [writing-mode:vertical-rl]`}>
-                  EST. 2025 — AARHUS
-              </div>
-          </div>
+          {/* Middle Spacer */}
+          <div className="flex-1"></div>
 
           {/* Bottom Left: CASES */}
           <Link to="/cases" className={`h-[72px] flex items-center justify-center border-t ${borderColor} ${bgColor} ${hoverBg} transition-colors cursor-pointer`}>
@@ -95,17 +91,24 @@ const LandingPage: React.FC = () => {
                         Studio
                     </span>
                     {/* Logo - Click to toggle dark mode */}
-                    <button 
-                      onClick={toggleDarkMode}
-                      className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110 flex-shrink-0"
-                      title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-                    >
-                      <img 
-                        src={darkMode ? '/assets/LogoDarkmode.png' : '/assets/Logo.png'} 
-                        alt="Hoffmeister Logo" 
-                        className="w-full h-full object-contain"
-                      />
-                    </button>
+                    <div className="relative group/logo">
+                      <button 
+                        onClick={toggleDarkMode}
+                        className="w-10 h-10 flex items-center justify-center hover:opacity-70 transition-all duration-300 hover:scale-110 flex-shrink-0"
+                      >
+                        <img 
+                          src={darkMode ? '/assets/LogoDarkmode.png' : '/assets/Logo.png'} 
+                          alt="Hoffmeister Logo" 
+                          className="w-full h-full object-contain"
+                        />
+                      </button>
+                      {/* Tooltip - positioned to the right */}
+                      <div className={`absolute top-1/2 -translate-y-1/2 left-full ml-3 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap opacity-0 group-hover/logo:opacity-100 transition-all duration-200 translate-x-1 group-hover/logo:translate-x-0 pointer-events-none ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
+                        {darkMode ? 'LIGHT MODE' : 'DARK MODE'}
+                        {/* Arrow pointing left */}
+                        <div className={`absolute top-1/2 -translate-y-1/2 right-full w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-r-[5px] ${darkMode ? 'border-r-white' : 'border-r-black'}`}></div>
+                      </div>
+                    </div>
                 </div>
               </div>
           </header>
@@ -118,48 +121,101 @@ const LandingPage: React.FC = () => {
                </div>
           </div>
 
-          {/* MARQUEE */}
-          <div className={`border-b ${borderColor} py-6 overflow-hidden ${darkMode ? 'bg-white text-black' : 'bg-black text-white'} transition-colors duration-300`}>
-            <div className="animate-marquee whitespace-nowrap flex gap-8">
-                {[...Array(4)].map((_, i) => (
-                    <span key={i} className="text-4xl md:text-6xl font-black uppercase tracking-[-0.05em] opacity-80">
-                        {marqueeServices}
-                    </span>
-                ))}
-            </div>
+          {/* === SPACER SECTION WITH GRID LINES === */}
+          <div className={`border-b ${borderColor} grid grid-cols-3 min-h-[300px] md:min-h-[500px]`}>
+              <div className={`border-r ${borderColor}`}></div>
+              <div className={`border-r ${borderColor}`}></div>
+              <div></div>
           </div>
 
-          {/* PROJECTS LIST */}
-          <div>
-              {/* Project 1 */}
-              <div className={`min-h-[600px] border-b ${borderColor} relative group overflow-hidden flex flex-col justify-end p-12`}>
-                  <img src="https://picsum.photos/1200/800?random=1" className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 z-0" alt="Mols Linjen" />
-                  <div className="relative z-10 flex justify-between items-end text-white mix-blend-difference">
-                       <span className="text-9xl font-black leading-none opacity-50">01</span>
-                       <h2 className="text-6xl font-black uppercase tracking-[-0.05em] leading-none text-right">MOLS<br/>LINJEN</h2>
+          {/* === SECTION 01: CASES === */}
+          <section className={`border-b ${borderColor}`}>
+              <div className="grid md:grid-cols-2">
+                  {/* Text Side - Border Right to create vertical line */}
+                  <div className={`flex flex-col justify-center md:border-r ${borderColor}`}>
+                      {/* Top Content - Vertically Centered with Min Height */}
+                      <div className="p-8 md:p-16 min-h-[350px] flex flex-col justify-center">
+                          <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
+                            Selected<br/>Work
+                          </h2>
+                      </div>
+                      
+                      {/* Full Width Separator Line */}
+                      <div className={`w-full h-px ${darkMode ? 'bg-white/20' : 'bg-black/10'}`}></div>
+                      
+                      {/* Bottom Content */}
+                      <div className="p-8 md:p-16 min-h-[250px] flex flex-col justify-center gap-8">
+                        <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-lg`}>
+                          Vi tror på strategisk design, der skaber reel forretningsværdi. Gennem en dybdegående proces bygger vi brands med substans, karakter og en digital tilstedeværelse, der ikke bare ses, men mærkes af målgruppen.
+                        </p>
+                      </div>
                   </div>
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-0 pointer-events-none"></div>
-              </div>
-
-               {/* Project 2 */}
-               <div className={`min-h-[600px] border-b ${borderColor} relative group overflow-hidden flex flex-col justify-end p-12`}>
-                  <img src="https://picsum.photos/1200/800?random=2" className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 z-0" alt="Nordic Seaplanes" />
-                   <div className="relative z-10 flex justify-between items-end text-white mix-blend-difference">
-                       <h2 className="text-6xl font-black uppercase tracking-[-0.05em] leading-none text-left">NORDIC<br/>SEAPLANES</h2>
-                       <span className="text-9xl font-black leading-none opacity-50">02</span>
+                  {/* Image Side */}
+                  <div className={`relative group aspect-[4/5] md:aspect-auto min-h-[600px] border-t md:border-t-0 ${borderColor}`}>
+                      <img src="/assets/cases/ro-gus/Brand In Action.png" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 grayscale group-hover:grayscale-0" alt="Cases" />
                   </div>
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-0 pointer-events-none"></div>
               </div>
-          </div>
+          </section>
 
-          {/* MANIFESTO */}
-          <section className={`${darkMode ? 'bg-white text-black' : 'bg-black text-white'} p-16 md:py-32 text-center border-b ${borderColor} transition-colors duration-300`}>
-             <p className="text-3xl md:text-5xl font-bold uppercase leading-tight tracking-[-0.05em] max-w-4xl mx-auto">
-                "Brutally simple digital products for complex problems."
-             </p>
-             <button className={`mt-12 border ${darkMode ? 'border-black hover:bg-black hover:text-white' : 'border-white hover:bg-white hover:text-black'} px-8 py-4 text-lg font-bold uppercase tracking-widest transition-colors`}>
-                Start a Project
-             </button>
+          {/* === SECTION 02: SERVICES === */}
+          <section className={`border-b ${borderColor}`}>
+              <div className="grid md:grid-cols-2">
+                  {/* Image Side */}
+                  <div className={`relative group aspect-[4/5] md:aspect-auto min-h-[600px] md:border-r ${borderColor} order-2 md:order-1`}>
+                      <img src="/assets/cases/nordbrew/Mockups - packaging.png" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 grayscale group-hover:grayscale-0" alt="Services" />
+                  </div>
+                  {/* Text Side */}
+                  <div className={`flex flex-col justify-center order-1 md:order-2 border-b md:border-b-0 ${borderColor}`}>
+                      {/* Top Content - Vertically Centered with Min Height */}
+                      <div className="p-8 md:p-16 min-h-[350px] flex flex-col justify-center">
+                          <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
+                            Core<br/>Services
+                          </h2>
+                      </div>
+
+                      {/* Full Width Separator Line */}
+                      <div className={`w-full h-px ${darkMode ? 'bg-white/20' : 'bg-black/10'}`}></div>
+
+                      {/* Bottom Content */}
+                      <div className="p-8 md:p-16 min-h-[250px] flex flex-col justify-center gap-8">
+                        <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-lg`}>
+                          Fra skarp visuel identitet til kompleks webudvikling. Vi leverer en komplet pakke, der sikrer, at dit brand står konsistent og professionelt på alle platforme. Vi tænker i helheder frem for enkeltstående løsninger.
+                        </p>
+                      </div>
+                  </div>
+              </div>
+          </section>
+
+          {/* === SECTION 03: PORTAL === */}
+          <section className={`border-b ${borderColor}`}>
+              <div className="grid md:grid-cols-2">
+                  {/* Text Side */}
+                  <div className={`flex flex-col justify-center md:border-r ${borderColor}`}>
+                      {/* Top Content - Vertically Centered with Min Height */}
+                      <div className="p-8 md:p-16 min-h-[350px] flex flex-col justify-center">
+                          <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
+                            Client<br/>Portal
+                          </h2>
+                      </div>
+
+                      {/* Full Width Separator Line */}
+                      <div className={`w-full h-px ${darkMode ? 'bg-white/20' : 'bg-black/10'}`}></div>
+
+                      {/* Bottom Content */}
+                      <div className="p-8 md:p-16 min-h-[250px] flex flex-col justify-center gap-8">
+                        <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-lg`}>
+                          Fuld transparens og kontrol gennem hele processen. Vores skræddersyede klient-portal giver dig et samlet overblik over tidslinjer, filer og godkendelser, så du altid er opdateret på projektets fremdrift.
+                        </p>
+                      </div>
+                  </div>
+                  {/* Image Side */}
+                  <div className={`relative group aspect-[4/5] md:aspect-auto min-h-[600px] border-t md:border-t-0 ${borderColor} flex items-center justify-center ${darkMode ? 'bg-[#111]' : 'bg-gray-50'}`}>
+                      <div className="text-center transform transition-transform duration-700 group-hover:scale-110">
+                          <span className="text-6xl md:text-8xl mb-6 block">🔐</span>
+                          <span className="text-sm font-bold uppercase tracking-widest opacity-50">Secure Access</span>
+                      </div>
+                  </div>
+              </div>
           </section>
 
           {/* FOOTER CONTENT (Newsletter, Legal) */}
