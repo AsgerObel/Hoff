@@ -7,6 +7,36 @@ const LandingPage: React.FC = () => {
   const { darkMode, toggleDarkMode } = useTheme();
   const [introComplete, setIntroComplete] = useState(false);
   const [introFading, setIntroFading] = useState(false);
+  const [hoveredImageIndex, setHoveredImageIndex] = useState<number | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [hoveredService, setHoveredService] = useState<number | null>(null);
+
+  const services = [
+    { title: 'Digital Design', id: '01', items: ['UI/UX', 'App Design', 'Prototyping'] },
+    { title: 'Branding', id: '02', items: ['Strategy', 'Tone of Voice', 'Guidelines'] },
+    { title: 'Visuel Identitet', id: '03', items: ['Logo', 'Art Direction', 'Packaging'] },
+    { title: 'Web Design', id: '04', items: ['Landing Pages', 'Corporate', 'Campaign'] },
+    { title: 'Social Media', id: '05', items: ['Content', 'Campaigns', 'Analytics'] },
+    { title: 'Kode', id: '06', items: ['Frontend', 'React', 'Creative Coding'] },
+  ];
+
+  const caseImages = [
+    '/cases/ro-gus/Brand%20in%20Action.png',
+    '/cases/nordbrew/Mockups%20-%20packaging.png',
+    '/cases/echobloom/Echobloom%20Records%201.png',
+    '/cases/lava/maanedens-ret.png',
+    '/cases/dubs-donkraft/Artboard%201.png',
+    '/cases/ro-gus/Cup%20of%20Coffee.png',
+    '/cases/nordbrew/Mockups%20-%20packaging%202.png',
+    '/cases/echobloom/Echobloom%20Records%202.png',
+    '/cases/grenaa-chocolaterier/Artboard%201.png',
+    '/cases/lava/frokost-post.png',
+    '/cases/ro-gus/Street%20Poster.png',
+    '/cases/nordbrew/Nordbrew%20label.png',
+    '/cases/echobloom/Echobloom%20Records%203.png',
+    '/cases/grenaa-chocolaterier/Greena%20Business%20Card%201.png',
+    '/cases/ro-gus/Wall%20Sign.png'
+  ];
 
   useEffect(() => {
     // Start fade-out efter logo animation (2.2s)
@@ -134,7 +164,7 @@ const LandingPage: React.FC = () => {
                   {/* Text Side - Border Right to create vertical line */}
                   <div className={`flex flex-col justify-center md:border-r ${borderColor}`}>
                       {/* Top Content - Vertically Centered with Min Height */}
-                      <div className="p-8 md:p-16 min-h-[350px] flex flex-col justify-center">
+                      <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[250px] flex flex-col justify-center">
                           <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
                             Selected<br/>Work
                           </h2>
@@ -144,15 +174,66 @@ const LandingPage: React.FC = () => {
                       <div className={`w-full h-px ${darkMode ? 'bg-white/20' : 'bg-black/10'}`}></div>
                       
                       {/* Bottom Content */}
-                      <div className="p-8 md:p-16 min-h-[250px] flex flex-col justify-center gap-8">
+                      <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[150px] flex flex-col justify-center gap-8">
                         <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-lg`}>
                           Vi tror på strategisk design, der skaber reel forretningsværdi. Gennem en dybdegående proces bygger vi brands med substans, karakter og en digital tilstedeværelse, der ikke bare ses, men mærkes af målgruppen.
                         </p>
                       </div>
                   </div>
-                  {/* Image Side */}
-                  <div className={`relative group aspect-[4/5] md:aspect-auto min-h-[600px] border-t md:border-t-0 ${borderColor}`}>
-                      <img src="/assets/cases/ro-gus/Brand In Action.png" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 grayscale group-hover:grayscale-0" alt="Cases" />
+                  {/* Image Side - Interactive Grid */}
+                  <div 
+                    className={`relative aspect-square md:aspect-auto border-t md:border-t-0 ${borderColor} overflow-hidden ${bgColor} p-4`}
+                    onMouseLeave={() => setHoveredImageIndex(null)}
+                  >
+                      {/* Selected Image Overlay */}
+                      {selectedImageIndex !== null && (
+                        <div 
+                          className="absolute inset-0 z-30 flex items-center justify-center p-8 cursor-pointer animate-fade-in"
+                          style={{ backgroundColor: darkMode ? 'rgba(27,27,27,0.95)' : 'rgba(255,255,255,0.95)' }}
+                          onClick={() => setSelectedImageIndex(null)}
+                        >
+                          <img 
+                            src={caseImages[selectedImageIndex]} 
+                            className="max-w-[85%] max-h-[85%] object-contain shadow-2xl animate-modal-in"
+                            alt={`Case ${selectedImageIndex + 1}`} 
+                          />
+                          <button 
+                            className={`absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-sm font-bold ${darkMode ? 'text-white hover:text-gray-400' : 'text-black hover:text-gray-600'} transition-colors`}
+                            onClick={() => setSelectedImageIndex(null)}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      )}
+                      
+                      <div className="grid grid-cols-5 grid-rows-3 gap-3 h-full p-2">
+                        {caseImages.map((src, index) => {
+                          const isHovered = hoveredImageIndex === index;
+                          const isAnyHovered = hoveredImageIndex !== null;
+                          const isBlurred = isAnyHovered && !isHovered;
+                          
+                          return (
+                            <div 
+                              key={src}
+                              className="relative overflow-hidden cursor-pointer"
+                              onMouseEnter={() => setHoveredImageIndex(index)}
+                              onClick={() => setSelectedImageIndex(index)}
+                            >
+                              <img 
+                                src={src} 
+                                className={`w-full h-full object-contain transition-all duration-500 ${
+                                  isHovered 
+                                    ? 'grayscale-0 scale-110 z-20' 
+                                    : isBlurred 
+                                      ? 'grayscale blur-[1px] scale-95 opacity-50' 
+                                      : 'grayscale'
+                                }`}
+                                alt={`Case ${index + 1}`} 
+                              />
+                            </div>
+                          );
+                        })}
+                      </div>
                   </div>
               </div>
           </section>
@@ -160,14 +241,61 @@ const LandingPage: React.FC = () => {
           {/* === SECTION 02: SERVICES === */}
           <section className={`border-b ${borderColor}`}>
               <div className="grid md:grid-cols-2">
-                  {/* Image Side */}
-                  <div className={`relative group aspect-[4/5] md:aspect-auto min-h-[600px] md:border-r ${borderColor} order-2 md:order-1`}>
-                      <img src="/assets/cases/nordbrew/Mockups - packaging.png" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 grayscale group-hover:grayscale-0" alt="Services" />
+                  {/* Interactive Services Grid */}
+                  <div 
+                    className={`relative md:min-h-[500px] md:border-r ${borderColor} order-2 md:order-1 ${bgColor} p-0`}
+                    onMouseLeave={() => setHoveredService(null)}
+                  >
+                      <div className="grid grid-cols-2 grid-rows-3 h-full">
+                        {services.map((service, index) => {
+                          const isHovered = hoveredService === index;
+                          const isAnyHovered = hoveredService !== null;
+                          const isFaded = isAnyHovered && !isHovered;
+                          
+                          // Borders logic:
+                          // Right border for odd items (0, 2, 4)
+                          // Bottom border for first 4 items (0, 1, 2, 3)
+                          const hasRightBorder = index % 2 === 0;
+                          const hasBottomBorder = index < 4;
+                          
+                          return (
+                            <Link
+                              key={index}
+                              to="/services"
+                              className={`relative flex flex-col justify-between p-8 transition-all duration-500 cursor-pointer overflow-hidden group 
+                                ${hasRightBorder ? `border-r ${borderColor}` : ''} 
+                                ${hasBottomBorder ? `border-b ${borderColor}` : ''}
+                                ${isFaded ? 'opacity-30 blur-[1px]' : ''}
+                              `}
+                              onMouseEnter={() => setHoveredService(index)}
+                            >
+                              
+                              {/* Content Container */}
+                              <div className="flex flex-col h-full justify-center">
+                                <h3 className={`text-xl md:text-2xl font-black uppercase tracking-[-0.05em] leading-none mb-4 transition-transform duration-300 origin-left ${isHovered ? 'scale-110' : ''}`}>
+                                  {service.title}
+                                </h3>
+                                
+                                {/* Sub-items list */}
+                                <ul className={`flex flex-col gap-1 transition-all duration-300 ${
+                                  isHovered ? 'opacity-100 translate-y-0 h-auto mt-2' : 'opacity-0 translate-y-4 h-0 overflow-hidden mt-0'
+                                }`}>
+                                  {service.items.map((item, i) => (
+                                    <li key={i} className={`text-xs font-medium uppercase tracking-wide ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                      {item}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </Link>
+                          );
+                        })}
+                      </div>
                   </div>
                   {/* Text Side */}
                   <div className={`flex flex-col justify-center order-1 md:order-2 border-b md:border-b-0 ${borderColor}`}>
                       {/* Top Content - Vertically Centered with Min Height */}
-                      <div className="p-8 md:p-16 min-h-[350px] flex flex-col justify-center">
+                      <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[250px] flex flex-col justify-center">
                           <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
                             Core<br/>Services
                           </h2>
@@ -177,7 +305,7 @@ const LandingPage: React.FC = () => {
                       <div className={`w-full h-px ${darkMode ? 'bg-white/20' : 'bg-black/10'}`}></div>
 
                       {/* Bottom Content */}
-                      <div className="p-8 md:p-16 min-h-[250px] flex flex-col justify-center gap-8">
+                      <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[150px] flex flex-col justify-center gap-8">
                         <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-lg`}>
                           Fra skarp visuel identitet til kompleks webudvikling. Vi leverer en komplet pakke, der sikrer, at dit brand står konsistent og professionelt på alle platforme. Vi tænker i helheder frem for enkeltstående løsninger.
                         </p>
@@ -192,7 +320,7 @@ const LandingPage: React.FC = () => {
                   {/* Text Side */}
                   <div className={`flex flex-col justify-center md:border-r ${borderColor}`}>
                       {/* Top Content - Vertically Centered with Min Height */}
-                      <div className="p-8 md:p-16 min-h-[350px] flex flex-col justify-center">
+                      <div className="p-8 md:p-16 min-h-[250px] flex flex-col justify-center">
                           <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
                             Client<br/>Portal
                           </h2>
@@ -202,19 +330,76 @@ const LandingPage: React.FC = () => {
                       <div className={`w-full h-px ${darkMode ? 'bg-white/20' : 'bg-black/10'}`}></div>
 
                       {/* Bottom Content */}
-                      <div className="p-8 md:p-16 min-h-[250px] flex flex-col justify-center gap-8">
+                      <div className="p-8 md:p-16 min-h-[150px] flex flex-col justify-center gap-8">
                         <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-lg`}>
                           Fuld transparens og kontrol gennem hele processen. Vores skræddersyede klient-portal giver dig et samlet overblik over tidslinjer, filer og godkendelser, så du altid er opdateret på projektets fremdrift.
                         </p>
                       </div>
                   </div>
                   {/* Image Side */}
-                  <div className={`relative group aspect-[4/5] md:aspect-auto min-h-[600px] border-t md:border-t-0 ${borderColor} flex items-center justify-center ${darkMode ? 'bg-[#111]' : 'bg-gray-50'}`}>
+                  <div className={`relative group aspect-square md:aspect-auto md:min-h-[400px] border-t md:border-t-0 ${borderColor} flex items-center justify-center ${darkMode ? 'bg-[#111]' : 'bg-gray-50'}`}>
                       <div className="text-center transform transition-transform duration-700 group-hover:scale-110">
                           <span className="text-6xl md:text-8xl mb-6 block">🔐</span>
                           <span className="text-sm font-bold uppercase tracking-widest opacity-50">Secure Access</span>
                       </div>
                   </div>
+              </div>
+          </section>
+
+          {/* === SECTION 04: MANIFESTO (Centered Layout) === */}
+          <section className={`border-b ${borderColor}`}>
+              <div className="grid md:grid-cols-4 min-h-[500px]">
+                  {/* Left Spacer */}
+                  <div className={`border-b md:border-b-0 md:border-r ${borderColor} hidden md:block`}></div>
+                  
+                  {/* Content (Middle 2 Columns) */}
+                  <div className={`md:col-span-2 p-12 md:p-24 flex flex-col justify-center text-center items-center border-b md:border-b-0 md:border-r ${borderColor}`}>
+                      <span className={`text-xs font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'} mb-8 block`}>04 — Philosophy</span>
+                      <h2 className="text-4xl md:text-6xl font-black uppercase tracking-[-0.05em] leading-[0.95] mb-8">
+                        No Bullshit.<br/>Just Design.
+                      </h2>
+                      <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-md`}>
+                         Vi fjerner støjen og fokuserer på det essentielle. Vores designfilosofi bygger på klarhed, funktion og æstetik der holder. Ingen unødvendige elementer, kun ren effekt.
+                      </p>
+                  </div>
+
+                  {/* Right Spacer */}
+                  <div className="hidden md:block"></div>
+              </div>
+          </section>
+
+          {/* === SECTION 05: DETAILS (2x2 Grid) === */}
+          <section className={`border-b ${borderColor}`}>
+              <div className="grid grid-cols-1 md:grid-cols-2">
+                  
+                  {/* Quadrant 1: Image */}
+                  <div className={`relative aspect-square md:aspect-auto md:min-h-[400px] border-b ${borderColor} md:border-r ${darkMode ? 'bg-[#111]' : 'bg-gray-50'}`}>
+                      <img src="/cases/lava/maanedens-ret.png" className="w-full h-full object-contain grayscale hover:grayscale-0 transition-all duration-500" alt="Detail 1" />
+                  </div>
+
+                  {/* Quadrant 2: Text */}
+                  <div className={`p-12 flex flex-col justify-center border-b ${borderColor}`}>
+                      <span className={`text-xs font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'} mb-4`}>Strategy</span>
+                      <h3 className="text-2xl font-black uppercase tracking-[-0.05em]">Digital First</h3>
+                      <p className={`text-sm mt-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'} font-light`}>
+                        Vi tænker digitalt fra start. Brands lever online, og vi sikrer at dit brand performer på alle skærme.
+                      </p>
+                  </div>
+
+                  {/* Quadrant 3: Text */}
+                  <div className={`p-12 flex flex-col justify-center border-b md:border-b-0 md:border-r ${borderColor}`}>
+                      <span className={`text-xs font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'} mb-4`}>Craft</span>
+                      <h3 className="text-2xl font-black uppercase tracking-[-0.05em]">Pixel Perfect</h3>
+                      <p className={`text-sm mt-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'} font-light`}>
+                        Hver detalje tæller. Vi nørder pixels, grid-systemer og typografi til det sidder lige i skabet.
+                      </p>
+                  </div>
+
+                  {/* Quadrant 4: Image */}
+                  <div className={`relative aspect-square md:aspect-auto md:min-h-[400px] ${darkMode ? 'bg-[#111]' : 'bg-gray-50'}`}>
+                      <img src="/cases/dubs-donkraft/Artboard%201.png" className="w-full h-full object-contain grayscale hover:grayscale-0 transition-all duration-500" alt="Detail 2" />
+                  </div>
+
               </div>
           </section>
 
