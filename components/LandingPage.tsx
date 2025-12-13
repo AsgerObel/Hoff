@@ -1,10 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LiveClock from './LiveClock';
 import { useTheme } from './ThemeContext';
 
 const LandingPage: React.FC = () => {
   const { darkMode, toggleDarkMode } = useTheme();
+  const [introComplete, setIntroComplete] = useState(false);
+  const [introFading, setIntroFading] = useState(false);
+
+  useEffect(() => {
+    // Start fade-out efter logo animation (2.2s)
+    const fadeTimer = setTimeout(() => {
+      setIntroFading(true);
+    }, 2200);
+
+    // Afslut intro efter fade-out (3s total)
+    const completeTimer = setTimeout(() => {
+      setIntroComplete(true);
+    }, 3000);
+
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(completeTimer);
+    };
+  }, []);
   
   // Theme classes
   const bgColor = darkMode ? 'bg-[#1b1b1b]' : 'bg-white';
@@ -15,7 +34,32 @@ const LandingPage: React.FC = () => {
   const marqueeServices = "BRAND IDENTITY — WEB DESIGN — ART DIRECTION — DIGITAL STRATEGY — CAMPAIGN — SOCIAL MEDIA — ";
 
   return (
-    <div className={`flex h-screen ${bgColor} ${textColor} font-sans overflow-hidden transition-colors duration-300 ${darkMode ? 'selection:bg-white selection:text-black' : 'selection:bg-black selection:text-white'}`}>
+    <>
+      {/* INTRO OVERLAY */}
+      {!introComplete && (
+        <div 
+          className={`fixed inset-0 z-[100] bg-[#1b1b1b] flex items-center justify-center transition-opacity duration-700 ${introFading ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        >
+          <div className="flex flex-col items-start leading-none animate-intro-logo">
+            <span className="text-4xl md:text-6xl font-black tracking-[-0.05em] uppercase text-white -mb-1">
+              Hoffmeister
+            </span>
+            <div className="flex items-center gap-4">
+              <span className="text-4xl md:text-6xl font-black tracking-[-0.05em] uppercase text-white">
+                Studio
+              </span>
+              <img 
+                src="/assets/LogoDarkmode.png" 
+                alt="Hoffmeister Logo" 
+                className="w-10 h-10 md:w-14 md:h-14 object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MAIN CONTENT */}
+      <div className={`flex h-screen ${bgColor} ${textColor} font-sans overflow-hidden transition-all duration-500 ${darkMode ? 'selection:bg-white selection:text-black' : 'selection:bg-black selection:text-white'} ${!introComplete ? 'opacity-0' : 'opacity-100'}`}>
       
       {/* LEFT FIXED COLUMN */}
       <div className={`w-[188px] flex flex-col justify-between border-r ${borderColor} relative z-50 transition-colors duration-300`}>
@@ -177,6 +221,7 @@ const LandingPage: React.FC = () => {
       </div>
 
     </div>
+    </>
   );
 };
 
