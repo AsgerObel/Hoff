@@ -313,13 +313,13 @@ const Dashboard: React.FC<DashboardProps> = ({ title, tasks, currentUser, onAddC
             gridCols === 2 ? 'grid-cols-1 lg:grid-cols-2 gap-y-20 gap-x-8' : 
             'grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'
         }`}>
-            {onOpenAddModal && (
+            {/* {onOpenAddModal && (
               <AddProjectCard 
                 onClick={onOpenAddModal} 
                 viewMode={gridCols === 1 ? 'single' : gridCols === 4 ? 'compact' : 'grid'}
                 darkMode={darkMode}
               />
-            )}
+            )} */}
             
             {filteredAndSortedTasks.map(task => (
             <ProjectCard 
