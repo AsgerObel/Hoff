@@ -61,12 +61,12 @@ const LandingPage: React.FC = () => {
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
   const services = [
-    { title: 'Digital Design', id: '01', items: ['UI', 'UX', 'App Design', 'Prototyping'] },
-    { title: 'Branding', id: '02', items: ['Strategy', 'Tone of Voice', 'Guidelines'] },
-    { title: 'Visuel Identitet', id: '03', items: ['Logo Design', 'Art Direction', 'Packaging'] },
-    { title: 'Hjemmeside Design', id: '04', items: ['Web Design', 'Landing Pages', 'Interaction'] },
-    { title: 'SoMe Optimering', id: '05', items: ['Social Media', 'Campaigns', 'Content'] },
-    { title: 'Kode', id: '06', items: ['Frontend', 'React', 'Creative Coding'] },
+    { title: 'Digital Design', id: '01', items: ['User Interface', 'User Experience', 'App Design', 'Prototyping', 'Design Systems', 'Wireframing'] },
+    { title: 'Branding', id: '02', items: ['Strategy', 'Tone of Voice', 'Guidelines', 'Brand Architecture'] },
+    { title: 'Visuel Identitet', id: '03', items: ['Visual Identity', 'Logo Design', 'Art Direction', 'Packaging', 'Motion Graphics'] },
+    { title: 'Hjemmeside Design', id: '04', items: ['Web Design', 'Landing Pages', 'Corporate Sites', 'Campaign Sites', 'Interaction'] },
+    { title: 'SoMe Optimering', id: '05', items: ['Social Media', 'Campaigns', 'Strategy', 'Analytics', 'Content Creation'] },
+    { title: 'Skræddersyet Kode', id: '06', items: ['Frontend', 'Creative Coding', 'React / Next.js', 'API Integration'] },
   ];
 
   const caseImages = [
@@ -213,8 +213,33 @@ const LandingPage: React.FC = () => {
           </div>
 
           {/* === SPACER SECTION WITH GRID LINES === */}
-          <div className={`border-b ${borderColor} grid grid-cols-3 min-h-[300px] md:min-h-[500px]`}>
+          <div className={`border-b ${borderColor} grid grid-cols-2 min-h-[150px] md:min-h-[250px]`}>
               <div className={`border-r ${borderColor}`}></div>
+              <div></div>
+          </div>
+
+          {/* === INTRODUCTION SECTION === */}
+          <section className={`border-b ${borderColor}`}>
+              <div className="grid md:grid-cols-2">
+                  {/* Left Column - Title */}
+                  <div className={`flex flex-col justify-center md:border-r ${borderColor} py-16 px-6 md:py-24 md:pl-8 md:pr-16`}>
+                      <h2 className="text-4xl md:text-6xl font-black uppercase tracking-[-0.05em] leading-tight mb-6">
+                        Dit Design.<br/>Din Platform.
+                      </h2>
+                  </div>
+                  {/* Right Column - Text */}
+                  <div className={`flex flex-col justify-center py-16 px-6 md:py-24 md:px-12 border-t md:border-t-0 ${borderColor}`}>
+                      <div className="max-w-xl">
+                        <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white/80' : 'text-black/80'} font-light`}>
+                          Vi har bygget en platform, der samler alt dit designarbejde ét sted. Glem alt om endeløse mailtråde og forvirrende feedback-runder. Her kan du følge med i dine projekter i realtid, give feedback direkte på designet og godkende med ét enkelt klik. Det handler om gennemsigtighed og effektivitet. Vi har fjernet støjen, så vi kan fokusere på det vigtigste: at skabe stærke resultater sammen.
+                        </p>
+                      </div>
+                  </div>
+              </div>
+          </section>
+
+          {/* === ASYMMETRIC SPACER === */}
+          <div className={`border-b ${borderColor} grid grid-cols-[1fr_2fr] min-h-[120px] md:min-h-[180px]`}>
               <div className={`border-r ${borderColor}`}></div>
               <div></div>
           </div>
@@ -371,7 +396,7 @@ const LandingPage: React.FC = () => {
                       {/* Top Content - Vertically Centered with Min Height */}
                       <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[250px] flex flex-col justify-center">
                           <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
-                            Selected<br/>Work
+                            Udvalgte<br/>Cases
                           </h2>
                       </div>
                       
@@ -474,54 +499,57 @@ const LandingPage: React.FC = () => {
               <div></div>
           </div>
 
-          {/* === SECTION 02: SERVICES === */}
-          <section className={`border-b ${borderColor}`}>
-              <div className="grid md:grid-cols-[1fr_2fr]">
-                  {/* Left: Title */}
-                  <div className={`flex flex-col justify-start md:border-r ${borderColor} border-b md:border-b-0`}>
-                      {/* Top Content */}
-                      <div className="py-10 px-6 md:py-16 md:pl-8 md:pr-16">
-                          <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
-                            Services
-                          </h2>
-                      </div>
+          {/* === CTA SECTION === */}
+          <section className="">
+              <div className="grid md:grid-cols-[2fr_1fr] min-h-[300px]">
+                  {/* Left: Text & CTA */}
+                  <div className={`flex flex-col justify-center md:border-r ${borderColor} py-16 px-6 md:py-24 md:pl-8 md:pr-16`}>
+                      <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9] mb-6">
+                        Kontakt Os
+                      </h2>
                       
-                      {/* Full Width Separator Line */}
-                      <div className={`w-full h-px ${darkMode ? 'bg-white/20' : 'bg-black/10'}`}></div>
-                      
-                      {/* Bottom Spacer */}
-                      <div className="flex-1"></div>
+                      <Link 
+                        to="/kontakt"
+                        className={`flex items-center gap-3 text-xl md:text-2xl font-black uppercase tracking-[-0.02em] hover:opacity-60 transition-opacity ml-1 ${darkMode ? 'text-white' : 'text-black'}`}
+                      >
+                        Book et møde <ArrowUpRight size={28} />
+                      </Link>
                   </div>
                   
-                  {/* Right: Services List */}
-                  <div className="flex flex-col">
-                      {services.map((service, index) => (
-                        <Link
-                          key={index}
-                          to="/services"
-                          className={`group flex items-center justify-between p-6 md:py-8 md:px-10 border-b last:border-b-0 ${borderColor} ${hoverBg} transition-all duration-300 cursor-pointer`}
-                          onMouseEnter={() => setHoveredService(index)}
-                          onMouseLeave={() => setHoveredService(null)}
-                        >
-                          <div className="flex flex-col gap-2">
-                            <h3 className="text-xl md:text-2xl font-black uppercase tracking-[-0.05em]">
-                              {service.title}
-                            </h3>
-                            <span className={`text-xs md:text-sm font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                              {service.items.join(' — ')}
-                            </span>
+                  {/* Right: Map */}
+                  <div className={`relative border-t md:border-t-0 ${borderColor} overflow-hidden group p-6 flex items-center justify-center`}>
+                     {/* Map Image Container */}
+                      <div className="relative w-full h-full max-h-[250px] overflow-hidden rounded-lg border border-white/10">
+                        <img 
+                          src="/assets/aarhus-map.png" 
+                          alt="Kort over Aarhus" 
+                          className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${darkMode ? 'invert' : ''}`}
+                        />
+                        
+                        {/* Location Marker */}
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          <div className="relative w-5 h-5">
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className={`w-full h-[2px] ${darkMode ? 'bg-gray-600' : 'bg-gray-400'} rotate-45`} />
+                            </div>
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className={`w-full h-[2px] ${darkMode ? 'bg-gray-600' : 'bg-gray-400'} -rotate-45`} />
+                            </div>
                           </div>
-                          <span className={`transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1`}>
-                            <ArrowUpRight size={16} />
-                          </span>
-                        </Link>
-                      ))}
+                        </div>
+                      </div>
+
+                      {/* Address Overlay - Now outside map or simpler */}
+                      <div className={`absolute bottom-8 left-8 p-3 backdrop-blur-md border ${borderColor} ${darkMode ? 'bg-black/80' : 'bg-white/80'} rounded shadow-lg`}>
+                          <p className="text-[10px] font-bold uppercase tracking-widest mb-0.5">Hoffmeister Studio</p>
+                          <p className="text-[10px] font-medium opacity-80">Åboulevarden 70, 3. sal</p>
+                      </div>
                   </div>
               </div>
           </section>
 
           {/* FOOTER CONTENT (Newsletter, Legal) */}
-          <footer className={`px-16 py-8 border-t ${borderColor} mt-64 ${bgColor} transition-colors duration-300 min-h-[250px]`}>
+          <footer className={`px-16 py-8 border-t ${borderColor} ${bgColor} transition-colors duration-300 min-h-[250px]`}>
              <div className="grid grid-cols-3 w-full h-full items-start">
                 {/* Left: Socials */}
                 <div className="flex flex-col justify-between h-full">
