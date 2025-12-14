@@ -155,7 +155,7 @@ const LandingPage: React.FC = () => {
           <div className="flex-1"></div>
 
           {/* Bottom Left: CASES */}
-          <Link to="/cases" className={`h-[72px] flex items-center justify-center border-t ${borderColor} ${bgColor} ${hoverBg} transition-colors cursor-pointer`}>
+          <Link to="/cases" className={`h-24 flex items-center justify-center border-t ${borderColor} ${bgColor} ${hoverBg} transition-colors cursor-pointer`}>
               <span className="text-lg font-bold uppercase tracking-[-0.05em]">CASES</span>
           </Link>
       </div>
@@ -592,16 +592,16 @@ const LandingPage: React.FC = () => {
       {/* RIGHT FIXED COLUMN */}
       <div className={`w-[188px] flex flex-col justify-between border-l ${borderColor} relative z-50 transition-colors duration-300`}>
           {/* Top Right: LOGIN */}
-          <div className={`h-24 flex items-center justify-center border-b ${borderColor} ${bgColor} ${hoverBg} transition-colors cursor-pointer`}>
-              <Link to="/login" className="text-lg font-bold uppercase tracking-[-0.05em] w-full h-full flex items-center justify-center">LOGIN</Link>
-          </div>
+          <Link to="/login" className={`h-24 flex items-center justify-center border-b ${borderColor} ${bgColor} ${hoverBg} transition-colors cursor-pointer`}>
+              <span className="text-lg font-bold uppercase tracking-[-0.05em]">LOGIN</span>
+          </Link>
 
           {/* Middle Decoration */}
           <div className="flex-1 flex flex-col justify-center items-center">
           </div>
 
           {/* Bottom Right: KONTAKT */}
-          <Link to="/kontakt" className={`h-[72px] flex items-center justify-center border-t ${borderColor} ${bgColor} ${hoverBg} transition-colors cursor-pointer`}>
+          <Link to="/kontakt" className={`h-24 flex items-center justify-center border-t ${borderColor} ${bgColor} ${hoverBg} transition-colors cursor-pointer`}>
               <span className="text-lg font-bold uppercase tracking-[-0.05em]">KONTAKT</span>
           </Link>
       </div>
