@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowUpRight } from 'lucide-react';
 import LiveClock from './LiveClock';
 import { useTheme } from './ThemeContext';
 
 const LandingPage: React.FC = () => {
   const { darkMode, toggleDarkMode } = useTheme();
-  const [introComplete, setIntroComplete] = useState(false);
-  const [introFading, setIntroFading] = useState(false);
+  
+  // Check if intro has already been shown this session
+  const hasSeenIntro = sessionStorage.getItem('introShown') === 'true';
+  
+  const [introComplete, setIntroComplete] = useState(hasSeenIntro);
+  const [introFading, setIntroFading] = useState(hasSeenIntro);
   const [hoveredImageIndex, setHoveredImageIndex] = useState<number | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [hoveredService, setHoveredService] = useState<number | null>(null);
 
   const services = [
-    { title: 'Digital Design', id: '01', items: ['UI/UX', 'App Design', 'Prototyping'] },
+    { title: 'Digital Design', id: '01', items: ['UI', 'UX', 'App Design', 'Prototyping'] },
     { title: 'Branding', id: '02', items: ['Strategy', 'Tone of Voice', 'Guidelines'] },
-    { title: 'Visuel Identitet', id: '03', items: ['Logo', 'Art Direction', 'Packaging'] },
-    { title: 'Web Design', id: '04', items: ['Landing Pages', 'Corporate', 'Campaign'] },
-    { title: 'Social Media', id: '05', items: ['Content', 'Campaigns', 'Analytics'] },
+    { title: 'Visuel Identitet', id: '03', items: ['Logo Design', 'Art Direction', 'Packaging'] },
+    { title: 'Hjemmeside Design', id: '04', items: ['Web Design', 'Landing Pages', 'Interaction'] },
+    { title: 'SoMe Optimering', id: '05', items: ['Social Media', 'Campaigns', 'Content'] },
     { title: 'Kode', id: '06', items: ['Frontend', 'React', 'Creative Coding'] },
   ];
 
@@ -39,6 +44,9 @@ const LandingPage: React.FC = () => {
   ];
 
   useEffect(() => {
+    // Skip intro if already shown this session
+    if (hasSeenIntro) return;
+    
     // Start fade-out efter logo animation (2.2s)
     const fadeTimer = setTimeout(() => {
       setIntroFading(true);
@@ -47,13 +55,14 @@ const LandingPage: React.FC = () => {
     // Afslut intro efter fade-out (3s total)
     const completeTimer = setTimeout(() => {
       setIntroComplete(true);
+      sessionStorage.setItem('introShown', 'true');
     }, 3000);
 
     return () => {
       clearTimeout(fadeTimer);
       clearTimeout(completeTimer);
     };
-  }, []);
+  }, [hasSeenIntro]);
   
   // Theme classes
   const bgColor = darkMode ? 'bg-[#1b1b1b]' : 'bg-white';
@@ -158,6 +167,128 @@ const LandingPage: React.FC = () => {
               <div></div>
           </div>
 
+          {/* === PLATFORM SECTION 01: INTRO === */}
+          <section className={`border-b ${borderColor}`}>
+              <div className="grid md:grid-cols-2">
+                  {/* Text Side */}
+                  <div className={`flex flex-col justify-center md:border-r ${borderColor}`}>
+                      <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[250px] flex flex-col justify-center">
+                          <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
+                            Feedback<br/>Redefined
+                          </h2>
+                      </div>
+                      
+                      <div className={`w-full h-px ${darkMode ? 'bg-white/20' : 'bg-black/10'}`}></div>
+                      
+                      <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[150px] flex flex-col justify-center">
+                        <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-lg`}>
+                          Glem rodede mail-tråde og mistede filer. Vores skræddersyede feedback-platform samler al kommunikation, godkendelser og revisioner ét sted — så du altid har overblikket.
+                        </p>
+                      </div>
+                  </div>
+                  {/* Visual Side */}
+                  <div className={`relative aspect-square md:aspect-auto md:min-h-[500px] border-t md:border-t-0 ${borderColor} flex items-center justify-center ${darkMode ? 'bg-[#111]' : 'bg-gray-50'}`}>
+                      <div className="text-center transform transition-transform duration-700 hover:scale-110">
+                          <span className="text-7xl md:text-9xl mb-6 block">💬</span>
+                          <span className={`text-xs font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Real-time Feedback</span>
+                      </div>
+                  </div>
+              </div>
+          </section>
+
+          {/* === ASYMMETRIC SPACER === */}
+          <div className={`border-b ${borderColor} grid grid-cols-[3fr_1fr] min-h-[150px]`}>
+              <div className={`border-r ${borderColor}`}></div>
+              <div></div>
+          </div>
+
+          {/* === PLATFORM SECTION 02: USP === */}
+          <section className={`border-b ${borderColor}`}>
+              <div className="grid md:grid-cols-2">
+                  {/* Visual Side */}
+                  <div className={`relative aspect-square md:aspect-auto md:min-h-[500px] md:border-r ${borderColor} flex items-center justify-center ${darkMode ? 'bg-[#111]' : 'bg-gray-50'} order-2 md:order-1`}>
+                      <div className="grid grid-cols-2 gap-8 p-8">
+                          <div className="text-center transform transition-transform duration-500 hover:scale-110">
+                              <span className="text-5xl md:text-6xl block mb-2">⚡</span>
+                              <span className={`text-[10px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Hurtigere</span>
+                          </div>
+                          <div className="text-center transform transition-transform duration-500 hover:scale-110">
+                              <span className="text-5xl md:text-6xl block mb-2">🎯</span>
+                              <span className={`text-[10px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Præcis</span>
+                          </div>
+                          <div className="text-center transform transition-transform duration-500 hover:scale-110">
+                              <span className="text-5xl md:text-6xl block mb-2">🔒</span>
+                              <span className={`text-[10px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Sikker</span>
+                          </div>
+                          <div className="text-center transform transition-transform duration-500 hover:scale-110">
+                              <span className="text-5xl md:text-6xl block mb-2">✨</span>
+                              <span className={`text-[10px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Simpel</span>
+                          </div>
+                      </div>
+                  </div>
+                  {/* Text Side */}
+                  <div className={`flex flex-col justify-center border-b md:border-b-0 ${borderColor} order-1 md:order-2`}>
+                      <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[250px] flex flex-col justify-center">
+                          <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
+                            Hvorfor<br/>Os?
+                          </h2>
+                      </div>
+                      
+                      <div className={`w-full h-px ${darkMode ? 'bg-white/20' : 'bg-black/10'}`}></div>
+                      
+                      <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[150px] flex flex-col justify-center">
+                        <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-lg`}>
+                          Andre bureauer sender PDFs frem og tilbage. Vi giver dig en dedikeret portal med live-preview, versionering og kommentarer direkte på designet. Du sparer tid, vi undgår misforståelser.
+                        </p>
+                      </div>
+                  </div>
+              </div>
+          </section>
+
+          {/* === ASYMMETRIC SPACER === */}
+          <div className={`border-b ${borderColor} grid grid-cols-[1fr_3fr] min-h-[150px]`}>
+              <div className={`border-r ${borderColor}`}></div>
+              <div></div>
+          </div>
+
+          {/* === PLATFORM SECTION 03: FEATURES === */}
+          <section className={`border-b ${borderColor}`}>
+              <div className="grid md:grid-cols-3">
+                  {/* Feature 1 */}
+                  <div className={`p-8 md:p-12 flex flex-col justify-center border-b md:border-b-0 md:border-r ${borderColor} min-h-[300px]`}>
+                      <span className="text-4xl md:text-5xl mb-6">📁</span>
+                      <h3 className="text-xl md:text-2xl font-black uppercase tracking-[-0.05em] mb-4">Alt Samlet</h3>
+                      <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'} font-light`}>
+                        Filer, feedback og godkendelser samlet på én platform. Ingen flere "kan du sende den igen?" mails.
+                      </p>
+                  </div>
+                  
+                  {/* Feature 2 */}
+                  <div className={`p-8 md:p-12 flex flex-col justify-center border-b md:border-b-0 md:border-r ${borderColor} min-h-[300px]`}>
+                      <span className="text-4xl md:text-5xl mb-6">👆</span>
+                      <h3 className="text-xl md:text-2xl font-black uppercase tracking-[-0.05em] mb-4">Klik & Kommenter</h3>
+                      <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'} font-light`}>
+                        Peg direkte på det element du vil ændre. Vi ser præcis hvad du mener — ingen gætterier.
+                      </p>
+                  </div>
+                  
+                  {/* Feature 3 */}
+                  <div className={`p-8 md:p-12 flex flex-col justify-center min-h-[300px]`}>
+                      <span className="text-4xl md:text-5xl mb-6">📊</span>
+                      <h3 className="text-xl md:text-2xl font-black uppercase tracking-[-0.05em] mb-4">Fuld Historik</h3>
+                      <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'} font-light`}>
+                        Se alle versioner, ændringer og beslutninger. Perfekt til teams der skal holdes i sync.
+                      </p>
+                  </div>
+              </div>
+          </section>
+
+          {/* === SPACER BEFORE CASES === */}
+          <div className={`border-b ${borderColor} grid grid-cols-[2fr_1fr] min-h-[200px]`}>
+              <div className={`border-r ${borderColor}`}></div>
+              <div></div>
+          </div>
+
           {/* === SECTION 01: CASES === */}
           <section className={`border-b ${borderColor}`}>
               <div className="grid md:grid-cols-2">
@@ -238,78 +369,79 @@ const LandingPage: React.FC = () => {
               </div>
           </section>
 
+          {/* === SPACER BETWEEN CASES AND SERVICES === */}
+          <div className={`border-b ${borderColor} grid grid-cols-[1fr_2fr_1fr] min-h-[300px] md:min-h-[500px]`}>
+              <div className={`border-r ${borderColor} relative overflow-hidden group flex items-center justify-center p-8`}>
+                  <img 
+                    src="/cases/ro-gus/Bag%20Mockup%20on%20the%20Wall.png" 
+                    alt="Ro Gus Detail" 
+                    className="w-[75%] h-auto object-contain grayscale hover:grayscale-0 transition-all duration-500"
+                  />
+              </div>
+              <div className={`border-r ${borderColor} relative overflow-hidden group flex items-center justify-center p-8`}>
+                  <img 
+                    src="/cases/dubs-donkraft/Dubs%20&%20Donkraft%20poster%20mockup.png" 
+                    alt="Dubs Detail" 
+                    className="w-[60%] h-auto object-contain grayscale hover:grayscale-0 transition-all duration-500"
+                  />
+              </div>
+              <div className="relative overflow-hidden group flex items-center justify-center p-8">
+                  <img 
+                    src="/cases/nordbrew/Mockups%20-%20packaging%203.png" 
+                    alt="Nordbrew Detail" 
+                    className="w-[75%] h-auto object-contain grayscale hover:grayscale-0 transition-all duration-500"
+                  />
+              </div>
+          </div>
+
+          {/* === EXTRA SPACER BELOW IMAGES === */}
+          <div className={`border-b ${borderColor} grid grid-cols-[2fr_1fr] min-h-[200px]`}>
+              <div className={`border-r ${borderColor}`}></div>
+              <div></div>
+          </div>
+
           {/* === SECTION 02: SERVICES === */}
           <section className={`border-b ${borderColor}`}>
-              <div className="grid md:grid-cols-2">
-                  {/* Interactive Services Grid */}
-                  <div 
-                    className={`relative md:min-h-[500px] md:border-r ${borderColor} order-2 md:order-1 ${bgColor} p-0`}
-                    onMouseLeave={() => setHoveredService(null)}
-                  >
-                      <div className="grid grid-cols-2 grid-rows-3 h-full">
-                        {services.map((service, index) => {
-                          const isHovered = hoveredService === index;
-                          const isAnyHovered = hoveredService !== null;
-                          const isFaded = isAnyHovered && !isHovered;
-                          
-                          // Borders logic:
-                          // Right border for odd items (0, 2, 4)
-                          // Bottom border for first 4 items (0, 1, 2, 3)
-                          const hasRightBorder = index % 2 === 0;
-                          const hasBottomBorder = index < 4;
-                          
-                          return (
-                            <Link
-                              key={index}
-                              to="/services"
-                              className={`relative flex flex-col justify-between p-8 transition-all duration-500 cursor-pointer overflow-hidden group 
-                                ${hasRightBorder ? `border-r ${borderColor}` : ''} 
-                                ${hasBottomBorder ? `border-b ${borderColor}` : ''}
-                                ${isFaded ? 'opacity-30 blur-[1px]' : ''}
-                              `}
-                              onMouseEnter={() => setHoveredService(index)}
-                            >
-                              
-                              {/* Content Container */}
-                              <div className="flex flex-col h-full justify-center">
-                                <h3 className={`text-xl md:text-2xl font-black uppercase tracking-[-0.05em] leading-none mb-4 transition-transform duration-300 origin-left ${isHovered ? 'scale-110' : ''}`}>
-                                  {service.title}
-                                </h3>
-                                
-                                {/* Sub-items list */}
-                                <ul className={`flex flex-col gap-1 transition-all duration-300 ${
-                                  isHovered ? 'opacity-100 translate-y-0 h-auto mt-2' : 'opacity-0 translate-y-4 h-0 overflow-hidden mt-0'
-                                }`}>
-                                  {service.items.map((item, i) => (
-                                    <li key={i} className={`text-xs font-medium uppercase tracking-wide ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-                                      {item}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </Link>
-                          );
-                        })}
-                      </div>
-                  </div>
-                  {/* Text Side */}
-                  <div className={`flex flex-col justify-center order-1 md:order-2 border-b md:border-b-0 ${borderColor}`}>
-                      {/* Top Content - Vertically Centered with Min Height */}
-                      <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[250px] flex flex-col justify-center">
+              <div className="grid md:grid-cols-[1fr_2fr]">
+                  {/* Left: Title */}
+                  <div className={`flex flex-col justify-start md:border-r ${borderColor} border-b md:border-b-0`}>
+                      {/* Top Content */}
+                      <div className="py-10 px-6 md:py-16 md:pl-8 md:pr-16">
                           <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
-                            Core<br/>Services
+                            Services
                           </h2>
                       </div>
-
+                      
                       {/* Full Width Separator Line */}
                       <div className={`w-full h-px ${darkMode ? 'bg-white/20' : 'bg-black/10'}`}></div>
-
-                      {/* Bottom Content */}
-                      <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[150px] flex flex-col justify-center gap-8">
-                        <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-lg`}>
-                          Fra skarp visuel identitet til kompleks webudvikling. Vi leverer en komplet pakke, der sikrer, at dit brand står konsistent og professionelt på alle platforme. Vi tænker i helheder frem for enkeltstående løsninger.
-                        </p>
-                      </div>
+                      
+                      {/* Bottom Spacer */}
+                      <div className="flex-1"></div>
+                  </div>
+                  
+                  {/* Right: Services List */}
+                  <div className="flex flex-col">
+                      {services.map((service, index) => (
+                        <Link
+                          key={index}
+                          to="/services"
+                          className={`group flex items-center justify-between p-6 md:py-8 md:px-10 border-b last:border-b-0 ${borderColor} ${hoverBg} transition-all duration-300 cursor-pointer`}
+                          onMouseEnter={() => setHoveredService(index)}
+                          onMouseLeave={() => setHoveredService(null)}
+                        >
+                          <div className="flex flex-col gap-2">
+                            <h3 className="text-xl md:text-2xl font-black uppercase tracking-[-0.05em]">
+                              {service.title}
+                            </h3>
+                            <span className={`text-xs md:text-sm font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+                              {service.items.join(' — ')}
+                            </span>
+                          </div>
+                          <span className={`transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1`}>
+                            <ArrowUpRight size={16} />
+                          </span>
+                        </Link>
+                      ))}
                   </div>
               </div>
           </section>
@@ -355,7 +487,7 @@ const LandingPage: React.FC = () => {
                   {/* Content (Middle 2 Columns) */}
                   <div className={`md:col-span-2 p-12 md:p-24 flex flex-col justify-center text-center items-center border-b md:border-b-0 md:border-r ${borderColor}`}>
                       <span className={`text-xs font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'} mb-8 block`}>04 — Philosophy</span>
-                      <h2 className="text-4xl md:text-6xl font-black uppercase tracking-[-0.05em] leading-[0.95] mb-8">
+                      <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.95] mb-8">
                         No Bullshit.<br/>Just Design.
                       </h2>
                       <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-md`}>
