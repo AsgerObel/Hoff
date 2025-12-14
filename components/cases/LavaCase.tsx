@@ -325,7 +325,7 @@ const LavaCase: React.FC = () => {
           </button>
           <video 
             src={video.src}
-            className="max-h-[90vh] max-w-full rounded-lg"
+            className="max-h-[70vh] max-w-[80vw] rounded-lg"
             controls
             autoPlay
             onClick={(e) => e.stopPropagation()}

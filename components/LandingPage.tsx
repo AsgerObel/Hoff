@@ -1,8 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import LiveClock from './LiveClock';
 import { useTheme } from './ThemeContext';
+
+// Scroll-triggered Video Component
+const ScrollVideo: React.FC<{ src: string; className?: string; onClick?: () => void }> = ({ src, className, onClick }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            video.play();
+          } else {
+            video.pause();
+            video.currentTime = 0; // Reset to start
+          }
+        });
+      },
+      { threshold: 0.3 } // Trigger when 30% visible
+    );
+
+    observer.observe(video);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      muted
+      loop
+      playsInline
+      className={`${className} ${onClick ? 'cursor-pointer hover:scale-[1.02] transition-transform duration-300' : ''}`}
+      onClick={onClick}
+    >
+      <source src={src} type="video/mp4" />
+    </video>
+  );
+};
 
 const LandingPage: React.FC = () => {
   const { darkMode, toggleDarkMode } = useTheme();
@@ -15,6 +58,7 @@ const LandingPage: React.FC = () => {
   const [hoveredImageIndex, setHoveredImageIndex] = useState<number | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [hoveredService, setHoveredService] = useState<number | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
   const services = [
     { title: 'Digital Design', id: '01', items: ['UI', 'UX', 'App Design', 'Prototyping'] },
@@ -152,11 +196,19 @@ const LandingPage: React.FC = () => {
               </div>
           </header>
 
-          {/* HERO VIDEO - Adjusted for alignment */}
-          <div className={`w-full flex flex-col items-center justify-center relative group border-b ${borderColor} min-h-[calc(100vh-6rem)]`}>
-               <div className="w-full h-full absolute inset-0 bg-[url('https://picsum.photos/1600/900?grayscale')] bg-cover bg-center opacity-20 group-hover:opacity-40 transition-opacity duration-1000"></div>
-               <div className={`relative z-10 ${bgColor} p-6 border ${darkMode ? 'border-white' : 'border-black'} ${darkMode ? 'shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]' : 'shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'} transition-colors duration-300`}>
-                  <span className="text-xl font-bold uppercase tracking-[-0.05em]">SHOWREEL 2025</span>
+          {/* HERO - GRADIENT FLOW */}
+          <div className={`w-full flex flex-col items-center justify-center relative border-b ${borderColor} min-h-[calc(100vh-6rem)] overflow-hidden`}>
+               {/* Gradient Background */}
+               <div className="absolute inset-0 gradient-container"></div>
+               
+               {/* Gradient Overlay */}
+               <div className="absolute inset-0 gradient-overlay"></div>
+               
+               {/* Floating Orbs */}
+               <div className="absolute inset-0 overflow-hidden">
+                   <div className="orb orb1 absolute w-[300px] h-[300px] bg-[#EBE9E9] top-[20%] left-[10%]"></div>
+                   <div className="orb orb2 absolute w-[400px] h-[400px] bg-[#F9F9F9] top-[60%] right-[15%]"></div>
+                   <div className="orb orb3 absolute w-[250px] h-[250px] bg-[#1B1B1B] bottom-[10%] left-[40%]"></div>
                </div>
           </div>
 
@@ -167,14 +219,14 @@ const LandingPage: React.FC = () => {
               <div></div>
           </div>
 
-          {/* === PLATFORM SECTION 01: INTRO === */}
+          {/* === PLATFORM VIDEO 01: KOMMENTAR === */}
           <section className={`border-b ${borderColor}`}>
               <div className="grid md:grid-cols-2">
                   {/* Text Side */}
                   <div className={`flex flex-col justify-center md:border-r ${borderColor}`}>
                       <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[250px] flex flex-col justify-center">
                           <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
-                            Feedback<br/>Redefined
+                            Direkte<br/>Feedback
                           </h2>
                       </div>
                       
@@ -182,16 +234,17 @@ const LandingPage: React.FC = () => {
                       
                       <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[150px] flex flex-col justify-center">
                         <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-lg`}>
-                          Glem rodede mail-tråde og mistede filer. Vores skræddersyede feedback-platform samler al kommunikation, godkendelser og revisioner ét sted — så du altid har overblikket.
+                          Giv feedback direkte på designet. Klik præcis hvor du vil have ændringer, og skriv din kommentar. Vi ser det med det samme — ingen misforståelser.
                         </p>
                       </div>
                   </div>
-                  {/* Visual Side */}
-                  <div className={`relative aspect-square md:aspect-auto md:min-h-[500px] border-t md:border-t-0 ${borderColor} flex items-center justify-center ${darkMode ? 'bg-[#111]' : 'bg-gray-50'}`}>
-                      <div className="text-center transform transition-transform duration-700 hover:scale-110">
-                          <span className="text-7xl md:text-9xl mb-6 block">💬</span>
-                          <span className={`text-xs font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Real-time Feedback</span>
-                      </div>
+                  {/* Video Side */}
+                  <div className={`relative aspect-video md:aspect-auto md:min-h-[600px] border-t md:border-t-0 ${borderColor} overflow-hidden flex items-center justify-center`}>
+                      <ScrollVideo 
+                        src="/assets/Kommentar%201.mp4"
+                        className="w-full h-full object-contain"
+                        onClick={() => setSelectedVideo("/assets/Kommentar%201.mp4")}
+                      />
                   </div>
               </div>
           </section>
@@ -202,35 +255,22 @@ const LandingPage: React.FC = () => {
               <div></div>
           </div>
 
-          {/* === PLATFORM SECTION 02: USP === */}
+          {/* === PLATFORM VIDEO 02: OVERBLIK === */}
           <section className={`border-b ${borderColor}`}>
               <div className="grid md:grid-cols-2">
-                  {/* Visual Side */}
-                  <div className={`relative aspect-square md:aspect-auto md:min-h-[500px] md:border-r ${borderColor} flex items-center justify-center ${darkMode ? 'bg-[#111]' : 'bg-gray-50'} order-2 md:order-1`}>
-                      <div className="grid grid-cols-2 gap-8 p-8">
-                          <div className="text-center transform transition-transform duration-500 hover:scale-110">
-                              <span className="text-5xl md:text-6xl block mb-2">⚡</span>
-                              <span className={`text-[10px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Hurtigere</span>
-                          </div>
-                          <div className="text-center transform transition-transform duration-500 hover:scale-110">
-                              <span className="text-5xl md:text-6xl block mb-2">🎯</span>
-                              <span className={`text-[10px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Præcis</span>
-                          </div>
-                          <div className="text-center transform transition-transform duration-500 hover:scale-110">
-                              <span className="text-5xl md:text-6xl block mb-2">🔒</span>
-                              <span className={`text-[10px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Sikker</span>
-                          </div>
-                          <div className="text-center transform transition-transform duration-500 hover:scale-110">
-                              <span className="text-5xl md:text-6xl block mb-2">✨</span>
-                              <span className={`text-[10px] font-bold uppercase tracking-widest ${darkMode ? 'text-gray-500' : 'text-gray-400'}`}>Simpel</span>
-                          </div>
-                      </div>
+                  {/* Video Side */}
+                  <div className={`relative aspect-video md:aspect-auto md:min-h-[600px] md:border-r ${borderColor} overflow-hidden order-2 md:order-1 flex items-center justify-center`}>
+                      <ScrollVideo 
+                        src="/assets/Forside%20video%20-%20feedbackplatform%20system%202.mp4"
+                        className="w-full h-full object-contain"
+                        onClick={() => setSelectedVideo("/assets/Forside%20video%20-%20feedbackplatform%20system%202.mp4")}
+                      />
                   </div>
                   {/* Text Side */}
                   <div className={`flex flex-col justify-center border-b md:border-b-0 ${borderColor} order-1 md:order-2`}>
                       <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[250px] flex flex-col justify-center">
                           <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
-                            Hvorfor<br/>Os?
+                            Fuld<br/>Overblik
                           </h2>
                       </div>
                       
@@ -238,7 +278,7 @@ const LandingPage: React.FC = () => {
                       
                       <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[150px] flex flex-col justify-center">
                         <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-lg`}>
-                          Andre bureauer sender PDFs frem og tilbage. Vi giver dig en dedikeret portal med live-preview, versionering og kommentarer direkte på designet. Du sparer tid, vi undgår misforståelser.
+                          Se alle dine designprojekter samlet ét sted. Få overblik over hvad der er i gang, hvad der venter på dig, og hvad der er færdigt.
                         </p>
                       </div>
                   </div>
@@ -251,34 +291,68 @@ const LandingPage: React.FC = () => {
               <div></div>
           </div>
 
-          {/* === PLATFORM SECTION 03: FEATURES === */}
+          {/* === PLATFORM VIDEO 03: SORTERING === */}
           <section className={`border-b ${borderColor}`}>
-              <div className="grid md:grid-cols-3">
-                  {/* Feature 1 */}
-                  <div className={`p-8 md:p-12 flex flex-col justify-center border-b md:border-b-0 md:border-r ${borderColor} min-h-[300px]`}>
-                      <span className="text-4xl md:text-5xl mb-6">📁</span>
-                      <h3 className="text-xl md:text-2xl font-black uppercase tracking-[-0.05em] mb-4">Alt Samlet</h3>
-                      <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'} font-light`}>
-                        Filer, feedback og godkendelser samlet på én platform. Ingen flere "kan du sende den igen?" mails.
-                      </p>
+              <div className="grid md:grid-cols-2">
+                  {/* Text Side */}
+                  <div className={`flex flex-col justify-center md:border-r ${borderColor}`}>
+                      <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[250px] flex flex-col justify-center">
+                          <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
+                            Aldrig<br/>Gå Glip
+                          </h2>
+                      </div>
+                      
+                      <div className={`w-full h-px ${darkMode ? 'bg-white/20' : 'bg-black/10'}`}></div>
+                      
+                      <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[150px] flex flex-col justify-center">
+                        <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-lg`}>
+                          Sortér efter status og se hvad der venter på din godkendelse. Du får besked når noget er klar — så du aldrig misser en deadline.
+                        </p>
+                      </div>
                   </div>
-                  
-                  {/* Feature 2 */}
-                  <div className={`p-8 md:p-12 flex flex-col justify-center border-b md:border-b-0 md:border-r ${borderColor} min-h-[300px]`}>
-                      <span className="text-4xl md:text-5xl mb-6">👆</span>
-                      <h3 className="text-xl md:text-2xl font-black uppercase tracking-[-0.05em] mb-4">Klik & Kommenter</h3>
-                      <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'} font-light`}>
-                        Peg direkte på det element du vil ændre. Vi ser præcis hvad du mener — ingen gætterier.
-                      </p>
+                  {/* Video Side */}
+                  <div className={`relative aspect-video md:aspect-auto md:min-h-[600px] border-t md:border-t-0 ${borderColor} overflow-hidden flex items-center justify-center`}>
+                      <ScrollVideo 
+                        src="/assets/Forside%20video%20feedbackplatform%20sortering%203.mp4"
+                        className="w-full h-full object-contain"
+                        onClick={() => setSelectedVideo("/assets/Forside%20video%20feedbackplatform%20sortering%203.mp4")}
+                      />
                   </div>
-                  
-                  {/* Feature 3 */}
-                  <div className={`p-8 md:p-12 flex flex-col justify-center min-h-[300px]`}>
-                      <span className="text-4xl md:text-5xl mb-6">📊</span>
-                      <h3 className="text-xl md:text-2xl font-black uppercase tracking-[-0.05em] mb-4">Fuld Historik</h3>
-                      <p className={`text-sm leading-relaxed ${darkMode ? 'text-gray-400' : 'text-gray-600'} font-light`}>
-                        Se alle versioner, ændringer og beslutninger. Perfekt til teams der skal holdes i sync.
-                      </p>
+              </div>
+          </section>
+
+          {/* === ASYMMETRIC SPACER === */}
+          <div className={`border-b ${borderColor} grid grid-cols-[2fr_1fr] min-h-[150px]`}>
+              <div className={`border-r ${borderColor}`}></div>
+              <div></div>
+          </div>
+
+          {/* === PLATFORM VIDEO 04: GODKEND === */}
+          <section className={`border-b ${borderColor}`}>
+              <div className="grid md:grid-cols-2">
+                  {/* Video Side */}
+                  <div className={`relative aspect-video md:aspect-auto md:min-h-[600px] md:border-r ${borderColor} overflow-hidden order-2 md:order-1 flex items-center justify-center`}>
+                      <ScrollVideo 
+                        src="/assets/Godkendt%204.mp4"
+                        className="w-full h-full object-contain"
+                        onClick={() => setSelectedVideo("/assets/Godkendt%204.mp4")}
+                      />
+                  </div>
+                  {/* Text Side */}
+                  <div className={`flex flex-col justify-center border-b md:border-b-0 ${borderColor} order-1 md:order-2`}>
+                      <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[250px] flex flex-col justify-center">
+                          <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
+                            Godkend<br/>& Færdig
+                          </h2>
+                      </div>
+                      
+                      <div className={`w-full h-px ${darkMode ? 'bg-white/20' : 'bg-black/10'}`}></div>
+                      
+                      <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[150px] flex flex-col justify-center">
+                        <p className={`text-sm md:text-base leading-relaxed ${darkMode ? 'text-white' : 'text-black'} font-light max-w-lg`}>
+                          Er du tilfreds? Godkend med ét klik, og vi færdiggør projektet. Simpelt, hurtigt og uden unødvendige mails frem og tilbage.
+                        </p>
+                      </div>
                   </div>
               </div>
           </section>
@@ -505,6 +579,28 @@ const LandingPage: React.FC = () => {
       </div>
 
     </div>
+
+    {/* Video Modal */}
+    {selectedVideo && (
+      <div 
+        className="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-8"
+        onClick={() => setSelectedVideo(null)}
+      >
+        <button 
+          className="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors text-3xl font-bold"
+          onClick={() => setSelectedVideo(null)}
+        >
+          ✕
+        </button>
+        <video 
+          src={selectedVideo}
+          className="max-h-[70vh] max-w-[80vw] rounded-lg shadow-2xl"
+          controls
+          autoPlay
+          onClick={(e) => e.stopPropagation()}
+        />
+      </div>
+    )}
     </>
   );
 };
