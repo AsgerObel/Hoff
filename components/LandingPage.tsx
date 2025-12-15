@@ -210,6 +210,13 @@ const LandingPage: React.FC = () => {
                    <div className="orb orb2 absolute w-[400px] h-[400px] bg-[#F9F9F9] top-[60%] right-[15%]"></div>
                    <div className="orb orb3 absolute w-[250px] h-[250px] bg-[#1B1B1B] bottom-[10%] left-[40%]"></div>
                </div>
+
+               {/* Hero Text Overlay */}
+               <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none mix-blend-difference">
+                  <h1 className={`text-[10vw] font-black uppercase tracking-[-0.08em] leading-[0.85] ${darkMode ? 'text-white' : 'text-black'} text-center`}>
+                    DESIGN<br/>STUDIO
+                  </h1>
+               </div>
           </div>
 
           {/* === SPACER SECTION WITH GRID LINES === */}
@@ -295,7 +302,7 @@ const LandingPage: React.FC = () => {
                   <div className={`flex flex-col justify-center border-b md:border-b-0 ${borderColor} order-1 md:order-2`}>
                       <div className="py-8 px-6 md:py-16 md:pl-8 md:pr-16 min-h-[250px] flex flex-col justify-center">
                           <h2 className="text-5xl md:text-8xl font-black uppercase tracking-[-0.05em] leading-[0.9]">
-                            Fuld<br/>Overblik
+                            Fuldt<br/>Overblik
                           </h2>
                       </div>
                       
